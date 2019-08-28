@@ -1,12 +1,12 @@
 #!/bin/bash
-echo Esse script é para compilar rodar parser.l
+echo Esse script é para compilar rodar test_parser.l
 PARSEDIR=/home/rodrigo/Documents/Compiladores/src/flex
 TEMPFILE=/home/rodrigo/Documents/Compiladores/tmp
 echo Parsedir é $PARSEDIR
 cd $PARSEDIR
 echo Construindo parser
 echo
-flex --outfile=$TEMPFILE/test_parser.c parser.l
+flex --outfile=$TEMPFILE/test_parser.c test_parser.l
 echo
 
 echo Building...

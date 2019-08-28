@@ -1,7 +1,11 @@
 #include <stdio.h>
 #include "interpreter.h"
 
-int main(int argc, char const *argv[]) {
+extern int yylex();
+extern int yylineno;
+extern char* yytext;
 
+int main(void) {
+  
   return 0;
 }
