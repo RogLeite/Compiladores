@@ -7,8 +7,6 @@ then
   echo Esse script é para compilar e rodar $1
   TEMPFILE=/home/rodrigo/Documents/Compiladores/tmp
   SRCPATH="/home/rodrigo/Documents/Compiladores/src"
-  cd THISPATH
-  #MYPATH="$PATH:/home/rodrigo/Documents/Compiladores/src/main"
   echo Construindo parser
   echo
   flex --outfile=$TEMPFILE/test_parser.c $1
