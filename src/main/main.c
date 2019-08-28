@@ -5,7 +5,7 @@ extern int yylex();
 extern int yylineno;
 extern char* yytext;
 
-int main(int argc, char const *argv[]) {
-
+int main(void) {
+  
   return 0;
 }
