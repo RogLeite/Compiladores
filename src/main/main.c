@@ -20,7 +20,8 @@ char* names[] = {
           "TK_ID",
           "TK_STRING",
           "TK_INTEGER",
-          "TK_FLOATING"
+          "TK_FLOATING",
+          "TK_SYMBOL"
 };
 
 int main(void) {
