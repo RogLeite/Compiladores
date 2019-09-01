@@ -1,0 +1,10 @@
+#declaração da main
+main():int
+{
+  #declara var
+  var : int;
+  #atribui 0 a var
+  var = 0;
+  #retorno da main
+  return var;
+}
