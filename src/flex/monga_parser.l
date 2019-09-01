@@ -27,8 +27,8 @@ while                           return TK_WHILE;
 [-+*/,:;(){}=@<>]               return TK_SYMBOL;
 "["|"]"                         return TK_SYMBOL;
 "=="|"~="|"<="|">="|"&&"|"||"   return TK_SYMBOL;
-#[^\n]* printf("Comentário: \"%s\"\n", yytext);
-. printf("Não casou: \"%s\" Line: %i\n", yytext, yylineno);
+#[^\n]*                         ;
+. printf("MISMATCH: \"%s\" Line: %i\n", yytext, yylineno);
 %%
 
 int yywrap(void)
