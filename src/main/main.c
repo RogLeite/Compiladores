@@ -17,7 +17,8 @@ char* names[] = {
           "TK_RETURN",
           "TK_VOID",
           "TK_WHILE",
-          "TK_ID"
+          "TK_ID",
+          "TK_STRING"
 };
 
 int main(void) {

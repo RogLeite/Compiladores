@@ -15,6 +15,7 @@ typedef enum token {
   TK_WHILE,
   //
   TK_ID,
+  TK_STRING,
 } Token;
 
 #endif
