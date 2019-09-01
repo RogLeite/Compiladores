@@ -16,6 +16,8 @@ typedef enum token {
   //
   TK_ID,
   TK_STRING,
+  TK_INTEGER,
+  TK_FLOATING,
 } Token;
 
 #endif

@@ -18,7 +18,9 @@ char* names[] = {
           "TK_VOID",
           "TK_WHILE",
           "TK_ID",
-          "TK_STRING"
+          "TK_STRING",
+          "TK_INTEGER",
+          "TK_FLOATING"
 };
 
 int main(void) {
