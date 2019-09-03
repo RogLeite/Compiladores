@@ -3,7 +3,7 @@
 
 typedef enum token {
   //palavras reservadas
-  TK_AS,
+  TK_AS = 1,
   TK_CHAR,
   TK_ELSE,
   TK_FLOAT,
@@ -15,8 +15,10 @@ typedef enum token {
   TK_WHILE,
   //
   TK_ID,
+  TK_STRING,
+  TK_INTEGER,
+  TK_FLOATING,
+  TK_SYMBOL,
 } Token;
-
-
 
 #endif

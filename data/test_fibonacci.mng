@@ -1,0 +1,47 @@
+#Essa função calcula fibonacci até a n-ésima etapa
+fib(n:int):int[]
+{
+  #caso esteja errado o parâmetro
+  if n<2
+  {
+    ret : int[];
+    ret = new int[1];
+    ret[0] = -1;
+    return  ret ;
+  }
+  #declaração do contador
+  i : int;
+  #declaração do vetor de retorno
+  vetor_ret : int[];
+  #imprime 0 e 1 pra não parecer que estamos começando na segunda casa
+  @0;
+  @1;
+  #atribuição à i
+  i = 2;
+  #atribuição à vetor_ret
+  vetor_ret = new int[n];
+  #atribuição à primeira casa de vetor_ret
+  vetor_ret[0] = 0;
+  vetor_ret[1] = 1;
+  #loop do cálculo
+  while i<n
+  {
+    #imprime o indice atual
+    @i;
+    #calcula o vetor_ret[i]
+    vetor_ret[i] = vetor_ret[i-1] + vetor_ret[i-2];
+    #incrementa i
+    i = i+1;
+  }
+  #retorna vetor_ret
+  return vetor_ret;
+}
+
+#declaração da main
+main():int
+{
+  #chama fibonacci(10)
+  @fibonacci(10);
+  #retorno da main
+  return 0;
+}

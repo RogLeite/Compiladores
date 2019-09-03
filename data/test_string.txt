@@ -1,0 +1,4 @@
+""
+"string básica"
+"Oi, sou rodrigo e isso não tem sentido = \n\t\""
+"Isso é uma contrabarra \\!"

@@ -27,9 +27,13 @@ char* names[] = {
 int main(void) {
   int ntoken, vtoken;
   ntoken = yylex();
+  printf("int[ x ] = {");
+  int tkcounter = 0;
   while (ntoken) {
-    printf("%s\n", names[ntoken]);
+    printf("%s, ", names[ntoken]);
+    ++tkcounter;
     ntoken = yylex();
   }
+  printf("}; x = %d;", tkcounter);
   return 0;
 }

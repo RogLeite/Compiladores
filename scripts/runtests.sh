@@ -13,7 +13,7 @@ then
   echo Construindo parser
   flex --outfile=$TEMPFILE/tmp_parser.c $SRCPATH/flex/$1
   echo Building...
-  gcc -I$SRCPATH $SRCPATH/main/$2 $TEMPFILE/tmp_parser.c -o $BUILDPATH/$3 -lfl
+  gcc -I$SRCPATH $SRCPATH/test/simple_main.h $SRCPATH/main/$2 $TEMPFILE/tmp_parser.c -o $BUILDPATH/$3 -lfl
   echo Limpando tmp
 
   rm $TEMPFILE/tmp_parser.c

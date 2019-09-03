@@ -1,0 +1,22 @@
+Comentário: "#declaração da main"
+TK_ID
+TK_SYMBOL
+TK_SYMBOL
+TK_SYMBOL
+TK_INT
+TK_SYMBOL
+Comentário: "#declara var"
+TK_ID
+TK_SYMBOL
+TK_INT
+TK_SYMBOL
+Comentário: "#atribui 0 a var"
+TK_ID
+TK_SYMBOL
+TK_INTEGER
+TK_SYMBOL
+Comentário: "#retorno da main"
+TK_RETURN
+TK_ID
+TK_SYMBOL
+TK_SYMBOL
