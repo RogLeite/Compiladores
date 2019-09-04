@@ -5,6 +5,7 @@
 #include "main/interpreter.h"
 #define TK_NAME_SIZE 12
 #define TK_INITIAL_INDEX 258
+#define READABLE 0
 
 extern int yylex();
 extern int yylineno;
@@ -54,13 +55,13 @@ int main(void) {
     //
     //   return 0;
     // }
-    if (convertTokenToString(ntoken,&str)==1)
+    if (READABLE && convertTokenToString(ntoken,&str)==1)
     {
       printf( "%s ", str );
     }
     else
     {
-      printf("não converteu\n" );
+      printf( "%d ", ntoken );
     }
     ++tkcounter;
     ntoken = yylex();
