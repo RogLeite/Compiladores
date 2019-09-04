@@ -10,6 +10,31 @@ extern char* yytext;
 char* test_name;
 int result[];
 
+char* tk_names[] = {
+          NULL,
+          "TK_AS",
+          "TK_CHAR",
+          "TK_ELSE",
+          "TK_FLOAT",
+          "TK_IF",
+          "TK_INT",
+          "TK_NEW",
+          "TK_RETURN",
+          "TK_VOID",
+          "TK_WHILE",
+          "TK_ID",
+          "TK_STRING",
+          "TK_INTEGER",
+          "TK_FLOATING",
+          "TK_EQ",
+          "TK_NE",
+          "TK_LE",
+          "TK_GE",
+          "TK_AND",
+          "TK_OR"
+};
+char* convertTokenToString(int token);
+
 int main(void) {
   int ntoken;
   ntoken = yylex();
@@ -33,4 +58,16 @@ int main(void) {
   printf("%s",test_name);
   printf("\n");
   return 0;
+}
+
+char* convertTokenToString(int token)
+{
+  if (token>=258)
+  {
+
+  }
+  else
+  {
+    return (char) token;
+  }
 }
