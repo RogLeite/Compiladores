@@ -23,7 +23,6 @@ while                           return TK_WHILE;
 ([0-9]+("."[0-9]*)?|"."[0-9]+)([eE][-+]?[0-9]+)?    return TK_FLOATING;
 0x({HEX}+("."{HEX}*)?|"."{HEX}+)([pP][-+]?[0-9]+)?  return TK_FLOATING;
 
-
 [-+*/,:;(){}=@<>]               return (int)*yytext;
 "["|"]"                         return (int)*yytext;
 "=="                            return TK_EQ;
