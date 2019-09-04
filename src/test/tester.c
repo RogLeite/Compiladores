@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "tester.h"
 #include "main/interpreter.h"
 #define READABLE 0
 #ifdef TC_FIB10
