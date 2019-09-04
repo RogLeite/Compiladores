@@ -1,14 +1,16 @@
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "tester.h"
-#include "interpreter.h"
-
-
+#include "main/interpreter.h"
+#define TK_NAME_SIZE 12
+#define TK_INITIAL_INDEX 258
 
 extern int yylex();
 extern int yylineno;
 extern char* yytext;
-char* test_name;
-int result[];
+// char* test_name;
+// int result[];
 
 char* tk_names[] = {
           NULL,
@@ -33,41 +35,56 @@ char* tk_names[] = {
           "TK_AND",
           "TK_OR"
 };
-char* convertTokenToString(int token);
+int convertTokenToString(int token, char** str);
 
 int main(void) {
   int ntoken;
+  char* str = malloc(sizeof(char)*TK_NAME_SIZE);
   ntoken = yylex();
   int tkcounter = 0;
   while (ntoken) {
-    if (ntoken != result[tkcounter])
+    // if (ntoken != result[tkcounter])
+    // {
+    //   printf("FAILED: ");
+    //   printf("%s",test_name);
+    //   printf(" in token number %d at line: %d\n", tkcounter, yylineno);
+    //   printf("\tyytext = %s\n", yytext);
+    //   printf("\tntoken = %d\n", ntoken);
+    //   printf("\tresult[i] = %d\n", result[tkcounter]);
+    //
+    //   return 0;
+    // }
+    if (convertTokenToString(ntoken,&str)==1)
     {
-      printf("FAILED: ");
-      printf("%s",test_name);
-      printf(" in token number %d at line: %d\n", tkcounter, yylineno);
-      printf("\tyytext = %s\n", yytext);
-      printf("\tntoken = %d\n", ntoken);
-      printf("\tresult[i] = %d\n", result[tkcounter]);
-
-      return 0;
+      printf( "%s ", str );
+    }
+    else
+    {
+      printf("não converteu\n" );
     }
     ++tkcounter;
     ntoken = yylex();
   }
-  printf("Passed: ");
-  printf("%s",test_name);
-  printf("\n");
+  // printf("Passed: ");
+  // printf("%s",test_name);
+  // printf("\n");
   return 0;
 }
 
-char* convertTokenToString(int token)
+int convertTokenToString(int token, char** str)
 {
-  if (token>=258)
+  if (token>=TK_INITIAL_INDEX)
   {
-
+    strcpy(*str, tk_names[token-TK_INITIAL_INDEX+1]);
+    return 1;
+  }
+  else if (token>0)
+  {
+    char c = (char)token;
+    char mid[1] = { c};
+    strcpy(*str, mid);
+    return 1;
   }
   else
-  {
-    return (char) token;
-  }
+    return 0;
 }
