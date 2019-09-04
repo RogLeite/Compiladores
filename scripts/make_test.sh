@@ -3,20 +3,16 @@ TEMPFILE=/home/rodrigo/Documents/Compiladores/tmp
 SRCPATH=/home/rodrigo/Documents/Compiladores/src
 BUILDPATH=/home/rodrigo/Documents/Compiladores/build
 SCRIPTSPATH=/home/rodrigo/Documents/Compiladores/scripts
-if [ -z $1 ] || [ -z $2 ] || [ -z $3 ]
+if [ -r $SRCPATH/flex/monga_lexer.l ] && [ -s $SRCPATH/flex/monga_lexer.l ]
 then
-  echo Não há argumentos suficientes
-elif [ -r $SRCPATH/flex/$1 ] && [ -s $SRCPATH/flex/$1 ]
-then
-  echo Esse script é para compilar $1
   #A fazer: importar essas variáveis de um arquivo de config
   echo Construindo parser
   flex --outfile=$TEMPFILE/tmp_parser.c $SRCPATH/flex/$1
   echo Building...
-  gcc -I$SRCPATH $SRCPATH/test/simple_main.h $SRCPATH/main/$2 $TEMPFILE/tmp_parser.c -o $BUILDPATH/$3 -lfl
+  gcc -I$SRCPATH $SRCPATH/test/tester.c $TEMPFILE/tmp_tester.c -o $SRCPATH/test/tester -lfl
   echo Limpando tmp
 
   rm $TEMPFILE/tmp_parser.c
 else
-  echo Não tens permissão de leitura de $1 ou está vazio
+  echo Não tens permissão de leitura de monga_lexer.l ou está vazio
 fi
