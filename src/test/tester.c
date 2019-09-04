@@ -1,26 +1,32 @@
 #include <stdio.h>
+#include "tester.h"
 #include "interpreter.h"
+
+
 
 extern int yylex();
 extern int yylineno;
 extern char* yytext;
-extern char* test_name;
-extern int result[];
+char* test_name;
+int result[];
 
 int main(void) {
   int ntoken;
   ntoken = yylex();
   int tkcounter = 0;
   while (ntoken) {
-    ++tkcounter;
     if (ntoken != result[tkcounter])
     {
       printf("FAILED: ");
       printf("%s",test_name);
       printf(" in token number %d at line: %d\n", tkcounter, yylineno);
       printf("\tyytext = %s\n", yytext);
+      printf("\tntoken = %d\n", ntoken);
+      printf("\tresult[i] = %d\n", result[tkcounter]);
+
       return 0;
     }
+    ++tkcounter;
     ntoken = yylex();
   }
   printf("Passed: ");
