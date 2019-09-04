@@ -14,3 +14,5 @@ cd $SCRIPTSPATH
 ./make_tester.sh TC_FIB10
 cd $SRCPATH/test/
 ./tester < $DATAPATH/test_fibonacci.mng
+
+rm tester
