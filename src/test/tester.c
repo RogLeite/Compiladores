@@ -3,19 +3,18 @@
 #include <string.h>
 #include "tester.h"
 #include "main/interpreter.h"
-#define TK_NAME_SIZE 12
-#define TK_INITIAL_INDEX 258
 #define READABLE 0
-
 #ifdef TC_FIB10
 
-char* test_name = "fibonacci10";
-int result[];
+char* tc_name = "fibonacci10";
+int tc_qtd_tokens = 138;
+int tc_expected [138] = { 268, 40, 268, 58, 263, 41, 58, 263, 91, 93, 123, 262, 268, 60, 270, 123, 268, 58, 263, 91, 93, 59, 268, 61, 264, 263, 91, 270, 93, 59, 268, 91, 270, 93, 61, 45, 270, 59, 265, 268, 59, 125, 268, 58, 263, 59, 268, 58, 263, 91, 93, 59, 64, 270, 59, 64, 270, 59, 268, 61, 270, 59, 268, 61, 264, 263, 91, 268, 93, 59, 268, 91, 270, 93, 61, 270, 59, 268, 91, 270, 93, 61, 270, 59, 267, 268, 60, 268, 123, 64, 268, 59, 268, 91, 268, 93, 61, 268, 91, 268, 45, 270, 93, 43, 268, 91, 268, 45, 270, 93, 59, 268, 61, 268, 43, 270, 59, 125, 265, 268, 59, 125, 268, 40, 41, 58, 263, 123, 64, 268, 40, 270, 41, 59, 265, 270, 59, 125,  };
 
 #elif TC_SIMPLEMAIN
 
-char* test_name = "simple_main";
-int result[];
+char* tc_name = "simple_main";
+int tc_qtd_tokens = 18;
+int tc_expected[18] = { 268, 40, 41, 58, 263, 123, 268, 58, 263, 59, 268, 61, 270, 59, 265, 268, 59, 125,  };
 
 #endif
 
@@ -25,79 +24,16 @@ extern int yylex();
 extern int yylineno;
 extern char* yytext;
 
-char* tk_names[] = {
-          NULL,
-          "TK_AS",
-          "TK_CHAR",
-          "TK_ELSE",
-          "TK_FLOAT",
-          "TK_IF",
-          "TK_INT",
-          "TK_NEW",
-          "TK_RETURN",
-          "TK_VOID",
-          "TK_WHILE",
-          "TK_ID",
-          "TK_STRING",
-          "TK_INTEGER",
-          "TK_FLOATING",
-          "TK_EQ",
-          "TK_NE",
-          "TK_LE",
-          "TK_GE",
-          "TK_AND",
-          "TK_OR"
-};
-int convertTokenToString(int token, char** str);
-
 int main(void) {
   int ntoken;
-  char* str = malloc(sizeof(char)*TK_NAME_SIZE);
   ntoken = yylex();
   int tkcounter = 0;
-  while (ntoken) {
-    // if (ntoken != result[tkcounter])
-    // {
-    //   printf("FAILED: ");
-    //   printf("%s",test_name);
-    //   printf(" in token number %d at line: %d\n", tkcounter, yylineno);
-    //   printf("\tyytext = %s\n", yytext);
-    //   printf("\tntoken = %d\n", ntoken);
-    //   printf("\tresult[i] = %d\n", result[tkcounter]);
-    //
-    //   return 0;
-    // }
-    if (READABLE && convertTokenToString(ntoken,&str)==1)
-    {
-      printf( "%s ", str );
-    }
-    else
-    {
-      printf( "%d ", ntoken );
-    }
-    ++tkcounter;
-    ntoken = yylex();
-  }
-  // printf("Passed: ");
-  // printf("%s",test_name);
-  // printf("\n");
+  printf("tc_name = %s\n",tc_name );
+  printf("tc_qtd_tokens = %d\n", tc_qtd_tokens);
+  // while (ntoken) {
+  //
+  //   ++tkcounter;
+  //   ntoken = yylex();
+  // }
   return 0;
-}
-
-int convertTokenToString(int token, char** str)
-{
-  if (token>=TK_INITIAL_INDEX)
-  {
-    strcpy(*str, tk_names[token-TK_INITIAL_INDEX+1]);
-    return 1;
-  }
-  else if (token>0)
-  {
-    char c = (char)token;
-    char mid[1] = { c};
-    strcpy(*str, mid);
-    return 1;
-  }
-  else
-    return 0;
 }
