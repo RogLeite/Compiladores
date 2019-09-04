@@ -1,2 +1,0 @@
-#Comentário
-int rodrigo = 1; #declaração de var
