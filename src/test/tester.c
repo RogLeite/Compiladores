@@ -7,11 +7,23 @@
 #define TK_INITIAL_INDEX 258
 #define READABLE 0
 
+#ifdef TC_FIB10
+
+char* test_name = "fibonacci10";
+int result[];
+
+#elif TC_SIMPLEMAIN
+
+char* test_name = "simple_main";
+int result[];
+
+#endif
+
+
+
 extern int yylex();
 extern int yylineno;
 extern char* yytext;
-// char* test_name;
-// int result[];
 
 char* tk_names[] = {
           NULL,
