@@ -21,7 +21,12 @@ char* names[] = {
           "TK_STRING",
           "TK_INTEGER",
           "TK_FLOATING",
-          "TK_SYMBOL"
+          "TK_EQ",
+          "TK_NE",
+          "TK_LE",
+          "TK_GE",
+          "TK_AND",
+          "TK_OR"
 };
 
 int main(void) {

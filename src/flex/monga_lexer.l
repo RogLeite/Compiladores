@@ -24,9 +24,14 @@ while                           return TK_WHILE;
 0x({HEX}+("."{HEX}*)?|"."{HEX}+)([pP][-+]?[0-9]+)?  return TK_FLOATING;
 
 
-[-+*/,:;(){}=@<>]               return TK_SYMBOL;
-"["|"]"                         return TK_SYMBOL;
-"=="|"~="|"<="|">="|"&&"|"||"   return TK_SYMBOL;
+[-+*/,:;(){}=@<>]               return (int)*yytext;
+"["|"]"                         return (int)*yytext;
+"=="                            return TK_EQ;
+"~="                            return TK_NE;
+"<="                            return TK_LE;
+">="                            return TK_GE;
+"&&"                            return TK_AND;
+"||"                            return TK_OR;
 #[^\n]*                         ;
 . printf("MISMATCH: \"%s\" Line: %i\n", yytext, yylineno);
 %%
