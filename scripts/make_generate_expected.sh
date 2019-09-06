@@ -9,7 +9,12 @@ then
   echo Construindo parser
   flex --outfile=$TEMPFILE/tmp_gen_expected.c $SRCPATH/flex/monga_lexer.l
   echo Building...
-  gcc -I$SRCPATH $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c -o $SRCPATH/test/generate_expected -lfl
+  if [ -z $1 ]
+  then
+    gcc -I$SRCPATH $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c -o $SRCPATH/test/generate_expected -lfl
+  else
+    gcc -I$SRCPATH -D$1 $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c -o $SRCPATH/test/generate_expected -lfl
+  fi
   echo Limpando tmp
 
   rm $TEMPFILE/tmp_gen_expected.c
