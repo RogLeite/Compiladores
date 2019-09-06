@@ -15,6 +15,8 @@ int                             return TK_INT;
 new                             return TK_NEW;
 return                          return TK_RETURN;
 bool                            return TK_BOOL;
+false                           return TK_FALSE;
+true                            return TK_TRUE;
 while                           return TK_WHILE;
 [a-zA-Z_][a-zA-Z_0-9]*          return TK_ID;
 \"([^"\\\n]|\\[nt"\\])*\"       return TK_STRING;

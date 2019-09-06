@@ -18,6 +18,8 @@
 %token TK_GE
 %token TK_AND
 %token TK_OR
+%token TK_FALSE
+%token TK_TRUE
 %start program
 %%
 program : ;

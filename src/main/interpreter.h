@@ -64,7 +64,9 @@ extern int yydebug;
     TK_LE = 274,
     TK_GE = 275,
     TK_AND = 276,
-    TK_OR = 277
+    TK_OR = 277,
+    TK_FALSE = 278,
+    TK_TRUE = 279
   };
 #endif
 /* Tokens.  */
@@ -88,6 +90,8 @@ extern int yydebug;
 #define TK_GE 275
 #define TK_AND 276
 #define TK_OR 277
+#define TK_FALSE 278
+#define TK_TRUE 279
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED

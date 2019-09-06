@@ -31,7 +31,9 @@ char* tk_names[] = {
           "TK_LE",
           "TK_GE",
           "TK_AND",
-          "TK_OR"
+          "TK_OR",
+          "TK_FALSE",
+          "TK_TRUE"
 };
 int convertTokenToString(int token, char** str);
 
