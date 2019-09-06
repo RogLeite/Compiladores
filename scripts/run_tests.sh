@@ -5,6 +5,12 @@ BUILDPATH=/home/rodrigo/Documents/Compiladores/build
 SCRIPTSPATH=/home/rodrigo/Documents/Compiladores/scripts
 DATAPATH=/home/rodrigo/Documents/Compiladores/data
 
+
+cd $SCRIPTSPATH
+./make_tester.sh TC_LEXIC_TOKENS
+cd $SRCPATH/test/
+./tester < $DATAPATH/test_simple_main.mng
+
 cd $SCRIPTSPATH
 ./make_tester.sh TC_SIMPLEMAIN
 cd $SRCPATH/test/
