@@ -4,7 +4,7 @@
 #include "main/interpreter.h"
 #define TK_NAME_SIZE 12
 #define TK_INITIAL_INDEX 258
-#define READABLE 0
+#define READABLE 1
 
 extern int yylex();
 extern int yylineno;
@@ -42,20 +42,31 @@ int main(void) {
   char* str = malloc(sizeof(char)*TK_NAME_SIZE);
   ntoken = yylex();
   int tkcounter = 0;
-  printf("tc_expected = { ");
-  while (ntoken) {
-    if (READABLE && convertTokenToString(ntoken,&str)==1)
-    {
-      printf( "%s ", str );
-    }
-    else
-    {
+  if (!READABLE)
+  {
+    printf("tc_expected = { ");
+    while (ntoken) {
       printf( "%d, ", ntoken );
+      ++tkcounter;
+      ntoken = yylex();
     }
-    ++tkcounter;
-    ntoken = yylex();
+    printf(" }; tc_qtd_tokens = %d;", tkcounter);
   }
-  printf(" }; tc_qtd_tokens = %d;", tkcounter);
+  else
+  {
+    while (ntoken) {
+      if (convertTokenToString(ntoken,&str)==1)
+      {
+        printf( "%s\n", str );
+      }
+      else
+      {
+        printf( "%d\n", ntoken );
+      }
+      ++tkcounter;
+      ntoken = yylex();
+    }
+  }
   return 0;
 }
 
