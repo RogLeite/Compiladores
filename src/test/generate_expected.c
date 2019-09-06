@@ -4,7 +4,10 @@
 #include "main/interpreter.h"
 #define TK_NAME_SIZE 12
 #define TK_INITIAL_INDEX 258
-#define READABLE 1
+
+#ifndef READABLE
+#define READABLE 0
+#endif
 
 extern int yylex();
 extern int yylineno;
