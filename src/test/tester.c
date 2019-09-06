@@ -36,7 +36,11 @@ int main(void) {
   printf("test name: %s ",tc_name );
   printf("-----------------------------------\n");
   while (ntoken && tkcounter<tc_qtd_tokens) {
-
+    if(ntoken != tc_expected[tkcounter])
+    {
+      printf("Incorrect token Numero:%d in line l:%d\n", ntoken, yylineno);
+      break;
+    }
     ++tkcounter;
     ntoken = yylex();
   }
