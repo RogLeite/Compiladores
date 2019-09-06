@@ -20,7 +20,7 @@ char* tk_names[] = {
           "TK_INT",
           "TK_NEW",
           "TK_RETURN",
-          "TK_VOID",
+          "TK_BOOL",
           "TK_WHILE",
           "TK_ID",
           "TK_STRING",

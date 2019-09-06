@@ -6,7 +6,7 @@
 %token TK_INT
 %token TK_NEW
 %token TK_RETURN
-%token TK_VOID
+%token TK_BOOL
 %token TK_WHILE
 %token TK_ID
 %token TK_STRING
