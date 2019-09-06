@@ -1,0 +1,44 @@
+as
+char
+else
+float
+if
+int
+new
+return
+bool
+false
+true
+while
+==
+~=
+<=
+>=
+&&
+||
+#comentário \n
+"string básica"
+-
++
+++
+*
+/
+,
+:
+;
+(
+)
+{
+}
+=
+@
+<
+>
+[
+]
+"5tr!ng b1z@rrA c0m-símb0l05"
+"string com escape de contra-barra\\"
+"string com escape de aspas\""
+"string com escape de tab \t"
+"string com escape de newline \n"
+"string com vários escapes seguidos \\\"\\\n\t\\"
