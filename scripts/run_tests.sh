@@ -9,7 +9,7 @@ DATAPATH=/home/rodrigo/Documents/Compiladores/data
 cd $SCRIPTSPATH
 ./make_tester.sh TC_LEXIC_TOKENS
 cd $SRCPATH/test/
-./tester < $DATAPATH/test_simple_main.mng
+./tester < $DATAPATH/test_lexic_tokens.txt
 
 cd $SCRIPTSPATH
 ./make_tester.sh TC_SIMPLEMAIN
