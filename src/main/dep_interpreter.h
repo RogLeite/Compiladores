@@ -53,7 +53,7 @@ extern int yydebug;
     TK_INT = 263,
     TK_NEW = 264,
     TK_RETURN = 265,
-    TK_VOID = 266,
+    TK_BOOL = 266,
     TK_WHILE = 267,
     TK_ID = 268,
     TK_STRING = 269,
@@ -76,7 +76,7 @@ extern int yydebug;
 #define TK_INT 263
 #define TK_NEW 264
 #define TK_RETURN 265
-#define TK_VOID 266
+#define TK_BOOL 266
 #define TK_WHILE 267
 #define TK_ID 268
 #define TK_STRING 269

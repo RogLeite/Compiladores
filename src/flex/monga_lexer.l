@@ -14,7 +14,7 @@ if                              return TK_IF;
 int                             return TK_INT;
 new                             return TK_NEW;
 return                          return TK_RETURN;
-void                            return TK_VOID;
+bool                            return TK_BOOL;
 while                           return TK_WHILE;
 [a-zA-Z_][a-zA-Z_0-9]*          return TK_ID;
 \"([^"\\\n]|\\[nt"\\])*\"       return TK_STRING;
