@@ -20,6 +20,43 @@
 %token TK_OR
 %token TK_FALSE
 %token TK_TRUE
-%start program
+%start start
 %%
-program : ;
+
+start :
+          | programa
+          ;
+
+programa :  definicao
+          | programa definicao
+          ;
+
+definicao : def_variavel
+          | def_funcao ;
+
+def_variavel : TK_ID ':' tipo ';' ;
+
+tipo : TK_INT
+     | TK_CHAR
+     | TK_FLOAT
+     | TK_BOOL
+     | '[' tipo ']'
+     ;
+
+def_funcao : TK_ID '(' parametros ')' ':' tipo bloco
+           | TK_ID '(' parametros ')' bloco
+           ;
+
+parametros :
+           | lista_params ;
+
+lista_params : parametro
+             | lista_params ',' parametro;
+
+parametro : TK_ID ':' tipo ;
+
+bloco : '{' multi_definicoes multi_comandos '}' ;
+
+multi_definicoes : | defs_variaveis ;
+
+multi_comandos : | comandos ;
