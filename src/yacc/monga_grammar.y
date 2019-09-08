@@ -59,4 +59,27 @@ bloco : '{' multi_definicoes multi_comandos '}' ;
 
 multi_definicoes : | defs_variaveis ;
 
+defs_variaveis : def_variavel
+               | defs_variaveis def_variavel
+               ;
+
 multi_comandos : | comandos ;
+
+comandos : comando
+         | comandos comando
+         ;
+
+comando : TK_IF exp bloco TK_ELSE bloco
+        | TK_IF exp bloco
+        | TK_WHILE exp bloco
+        | var '=' exp ';'
+        | TK_RETURN exp ';'
+        | TK_RETURN ';'
+        | chamada ';'
+        | '@' exp ';'
+        | bloco
+        ;
+
+var : TK_ID
+    | exp '[' exp ']'
+    ;
