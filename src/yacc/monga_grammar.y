@@ -55,15 +55,15 @@ lista_params : parametro
 
 parametro : TK_ID ':' tipo ;
 
-bloco : '{' multi_definicoes multi_comandos '}' ;
+bloco : '{' multi_defs_opcional multi_comandos_opcional '}' ;
 
-multi_definicoes : | defs_variaveis ;
+multi_defs_opcional : | defs_variaveis ;
 
 defs_variaveis : def_variavel
                | defs_variaveis def_variavel
                ;
 
-multi_comandos : | comandos ;
+multi_comandos_opcional : | comandos ;
 
 comandos : comando
          | comandos comando
@@ -83,3 +83,23 @@ comando : TK_IF exp bloco TK_ELSE bloco
 var : TK_ID
     | exp '[' exp ']'
     ;
+
+exp : TK_INTEGER
+    | TK_FLOATING
+    | TK_STRING
+    | TK_TRUE
+    | TK_FALSE
+    | var
+    | '(' exp ')'
+    | exp TK_AS tipo
+    | TK_NEW tipo '[' exp ']'
+    | '-' exp
+    | '!' exp
+    ;
+
+chamada : TK_ID '(' lista_opcional_exp ')' ;
+
+lista_opcional_exp : | lista_exp ;
+
+lista_exp : exp
+          | lista_exp ',' exp ;
