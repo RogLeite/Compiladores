@@ -60,11 +60,11 @@ int main(void) {
     while (ntoken) {
       if (convertTokenToString(ntoken,&str)==1)
       {
-        printf( "%s\n", str );
+        printf( "%s ", str );
       }
       else
       {
-        printf( "%d\n", ntoken );
+        printf( "%d ", ntoken );
       }
       ++tkcounter;
       ntoken = yylex();

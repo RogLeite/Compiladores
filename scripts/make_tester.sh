@@ -1,8 +1,6 @@
 #!/bin/bash
-TEMPFILE=/home/rodrigo/Documents/Compiladores/tmp
-SRCPATH=/home/rodrigo/Documents/Compiladores/src
-BUILDPATH=/home/rodrigo/Documents/Compiladores/build
-SCRIPTSPATH=/home/rodrigo/Documents/Compiladores/scripts
+TEMPFILE=../tmp
+SRCPATH=../src
 if [ -r $SRCPATH/flex/monga_lexic.l ] && [ -s $SRCPATH/flex/monga_lexic.l ]
 then
   #A fazer: importar essas variáveis de um arquivo de config

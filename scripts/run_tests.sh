@@ -1,12 +1,9 @@
 #!/bin/bash
-TEMPFILE=/home/rodrigo/Documents/Compiladores/tmp
-SRCPATH=/home/rodrigo/Documents/Compiladores/src
-BUILDPATH=/home/rodrigo/Documents/Compiladores/build
-SCRIPTSPATH=/home/rodrigo/Documents/Compiladores/scripts
-DATAPATH=/home/rodrigo/Documents/Compiladores/data
+SRCPATH=../src
+SCRIPTSPATH=../../scripts
+DATAPATH=../../data
 
 
-cd $SCRIPTSPATH
 ./make_tester.sh TC_LEXIC_TOKENS
 cd $SRCPATH/test/
 ./tester < $DATAPATH/test_lexic_tokens.txt
