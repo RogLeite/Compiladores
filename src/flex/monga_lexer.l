@@ -1,5 +1,6 @@
 %{
 #include "main/interpreter.h"
+#include <string.h>
 %}
 HEX       [0-9A-Fa-f]
 HEXNOZ    [1-9A-Fa-f]
@@ -36,6 +37,39 @@ while                           return TK_WHILE;
 #[^\n]*                         ;
 . printf("MISMATCH: \"%s\" Line: %i\n", yytext, yylineno);
 %%
+
+void storeString()
+{
+  char* str = malloc(strlen(yytext)*sizeof(char));
+  int i = 0;
+  while(yytext[i] != '\0')
+  {
+    if (yytext[i] != '\\')
+    {
+      str[i] = yytext[i];
+    }
+    else
+    {
+      switch (yytext[i+1])
+      {
+        case 'n' :
+          str[i] = '\n';
+        break;
+        case 't' :
+          str[i] = '\t';
+        break;
+        case '\"' :
+          str[i] = '\"';
+        break;
+        case '\\' :
+          str[i] = '\\';
+        break;
+      }
+    }
+    ++i;
+  }
+
+}
 
 int yywrap(void)
 {
