@@ -3,11 +3,11 @@ TEMPFILE=/home/rodrigo/Documents/Compiladores/tmp
 BUILDPATH=/home/rodrigo/Documents/Compiladores/build
 SRCPATH=/home/rodrigo/Documents/Compiladores/src
 SCRIPTSPATH=/home/rodrigo/Documents/Compiladores/scripts
-if [ -r $SRCPATH/flex/monga_lexer.l ] && [ -s $SRCPATH/flex/monga_lexer.l ]
+if [ -r $SRCPATH/flex/monga_lexic.l ] && [ -s $SRCPATH/flex/monga_lexic.l ]
 then
   #A fazer: importar essas variáveis de um arquivo de config
   echo Construindo parser
-  flex --outfile=$TEMPFILE/tmp_gen_expected.c $SRCPATH/flex/monga_lexer.l
+  flex --outfile=$TEMPFILE/tmp_gen_expected.c $SRCPATH/flex/monga_lexic.l
   echo Building...
   if [ -z $1 ]
   then
@@ -19,5 +19,5 @@ then
 
   rm $TEMPFILE/tmp_gen_expected.c
 else
-  echo Não tens permissão de leitura de monga_lexer.l ou está vazio
+  echo Não tens permissão de leitura de monga_lexic.l ou está vazio
 fi
