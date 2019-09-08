@@ -1,3 +1,8 @@
+  /*
+  * Parser sintático de Monga
+  * Rodrigo Leite - 1413150 - 08/setembro/2019
+  **/
+
 %token TK_AS
 %token TK_CHAR
 %token TK_ELSE

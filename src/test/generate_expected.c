@@ -1,3 +1,7 @@
+/*
+* Visualizador de tokens no output
+* Rodrigo Leite - 1413150 - 08/setembro/2019
+**/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

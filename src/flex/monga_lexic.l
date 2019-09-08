@@ -1,3 +1,7 @@
+  /*
+  * Parser léxico de Monga
+  * Rodrigo Leite - 1413150 - 08/setembro/2019
+  **/
 %{
 #include "main/interpreter.h"
 #include <string.h>
