@@ -103,7 +103,19 @@ exp : TK_INTEGER
     | TK_NEW tipo '[' exp ']'
     | '-' exp
     | '!' exp
+    | exp '+' parcela
+    | exp '-' parcela
+    | parcela
     ;
+
+parcela : parcela '*' fator
+        | parcela '/' fator
+        | fator
+        ;
+fator : TK_INTEGER
+      | TK_FLOATING
+      | '(' exp ')'
+      ;
 
 chamada : TK_ID '(' lista_opcional_exp ')' ;
 
