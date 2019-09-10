@@ -103,19 +103,34 @@ exp : TK_INTEGER
     | TK_NEW tipo '[' exp ']'
     | '-' exp
     | '!' exp
-    | exp '+' parcela
-    | exp '-' parcela
-    | parcela
+    | exp TK_AND relacional
+    | exp TK_OR relacional
     ;
+
+relacional : relacional TK_EQ aritmetica
+           | relacional TK_NE aritmetica
+           | relacional TK_LE aritmetica
+           | relacional TK_GE aritmetica
+           | relacional '<' aritmetica
+           | relacional '>' aritmetica
+           | aritmetica
+           ;
+
+aritmetica: aritmetica '+' parcela
+          | aritmetica '-' parcela
+          | parcela
+          ;
 
 parcela : parcela '*' fator
         | parcela '/' fator
         | fator
         ;
+
 fator : TK_INTEGER
       | TK_FLOATING
       | '(' exp ')'
       ;
+
 
 chamada : TK_ID '(' lista_opcional_exp ')' ;
 
