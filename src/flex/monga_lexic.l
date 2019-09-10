@@ -5,6 +5,10 @@
 %{
 #include "main/interpreter.h"
 #include <string.h>
+#include <stdlib.h>
+void storeString();
+void storeInt();
+void storeFloat();
 %}
 HEX       [0-9A-Fa-f]
 HEXNOZ    [1-9A-Fa-f]
@@ -72,9 +76,16 @@ void storeString()
     }
     ++i;
   }
-
+  //yylval.s = str;
 }
-
+void storeInt()
+{
+  //yylval.i = watoi(yytext);
+}
+void storeFloat()
+{
+  //yylval.d = strtod(yytext, (char**) NULL);
+}
 int yywrap(void)
 {
   return 1;
