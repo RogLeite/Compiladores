@@ -5,6 +5,7 @@
 %{
 #include <stdio.h>
 #include "main/interpreter.h"
+#include "main/lex_defs.h"
 void yyerror(char *s);
 %}
 

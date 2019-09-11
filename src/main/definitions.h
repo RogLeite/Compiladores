@@ -98,7 +98,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 11 "../src/yacc/monga_grammar.y" /* yacc.c:1909  */
+#line 12 "../src/yacc/monga_grammar.y" /* yacc.c:1909  */
 
   long i;
   double d;
