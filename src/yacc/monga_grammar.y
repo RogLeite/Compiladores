@@ -3,10 +3,16 @@
   * Rodrigo Leite - 1413150 - 08/setembro/2019
   **/
 %{
+#include <stdio.h>
 #include "main/interpreter.h"
+void yyerror(char *s);
 %}
 
-
+%union {
+  long i;
+  double d;
+  char* s;
+}
 %token TK_AS
 %token TK_CHAR
 %token TK_ELSE
@@ -17,10 +23,10 @@
 %token TK_RETURN
 %token TK_BOOL
 %token TK_WHILE
-%token TK_ID
-%token TK_STRING
-%token TK_INTEGER
-%token TK_FLOATING
+%token <s> TK_ID
+%token <s> TK_STRING
+%token <i> TK_INTEGER
+%token <d> TK_FLOATING
 %token TK_EQ
 %token TK_NE
 %token TK_LE
@@ -152,3 +158,6 @@ lista_opcional_exp : %empty
 lista_exp : exp
           | lista_exp ',' exp
           ;
+%%
+
+void yyerror (char *s){fprintf(stderr, "%s\n", s);}
