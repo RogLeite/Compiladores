@@ -4,18 +4,18 @@ SCRIPTSPATH=../../scripts
 DATAPATH=../../data
 
 
-./make_tester.sh TC_LEXIC_TOKENS
+./make_lexic_tester.sh TC_LEXIC_TOKENS
 cd $SRCPATH/test/
-./tester < $DATAPATH/test_lexic_tokens.txt
+./lexic_tester < $DATAPATH/test_lexic_tokens.txt
 
 cd $SCRIPTSPATH
-./make_tester.sh TC_SIMPLEMAIN
+./make_lexic_tester.sh TC_SIMPLEMAIN
 cd $SRCPATH/test/
-./tester < $DATAPATH/test_simple_main.mng
+./lexic_tester < $DATAPATH/test_simple_main.mng
 
 cd $SCRIPTSPATH
-./make_tester.sh TC_FIB10
+./make_lexic_tester.sh TC_FIB10
 cd $SRCPATH/test/
-./tester < $DATAPATH/test_fibonacci.mng
+./lexic_tester < $DATAPATH/test_fibonacci.mng
 
-rm tester
+rm lexic_tester
