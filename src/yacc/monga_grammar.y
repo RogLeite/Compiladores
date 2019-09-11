@@ -6,6 +6,7 @@
 #include "main/interpreter.h"
 %}
 
+
 %token TK_AS
 %token TK_CHAR
 %token TK_ELSE
@@ -31,16 +32,17 @@
 %start start
 %%
 
-start :
-          | programa
-          ;
+start : %empty
+      | programa
+      ;
 
-programa :  definicao
-          | programa definicao
-          ;
+programa : definicao
+         | programa definicao
+         ;
 
 definicao : def_variavel
-          | def_funcao ;
+          | def_funcao
+          ;
 
 def_variavel : TK_ID ':' tipo ';' ;
 
@@ -55,7 +57,7 @@ def_funcao : TK_ID '(' parametros ')' ':' tipo bloco
            | TK_ID '(' parametros ')' bloco
            ;
 
-parametros :
+parametros : %empty
            | lista_params ;
 
 lista_params : parametro
@@ -63,15 +65,16 @@ lista_params : parametro
 
 parametro : TK_ID ':' tipo ;
 
-bloco : '{' multi_defs_opcional multi_comandos_opcional '}' ;
+bloco : '{' '}'
+      | '{' comandos '}'
+      | '{' defs_variaveis '}'
+      | '{' defs_variaveis comandos '}'
+      ;
 
-multi_defs_opcional : | defs_variaveis ;
 
 defs_variaveis : def_variavel
                | defs_variaveis def_variavel
                ;
-
-multi_comandos_opcional : | comandos ;
 
 comandos : comando
          | comandos comando
@@ -92,41 +95,49 @@ var : TK_ID
     | exp '[' exp ']'
     ;
 
-exp : TK_INTEGER
-    | TK_FLOATING
-    | TK_STRING
-    | TK_TRUE
-    | TK_FALSE
-    | var
-    | '(' exp ')'
+exp : var
     | exp TK_AS tipo
+    | chamada
     | TK_NEW tipo '[' exp ']'
-    | '-' exp
-    | '!' exp
-    | exp TK_AND relacional
-    | exp TK_OR relacional
+    | exp TK_OR exp_and
+    | exp_and
     ;
 
-relacional : relacional TK_EQ aritmetica
-           | relacional TK_NE aritmetica
-           | relacional TK_LE aritmetica
-           | relacional TK_GE aritmetica
-           | relacional '<' aritmetica
-           | relacional '>' aritmetica
-           | aritmetica
-           ;
-
-aritmetica: aritmetica '+' parcela
-          | aritmetica '-' parcela
-          | parcela
-          ;
-
-parcela : parcela '*' fator
-        | parcela '/' fator
-        | fator
+exp_and : exp_and TK_AND exp_igualdade
+        | exp_igualdade
         ;
 
-fator : TK_INTEGER
+exp_igualdade : exp_igualdade TK_EQ exp_comparativa
+              | exp_igualdade TK_NE exp_comparativa
+              | exp_comparativa
+              ;
+
+exp_comparativa : exp_comparativa TK_LE exp_aditiva
+                | exp_comparativa TK_GE exp_aditiva
+                | exp_comparativa '<' exp_aditiva
+                | exp_comparativa '>' exp_aditiva
+                | exp_aditiva
+                ;
+
+exp_aditiva : exp_aditiva '+' exp_multiplicativa
+            | exp_aditiva '-' exp_multiplicativa
+            | exp_multiplicativa
+            ;
+
+exp_multiplicativa : exp_multiplicativa '*' exp_unaria
+                   | exp_multiplicativa '/' exp_unaria
+                   | exp_unaria
+                   ;
+
+exp_unaria : '!' fator
+           | '-' fator
+           | fator
+           ;
+
+fator : TK_STRING
+      | TK_TRUE
+      | TK_FALSE
+      | TK_INTEGER
       | TK_FLOATING
       | '(' exp ')'
       ;
@@ -134,7 +145,10 @@ fator : TK_INTEGER
 
 chamada : TK_ID '(' lista_opcional_exp ')' ;
 
-lista_opcional_exp : | lista_exp ;
+lista_opcional_exp : %empty
+                   | lista_exp
+                   ;
 
 lista_exp : exp
-          | lista_exp ',' exp ;
+          | lista_exp ',' exp
+          ;
