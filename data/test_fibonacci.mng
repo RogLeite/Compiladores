@@ -1,18 +1,18 @@
 #Essa função calcula fibonacci até a n-ésima etapa
 fib(n:int):[int]
 {
+  #declaração do contador
+  i : int;
+  #declaração do vetor de retorno
+  vetor_ret : [int];
   #caso esteja errado o parâmetro
   if n<2
   {
-    ret : int[];
+    ret : [int];
     ret = new int[1];
     ret[0] = -1;
     return  ret ;
   }
-  #declaração do contador
-  i : int;
-  #declaração do vetor de retorno
-  vetor_ret : int[];
   #imprime 0 e 1 pra não parecer que estamos começando na segunda casa
   @0;
   @1;

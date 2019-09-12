@@ -100,7 +100,7 @@ comando : TK_IF exp bloco TK_ELSE bloco
         ;
 
 var : TK_ID
-    | exp_aditiva '[' exp_aditiva ']'
+    | fator '[' exp ']'
     ;
 
 exp : exp_and TK_OR exp
@@ -137,7 +137,7 @@ exp_as : exp_new TK_AS tipo
        | exp_new
        ;
 
-exp_new : TK_NEW tipo '[' exp_unaria ']'
+exp_new : TK_NEW tipo '[' exp ']'
         | exp_unaria
         ;
 
@@ -146,13 +146,13 @@ exp_unaria : '!' fator
            | fator
            ;
 
-fator : '(' exp ')'
-      | literal
+fator : constante
+      | '(' exp ')'
       | chamada
       | var
       ;
 
-literal : TK_STRING
+constante : TK_STRING
         | TK_TRUE
         | TK_FALSE
         | TK_INTEGER
