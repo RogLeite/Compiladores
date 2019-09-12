@@ -100,56 +100,64 @@ comando : TK_IF exp bloco TK_ELSE bloco
         ;
 
 var : TK_ID
-    | exp '[' exp ']'
+    | exp_aditiva '[' exp_aditiva ']'
     ;
 
-exp : exp TK_AS tipo
-    | chamada
-    | TK_NEW tipo '[' exp ']'
-    | exp TK_OR exp_and
+exp : exp_and TK_OR exp
     | exp_and
     ;
 
-exp_and : exp_and TK_AND exp_igualdade
+exp_and : exp_igualdade TK_AND exp_and
         | exp_igualdade
         ;
 
-exp_igualdade : exp_igualdade TK_EQ exp_comparativa
-              | exp_igualdade TK_NE exp_comparativa
+exp_igualdade : exp_comparativa TK_EQ exp_igualdade
+              | exp_comparativa TK_NE exp_igualdade
               | exp_comparativa
               ;
 
-exp_comparativa : exp_comparativa TK_LE exp_aditiva
-                | exp_comparativa TK_GE exp_aditiva
-                | exp_comparativa '<' exp_aditiva
-                | exp_comparativa '>' exp_aditiva
+exp_comparativa : exp_aditiva TK_LE exp_aditiva
+                | exp_aditiva TK_GE exp_aditiva
+                | exp_aditiva '<' exp_aditiva
+                | exp_aditiva '>' exp_aditiva
                 | exp_aditiva
                 ;
 
-exp_aditiva : exp_aditiva '+' exp_multiplicativa
-            | exp_aditiva '-' exp_multiplicativa
+exp_aditiva : exp_multiplicativa '+' exp_aditiva
+            | exp_multiplicativa '-' exp_aditiva
             | exp_multiplicativa
             ;
 
-exp_multiplicativa : exp_multiplicativa '*' exp_unaria
-                   | exp_multiplicativa '/' exp_unaria
-                   | exp_unaria
+exp_multiplicativa : exp_as '*' exp_multiplicativa
+                   | exp_as '/' exp_multiplicativa
+                   | exp_as
                    ;
+
+exp_as : exp_new TK_AS tipo
+       | exp_new
+       ;
+
+exp_new : TK_NEW tipo '[' exp_unaria ']'
+        | exp_unaria
+        ;
 
 exp_unaria : '!' fator
            | '-' fator
            | fator
            ;
 
-fator : var
-      | TK_STRING
-      | TK_TRUE
-      | TK_FALSE
-      | TK_INTEGER
-      | TK_FLOATING
-      | '(' exp ')'
+fator : '(' exp ')'
+      | literal
+      | chamada
+      | var
       ;
 
+literal : TK_STRING
+        | TK_TRUE
+        | TK_FALSE
+        | TK_INTEGER
+        | TK_FLOATING
+        ;
 
 chamada : TK_ID '(' lista_opcional_exp ')' ;
 
