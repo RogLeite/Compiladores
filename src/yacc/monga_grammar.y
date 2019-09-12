@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include "main/interpreter.h"
 #include "main/lex_defs.h"
-void yyerror(char *s);
+void yyerror(const char *s);
 %}
 
 %union {
@@ -14,6 +14,7 @@ void yyerror(char *s);
   double d;
   char* s;
 }
+%define parse.error verbose
 %token TK_AS
 %token TK_CHAR
 %token TK_ELSE
@@ -161,4 +162,4 @@ lista_exp : exp
           ;
 %%
 
-void yyerror (char *s){fprintf(stderr, "%s\n", s);}
+void yyerror (const char *s){fprintf(stderr, "%s\n", s);}
