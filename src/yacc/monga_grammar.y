@@ -103,8 +103,7 @@ var : TK_ID
     | exp '[' exp ']'
     ;
 
-exp : var
-    | exp TK_AS tipo
+exp : exp TK_AS tipo
     | chamada
     | TK_NEW tipo '[' exp ']'
     | exp TK_OR exp_and
@@ -142,7 +141,8 @@ exp_unaria : '!' fator
            | fator
            ;
 
-fator : TK_STRING
+fator : var
+      | TK_STRING
       | TK_TRUE
       | TK_FALSE
       | TK_INTEGER
