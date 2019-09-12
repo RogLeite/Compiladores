@@ -1,5 +1,5 @@
 #Essa função calcula fibonacci até a n-ésima etapa
-fib(n:int):int[]
+fib(n:int):[int]
 {
   #caso esteja errado o parâmetro
   if n<2
