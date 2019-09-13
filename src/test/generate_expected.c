@@ -73,6 +73,7 @@ int main(void) {
       ++tkcounter;
       ntoken = yylex();
     }
+    printf("\n");
   }
   return 0;
 }
