@@ -2,15 +2,19 @@
 #### Rodrigo Leite da Silva - 1413150
 #### 08/setembro/2019
 
-Para executar os testes léxicos:
+
+#####Da pasta raiz você pode:
+ - Para executar os testes léxicos:
 ```
 $ ./lexic_tests.sh
 ```
 
-Para executar os testes gramaticais:
+ - Para executar os testes gramaticais:
 ```
 $ ./grammatic_tests.sh
 ```
+ - Não esqueça de verificar a permissão para execução. Caso não tenha, execute: ``` chmod +x *_tests.sh ``` 
+
 O arquivo em flex, com as definições léxicas de Monga estão no arquivo ``` src/flex/monga_lexic.l ```
 
 O arquivo em yacc, com as definições gramaticais de Monga estão no arquivo ``` src/yacc/monga_grammar.y ```
