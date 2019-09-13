@@ -18,4 +18,8 @@ echo
 echo Testando test_fibonacci.mng
 ./grammatic_tester < $DATAPATH/test_fibonacci.mng
 
+echo
+echo Testando ola_mundo.mng
+./grammatic_tester < $DATAPATH/ola_mundo.mng
+
 rm grammatic_tester

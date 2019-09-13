@@ -1,0 +1,8 @@
+main():int
+{
+  str : [char];
+  str = "Olá mundo!\n" ;
+  @ str ;
+  @ "Tchau mundo!\n" ;
+  return 0;
+}
