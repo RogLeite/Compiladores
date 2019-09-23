@@ -10,9 +10,9 @@ then
   #echo Building...
   if [ -z $1 ]
   then
-    gcc -I$SRCPATH $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c -o $SRCPATH/test/generate_expected -lfl
+    gcc -Wall -I$SRCPATH $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c -o $SRCPATH/test/generate_expected -lfl
   else
-    gcc -I$SRCPATH -D$1 $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c -o $SRCPATH/test/generate_expected -lfl
+    gcc -Wall -I$SRCPATH -D$1 $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c -o $SRCPATH/test/generate_expected -lfl
   fi
   #echo Limpando tmp
 
