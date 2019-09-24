@@ -7,11 +7,21 @@ typedef union tree_node_t Node;
 
 typedef enum node_tag_t{
   expression,
-  block,
-  declaracao,
   comando,
   tipo,
-  variavel
+  variavel,
+  BLOCK,
+  VARDEC,
+  DEFS,
+  INTTYPE,
+  FLOATTYPE,
+  BOOLTYPE,
+  CHARTYPE,
+  ARRAYDEC,
+  TYPEDFUNCDEF,
+  FUNCDEF,
+  PARAMLIST,
+  PARAM
 } NodeTag;
 
 typedef union tree_node_t{
@@ -20,19 +30,44 @@ typedef union tree_node_t{
   } leaf;
   struct{
     NodeTag tag ;
-    Node *e1;
+    Node *n1;
   } uni;
   struct{
     NodeTag tag ;
-    Node *e1,*e2;
+    Node *n1,*n2;
   } bi;
   struct{
     NodeTag tag ;
-    Node *e1,*e2,*e3;
+    Node *n1,*n2,*n3;
   } tri;
+  struct{
+    NodeTag tag;
+    char *id;
+  } id_leaf;
+  struct{
+    NodeTag tag;
+    char *id;
+    Node *n1;
+  } id_uni;
+  struct{
+    NodeTag tag;
+    char *id;
+    Node *n1, *n2;
+  } id_bi;
+  struct{
+    NodeTag tag;
+    char *id;
+    Node *n1, *n2, *n3;
+  } id_tri;
 } Node;
 
 Node *global_tree;
+
+Node *intType;
+Node *floatType;
+Node *boolType;
+Node *charType;
+
 /**
 Como está no caderno
 */
@@ -42,9 +77,9 @@ typedef struct tree_node_t{
   NodeTag tag;
   union content_t{
     struct{ } leaf;
-    struct{ Exp *e1; } uni;
-    struct{ Exp *e1,*e2; } bi;
-    struct{ Exp *e1,*e2,*e3; } tri;
+    struct{ Exp *n1; } uni;
+    struct{ Exp *n1,*n2; } bi;
+    struct{ Exp *n1,*n2,*n3; } tri;
   } content;
 } Node;
 */
