@@ -13,10 +13,6 @@
 #define READABLE 0
 #endif
 
-extern int yylex();
-extern int yylineno;
-extern char* yytext;
-
 char* tk_names[] = {
           NULL,
           "TK_AS",

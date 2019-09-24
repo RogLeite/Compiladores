@@ -7,8 +7,6 @@
 #include <string.h>
 #include "main/interpreter.h"
 
-extern int yyparse();
-extern char* yytext;
 
 int main(void)
 {

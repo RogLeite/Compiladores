@@ -28,11 +28,6 @@ int tc_expected[18] = { 268, 40, 41, 58, 263, 123, 268, 58, 263, 59, 268, 61, 27
 #endif
 
 
-
-extern int yylex();
-extern int yylineno;
-extern char* yytext;
-
 int main(void) {
   int passed = 1;
   int ntoken;
