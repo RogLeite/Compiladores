@@ -100,7 +100,7 @@ union YYSTYPE
 {
 #line 12 "../src/yacc/monga_grammar.y" /* yacc.c:1909  */
 
-  long i;
+  int i;
   double d;
   char* s;
 

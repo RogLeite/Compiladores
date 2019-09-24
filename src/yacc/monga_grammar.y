@@ -10,7 +10,7 @@ void yyerror(const char *s);
 %}
 
 %union {
-  long i;
+  int i;
   double d;
   char* s;
 }
