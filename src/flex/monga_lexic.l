@@ -27,12 +27,12 @@ bool                            return TK_BOOL;
 false                           return TK_FALSE;
 true                            return TK_TRUE;
 while                           return TK_WHILE;
-[a-zA-Z_][a-zA-Z_0-9]*          return TK_ID;
-\"([^"\\\n]|\\[nt"\\])*\"       return TK_STRING;
-[0-9]+                          return TK_INTEGER;
-0x{HEX}+                        return TK_INTEGER;
-([0-9]+("."[0-9]*)?|"."[0-9]+)([eE][-+]?[0-9]+)?    return TK_FLOATING;
-0x({HEX}+("."{HEX}*)?|"."{HEX}+)([pP][-+]?[0-9]+)?  return TK_FLOATING;
+[a-zA-Z_][a-zA-Z_0-9]*          {storeString(); return TK_ID;}
+\"([^"\\\n]|\\[nt"\\])*\"       {storeString(); return TK_STRING;}
+[0-9]+                          {storeInt(); return TK_INTEGER;}
+0x{HEX}+                        {storeInt(); return TK_INTEGER;}
+([0-9]+("."[0-9]*)?|"."[0-9]+)([eE][-+]?[0-9]+)?    {storeFloat(); return TK_FLOATING;}
+0x({HEX}+("."{HEX}*)?|"."{HEX}+)([pP][-+]?[0-9]+)?  {storeFloat(); return TK_FLOATING;}
 
 [-+*/,:;(){}=@<>]               return (int)*yytext;
 "["|"]"                         return (int)*yytext;
@@ -76,15 +76,15 @@ void storeString()
     }
     ++i;
   }
-  //yylval.s = str;
+  yylval.s = str;
 }
 void storeInt()
 {
-  //yylval.i = watoi(yytext);
+  yylval.i = atoi(yytext);
 }
 void storeFloat()
 {
-  //yylval.d = strtod(yytext, (char**) NULL);
+  yylval.d = strtod(yytext, (char**) NULL);
 }
 int yywrap(void)
 {
