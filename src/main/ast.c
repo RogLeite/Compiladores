@@ -12,6 +12,31 @@ boolType.leaf.tag = BOOLTYPE;
 charType = malloc(sizeof(Node));
 charType.leaf.tag = CHARTYPE;
 
+trueValue = malloc(sizeof(Node));
+trueValue.leaf.tag = TRUE_VALUE;
+
+falseValue = malloc(sizeof(Node));
+falseValue.leaf.tag = FALSE_VALUE;
+
+Node *mkConstantNode(NodeTag tag, YYSTYPE val)
+{
+  Node *newNode = malloc(sizeof(Node));
+  switch(tag){
+    case STRING:
+      newNode.cte_string.tag = tag;
+      strcpy(newNode.cte_string.value, val.s);
+      break;
+      case INTEGER:
+        newNode.cte_integer.tag = tag;
+        newNode.cte_integer.value = val.i;
+      break;
+      case FLOATING:
+        newNode.cte_floating.tag = tag;
+        newNode.cte_floating.value = val.d;
+      break;
+  }
+  return newNode;
+}
 Node *mkLeafNode(NodeTag tag)
 {
   Node *newNode = malloc(sizeof(Node));

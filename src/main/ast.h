@@ -44,10 +44,27 @@ typedef enum node_tag_t{
   NOT,
   NEGATIVE,
   CALL,
-  LISTEXP
+  LISTEXP,
+  TRUE_VALUE,
+  FALSE_VALUE,
+  STRING,
+  INTEGER,
+  FLOATING
 } NodeTag;
 
 typedef union tree_node_t{
+  struct{
+    NodeTag tag;
+    double value;
+  } cte_floating;
+  struct{
+    NodeTag tag;
+    int value;
+  } cte_integer;
+  struct{
+    NodeTag tag;
+    char *value;
+  } cte_string;
   struct{
     NodeTag tag;
   } leaf;
@@ -90,6 +107,11 @@ Node *intType;
 Node *floatType;
 Node *boolType;
 Node *charType;
+
+Node *trueValue;
+Node *falseValue;
+
+Node *mkConstantNode(NodeTag tag, YYSTYPE val);
 
 Node *mkLeafNode(NodeTag tag);
 Node *mkUniNode(NodeTag tag, Node *first);
