@@ -20,28 +20,29 @@ void yyerror(const char *s);
   Node *n;
 }
 %define parse.error verbose
-%token TK_AS
-%token TK_CHAR
-%token TK_ELSE
-%token TK_FLOAT
-%token TK_IF
-%token TK_INT
-%token TK_NEW
-%token TK_RETURN
-%token TK_BOOL
-%token TK_WHILE
+%token <i> TK_AS
+%token <i> TK_CHAR
+%token <i> TK_ELSE
+%token <i> TK_FLOAT
+%token <i> TK_IF
+%token <i> TK_INT
+%token <i> TK_NEW
+%token <i> TK_RETURN
+%token <i> TK_BOOL
+%token <i> TK_WHILE
 %token <s> TK_ID
 %token <s> TK_STRING
 %token <i> TK_INTEGER
 %token <d> TK_FLOATING
-%token TK_EQ
-%token TK_NE
-%token TK_LE
-%token TK_GE
-%token TK_AND
-%token TK_OR
-%token TK_FALSE
-%token TK_TRUE
+%token <i> TK_EQ
+%token <i> TK_NE
+%token <i> TK_LE
+%token <i> TK_GE
+%token <i> TK_AND
+%token <i> TK_OR
+%token <i> TK_FALSE
+%token <i> TK_TRUE
+%token <i> '-' '+' '*' '/' ',' ':' ';' '(' ')' '{' '}' '=' '@' '<' '>' '[' ']'
 %start start
 %%
 
@@ -159,11 +160,11 @@ fator : constante   {$$ = $1;}
       | var         {$$ = $1;}
       ;
 
-constante : TK_STRING {$$ = ;}
-        | TK_TRUE     {$$ = ;}
-        | TK_FALSE    {$$ = ;}
-        | TK_INTEGER  {$$ = ;}
-        | TK_FLOATING {$$ = ;}
+constante : TK_STRING {$$ = mkConstantNode(STRING, $1);}
+        | TK_TRUE     {$$ = trueValue;}
+        | TK_FALSE    {$$ = falseValue;}
+        | TK_INTEGER  {$$ = mkConstantNode(INTEGER, $1);}
+        | TK_FLOATING {$$ = mkConstantNode(FLOATING, $1);}
         ;
 
 chamada : TK_ID '(' lista_opcional_exp ')' {$$ = mkIdUniNode(CALL, $1, $3);} ;
