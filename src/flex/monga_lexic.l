@@ -12,37 +12,36 @@ void storeInt();
 void storeFloat();
 %}
 HEX       [0-9A-Fa-f]
-HEXNOZ    [1-9A-Fa-f]
 %%
 [ \t]                           ;
 \n                              yylineno++;
-as                              return TK_AS;
-char                            return TK_CHAR;
-else                            return TK_ELSE;
-float                           return TK_FLOAT;
-if                              return TK_IF;
-int                             return TK_INT;
-new                             return TK_NEW;
-return                          return TK_RETURN;
-bool                            return TK_BOOL;
-false                           return TK_FALSE;
-true                            return TK_TRUE;
-while                           return TK_WHILE;
+as                              {storeLineno(); return TK_AS;}
+char                            {storeLineno(); return TK_CHAR;}
+else                            {storeLineno(); return TK_ELSE;}
+float                           {storeLineno(); return TK_FLOAT; }
+if                              {storeLineno(); return TK_IF;}
+int                             {storeLineno(); return TK_INT; }
+new                             {storeLineno(); return TK_NEW; }
+return                          {storeLineno(); return TK_RETURN;}
+bool                            {storeLineno(); return TK_BOOL;}
+false                           {storeLineno(); return TK_FALSE; }
+true                            {storeLineno(); return TK_TRUE;}
+while                           {storeLineno(); return TK_WHILE; }
 [a-zA-Z_][a-zA-Z_0-9]*          {storeString(); return TK_ID;}
 \"([^"\\\n]|\\[nt"\\])*\"       {storeString(); return TK_STRING;}
 [0-9]+                          {storeInt(); return TK_INTEGER;}
-0x{HEX}+                        {storeInt(); return TK_INTEGER;}
+0[xX]{HEX}+                        {storeInt(); return TK_INTEGER;}
 ([0-9]+("."[0-9]*)?|"."[0-9]+)([eE][-+]?[0-9]+)?    {storeFloat(); return TK_FLOATING;}
 0x({HEX}+("."{HEX}*)?|"."{HEX}+)([pP][-+]?[0-9]+)?  {storeFloat(); return TK_FLOATING;}
 
-[-+*/,:;(){}=@<>]               return (int)*yytext;
-"["|"]"                         return (int)*yytext;
-"=="                            return TK_EQ;
-"~="                            return TK_NE;
-"<="                            return TK_LE;
-">="                            return TK_GE;
-"&&"                            return TK_AND;
-"||"                            return TK_OR;
+[-+*/,:;(){}=@<>]               {storeLineno(); return (int)*yytext;}
+"["|"]"                         {storeLineno(); return (int)*yytext;}
+"=="                            {storeLineno(); return TK_EQ;}
+"~="                            {storeLineno(); return TK_NE;}
+"<="                            {storeLineno(); return TK_LE;}
+">="                            {storeLineno(); return TK_GE;}
+"&&"                            {storeLineno(); return TK_AND;}
+"||"                            {storeLineno(); return TK_OR;}
 #[^\n]*                         ;
 . printf("MISMATCH: \"%s\" Line: %i\n", yytext, yylineno);
 %%
@@ -86,6 +85,10 @@ void storeInt()
 void storeFloat()
 {
   yylval.d = strtod(yytext, (char**) NULL);
+}
+void storeLineno()
+{
+  yylval.i = yylineno;
 }
 int yywrap(void)
 {
