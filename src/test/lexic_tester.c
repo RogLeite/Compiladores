@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "main/ast.h"
 #include "main/interpreter.h"
 #define READABLE 0
 #ifdef TC_LEXIC_TOKENS
