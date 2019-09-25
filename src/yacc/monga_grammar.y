@@ -16,7 +16,7 @@ void yyerror(const char *s);
 %union {
   int i;
   double d;
-  char* s;
+  char *s;
   Node *n;
 }
 %define parse.error verbose
@@ -42,7 +42,13 @@ void yyerror(const char *s);
 %token <i> TK_OR
 %token <i> TK_FALSE
 %token <i> TK_TRUE
-%token <i> '-' '+' '*' '/' ',' ':' ';' '(' ')' '{' '}' '=' '@' '<' '>' '[' ']'
+%token <i> '-' '+' '*' '/' '!' ',' ':' ';' '(' ')' '{' '}' '=' '@' '<' '>' '[' ']'
+
+%type <n> programa definicao def_variavel tipo def_funcao parametros lista_params
+%type <n> parametro bloco defs_variaveis comandos comando var exp exp_and exp_igualdade
+%type <n> exp_comparativa exp_aditiva exp_multiplicativa exp_as exp_new exp_unaria
+%type <n> fator constante chamada lista_opcional_exp lista_exp
+
 %start start
 %%
 
@@ -149,8 +155,8 @@ exp_new : TK_NEW tipo '[' exp ']' {$$ = mkBiNode(NEW, $2, $4);}
         | exp_unaria              {$$ = $1;}
         ;
 
-exp_unaria : '!' fator     {$$ = mkUniNode(NOT, $1);}
-           | '-' fator     {$$ = mkUniNode(NEGATIVE, $1);}
+exp_unaria : '!' fator     {$$ = mkUniNode(NOT, $2);}
+           | '-' fator     {$$ = mkUniNode(NEGATIVE, $2);}
            | fator         {$$ = $1;}
            ;
 

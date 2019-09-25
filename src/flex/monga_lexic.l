@@ -34,7 +34,7 @@ while                           {storeLineno(); return TK_WHILE; }
 ([0-9]+("."[0-9]*)?|"."[0-9]+)([eE][-+]?[0-9]+)?    {storeFloat(); return TK_FLOATING;}
 0x({HEX}+("."{HEX}*)?|"."{HEX}+)([pP][-+]?[0-9]+)?  {storeFloat(); return TK_FLOATING;}
 
-[-+*/,:;(){}=@<>]               {storeLineno(); return (int)*yytext;}
+[-+*/!,:;(){}=@<>]              {storeLineno(); return (int)*yytext;}
 "["|"]"                         {storeLineno(); return (int)*yytext;}
 "=="                            {storeLineno(); return TK_EQ;}
 "~="                            {storeLineno(); return TK_NE;}
