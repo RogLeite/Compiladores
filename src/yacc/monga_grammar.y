@@ -70,11 +70,11 @@ tipo : TK_INT       {$$ = intType;}
      | TK_CHAR      {$$ = charType;}
      | TK_FLOAT     {$$ = floatType;}
      | TK_BOOL      {$$ = boolType;}
-     | '[' tipo ']' {$$ = mkUniNode(ARRAYDEC, $1);}
+     | '[' tipo ']' {$$ = mkUniNode(ARRAYDEC, $2);}
      ;
 
 def_funcao : TK_ID '(' parametros ')' ':' tipo bloco {$$ = mkIdTriNode(TYPEDFUNCDEF, $1, $3, $6, $7);}
-           | TK_ID '(' parametros ')' bloco          {$$ = mkTriNode(FUNCDEF, $1, $3, $5);}
+           | TK_ID '(' parametros ')' bloco          {$$ = mkIdBiNode(FUNCDEF, $1, $3, $5);}
            ;
 
 parametros : %empty       {$$ = NULL;}
@@ -113,7 +113,7 @@ comando : TK_IF exp bloco TK_ELSE bloco {$$ = mkTriNode(IFELSE, $2, $3, $5);}
         | bloco                         {$$ = $1;}
         ;
 
-var : TK_ID                {$$ = mkIdUniNode(SIMPLEVAR, $1);}
+var : TK_ID                {$$ = mkIdLeafNode(SIMPLEVAR, $1);}
     | fator '[' exp ']'    {$$ = mkBiNode(ARRAYVAR, $1, $3);}
     ;
 
@@ -166,11 +166,11 @@ fator : constante   {$$ = $1;}
       | var         {$$ = $1;}
       ;
 
-constante : TK_STRING {$$ = mkConstantNode(STRING, $1);}
+constante : TK_STRING {$$ = mkCteStringNode(STRING, $1);}
         | TK_TRUE     {$$ = trueValue;}
         | TK_FALSE    {$$ = falseValue;}
-        | TK_INTEGER  {$$ = mkConstantNode(INTEGER, $1);}
-        | TK_FLOATING {$$ = mkConstantNode(FLOATING, $1);}
+        | TK_INTEGER  {$$ = mkCteIntegerNode(INTEGER, $1);}
+        | TK_FLOATING {$$ = mkCteFloatingNode(FLOATING, $1);}
         ;
 
 chamada : TK_ID '(' lista_opcional_exp ')' {$$ = mkIdUniNode(CALL, $1, $3);} ;
