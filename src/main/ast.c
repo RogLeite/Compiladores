@@ -1,103 +1,107 @@
 #include "main/ast.h"
+#include <string.h>
+#include <stdlib.h>
 
-intType = malloc(sizeof(Node));
-intType.leaf.tag = INTTYPE;
+intType = (Node*)malloc(sizeof(Node));
+intType->leaf.tag = INTTYPE;
+/*
+floatType = (Node*)malloc(sizeof(Node));
+floatType->leaf.tag = FLOATTYPE;
 
-floatType = malloc(sizeof(Node));
-floatType.leaf.tag = FLOATTYPE;
+boolType = (Node*)malloc(sizeof(Node));
+boolType->leaf.tag = BOOLTYPE;
 
-boolType = malloc(sizeof(Node));
-boolType.leaf.tag = BOOLTYPE;
+charType = (Node*)malloc(sizeof(Node));
+charType->leaf.tag = CHARTYPE;
 
-charType = malloc(sizeof(Node));
-charType.leaf.tag = CHARTYPE;
-
-trueValue = malloc(sizeof(Node));
+trueValue = (Node*)malloc(sizeof(Node));
 trueValue.leaf.tag = TRUE_VALUE;
 
-falseValue = malloc(sizeof(Node));
+falseValue = (Node*)malloc(sizeof(Node));
 falseValue.leaf.tag = FALSE_VALUE;
-
-Node *mkConstantNode(NodeTag tag, YYSTYPE val)
+*/
+Node *mkCteIntegerNode(NodeTag tag, int val)
 {
-  Node *newNode = malloc(sizeof(Node));
-  switch(tag){
-    case STRING:
-      newNode.cte_string.tag = tag;
-      strcpy(newNode.cte_string.value, val.s);
-      break;
-      case INTEGER:
-        newNode.cte_integer.tag = tag;
-        newNode.cte_integer.value = val.i;
-      break;
-      case FLOATING:
-        newNode.cte_floating.tag = tag;
-        newNode.cte_floating.value = val.d;
-      break;
-  }
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->cte_integer.tag = tag;
+  newNode->cte_integer.value = val;
+  return newNode;
+}
+Node *mkCteStringNode(NodeTag tag, char *val)
+{
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->cte_string.tag = tag;
+  strcpy(newNode->cte_string.value, val);
+  return newNode;
+}
+Node *mkCteFloatingNode(NodeTag tag, double val)
+{
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->cte_floating.tag = tag;
+  newNode->cte_floating.value = val;
   return newNode;
 }
 Node *mkLeafNode(NodeTag tag)
 {
-  Node *newNode = malloc(sizeof(Node));
-  newNode.leaf.tag = tag;
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->leaf.tag = tag;
   return newNode;
 }
 Node *mkUniNode(NodeTag tag, Node *first)
 {
-  Node *newNode = malloc(sizeof(Node));
-  newNode.uni.tag = tag;
-  newNode.uni.n1 = first;
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->uni.tag = tag;
+  newNode->uni.n1 = first;
   return newNode;
 }
 Node *mkBiNode(NodeTag tag, Node *first, Node *second)
 {
-  Node *newNode = malloc(sizeof(Node));
-  newNode.bi.tag = tag;
-  newNode.bi.n1 = first;
-  newNode.bi.n2 = second;
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->bi.tag = tag;
+  newNode->bi.n1 = first;
+  newNode->bi.n2 = second;
   return newNode;
 }
 Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third)
 {
-  Node *newNode = malloc(sizeof(Node));
-  newNode.tri.tag = tag;
-  newNode.tri.n1 = first;
-  newNode.tri.n2 = second;
-  newNode.tri.n3 = third;
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->tri.tag = tag;
+  newNode->tri.n1 = first;
+  newNode->tri.n2 = second;
+  newNode->tri.n3 = third;
   return newNode;
 }
 Node *mkIdLeafNode(NodeTag tag, char *id)
 {
-  Node *newNode = malloc(sizeof(Node));
-  strcpy(newNode.id_leaf.id, id);
-  newNode.id_leaf.tag = tag;
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  strcpy(newNode->id_leaf.id, id);
+  newNode->id_leaf.tag = tag;
   return newNode;
 }
 Node *mkIdUniNode(NodeTag tag, char *id, Node *first)
 {
-  Node *newNode = malloc(sizeof(Node));
-  newNode.id_uni.tag = tag;
-  strcpy(newNode.id_uni.id, id);
-  newNode.id_uni.n1 = first;
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->id_uni.tag = tag;
+  strcpy(newNode->id_uni.id, id);
+  newNode->id_uni.n1 = first;
   return newNode;
 }
 Node *mkIdBiNode(NodeTag tag, char *id, Node *first, Node *second)
 {
-  Node *newNode = malloc(sizeof(Node));
-  newNode.id_bi.tag = tag;
-  strcpy(newNode.id_bi.id, id);
-  newNode.id_bi.n1 = first;
-  newNode.id_bi.n2 = second;
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->id_bi.tag = tag;
+  strcpy(newNode->id_bi.id, id);
+  newNode->id_bi.n1 = first;
+  newNode->id_bi.n2 = second;
   return newNode;
 }
 Node *mkIdTriNode(NodeTag tag, char *id, Node *first, Node *second, Node *third)
 {
-  Node *newNode = malloc(sizeof(Node));
-  newNode.id_tri.tag = tag;
-  strcpy(newNode.id_tri.id, id);
-  newNode.id_tri.n1 = first;
-  newNode.id_tri.n2 = second;
-  newNode.id_tri.n3 = third;
+  Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->id_tri.tag = tag;
+  strcpy(newNode->id_tri.id, id);
+  newNode->id_tri.n1 = first;
+  newNode->id_tri.n2 = second;
+  newNode->id_tri.n3 = third;
   return newNode;
 }

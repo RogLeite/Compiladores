@@ -111,7 +111,9 @@ Node *charType;
 Node *trueValue;
 Node *falseValue;
 
-Node *mkConstantNode(NodeTag tag, YYSTYPE val);
+Node *mkCteIntegerNode(NodeTag tag, int val);
+Node *mkCteStringNode(NodeTag tag, char *val);
+Node *mkCteFloatingNode(NodeTag tag, double val);
 
 Node *mkLeafNode(NodeTag tag);
 Node *mkUniNode(NodeTag tag, Node *first);
