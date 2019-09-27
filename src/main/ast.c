@@ -3,9 +3,6 @@
 #include <stdlib.h>
 
 
-Node *boolType = (Node*)malloc(sizeof(Node));
-boolType->leaf.tag = BOOLTYPE;
-
 Node *charType = (Node*)malloc(sizeof(Node));
 charType->leaf.tag = CHARTYPE;
 
@@ -118,4 +115,13 @@ Node *mkFloatTypeNode()
     floatType->leaf.tag = FLOATTYPE;
   }
   return floatType;
+}
+Node *mkBoolTypeNode()
+{
+  if(boolType==NULL)
+  {
+    boolType = (Node*)malloc(sizeof(Node));
+    boolType->leaf.tag = BOOLTYPE;
+  }
+  return boolType;
 }

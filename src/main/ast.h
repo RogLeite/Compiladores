@@ -105,7 +105,7 @@ Node *global_tree;
 
 Node *intType = NULL;
 Node *floatType = NULL;
-extern Node *boolType;
+Node *boolType = NULL;
 extern Node *charType;
 
 extern Node *trueValue;
@@ -126,5 +126,6 @@ Node *mkIdTriNode(NodeTag tag, char *id, Node *first, Node *second, Node *third)
 
 Node *mkIntTypeNode();
 Node *mkFloatTypeNode();
+Node *mkBoolTypeNode();
 
 #endif
