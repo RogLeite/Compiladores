@@ -66,7 +66,7 @@ definicao : def_variavel  {$$ = $1;}
 
 def_variavel : TK_ID ':' tipo ';' {$$ = mkIdUniNode(VARDEC, $1, $3);};
 
-tipo : TK_INT       {$$ = intType;}
+tipo : TK_INT       {$$ = mkIntTypeNode();}
      | TK_CHAR      {$$ = charType;}
      | TK_FLOAT     {$$ = floatType;}
      | TK_BOOL      {$$ = boolType;}

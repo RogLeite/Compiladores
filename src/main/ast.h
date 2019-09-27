@@ -103,7 +103,7 @@ typedef union tree_node_t{
 
 Node *global_tree;
 
-extern Node *intType;
+Node *intType = NULL;
 extern Node *floatType;
 extern Node *boolType;
 extern Node *charType;
@@ -123,5 +123,7 @@ Node *mkIdLeafNode(NodeTag tag, char *id);
 Node *mkIdUniNode(NodeTag tag, char *id, Node *first);
 Node *mkIdBiNode(NodeTag tag, char *id, Node *first, Node *second);
 Node *mkIdTriNode(NodeTag tag, char *id, Node *first, Node *second, Node *third);
+
+Node *mkIntTypeNode();
 
 #endif

@@ -2,8 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-Node *intType = (Node*)malloc(sizeof(Node));
-intType->leaf.tag = INTTYPE;
 
 Node *floatType = (Node*)malloc(sizeof(Node));
 floatType->leaf.tag = FLOATTYPE;
@@ -104,4 +102,14 @@ Node *mkIdTriNode(NodeTag tag, char *id, Node *first, Node *second, Node *third)
   newNode->id_tri.n2 = second;
   newNode->id_tri.n3 = third;
   return newNode;
+}
+
+Node *mkIntTypeNode()
+{
+  if(intType==NULL)
+  {
+    intType = (Node*)malloc(sizeof(Node));
+    intType->leaf.tag = INTTYPE;
+  }
+  return intType;
 }
