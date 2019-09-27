@@ -1,6 +1,17 @@
 #include "main/ast.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+
+Node *global_tree = NULL;
+
+Node *intType = NULL;
+Node *floatType = NULL;
+Node *boolType = NULL;
+Node *charType = NULL;
+
+Node *trueValue = NULL;
+Node *falseValue = NULL;
 
 Node *mkCteIntegerNode(NodeTag tag, int val)
 {
@@ -141,4 +152,14 @@ Node *mkFalseValueNode()
     falseValue->leaf.tag = FALSEVALUE;
   }
   return falseValue;
+}
+void setGlobalTree(Node *tree)
+{
+  if (global_tree == NULL)
+  {
+    if(tree != NULL)
+      global_tree = tree;
+    else
+      printf("tree é nula\n");
+  }
 }

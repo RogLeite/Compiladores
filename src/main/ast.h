@@ -101,15 +101,15 @@ typedef union tree_node_t{
   } id_tri;
 } Node;
 
-Node *global_tree;
+extern Node *global_tree;
 
-Node *intType = NULL;
-Node *floatType = NULL;
-Node *boolType = NULL;
-Node *charType = NULL;
+extern Node *intType;
+extern Node *floatType;
+extern Node *boolType;
+extern Node *charType;
 
-Node *trueValue = NULL;
-Node *falseValue = NULL;
+extern Node *trueValue;
+extern Node *falseValue;
 
 Node *mkCteIntegerNode(NodeTag tag, int val);
 Node *mkCteStringNode(NodeTag tag, char *val);
@@ -131,5 +131,7 @@ Node *mkCharTypeNode();
 
 Node *mkTrueValueNode();
 Node *mkFalseValueNode();
+
+void setGlobalTree(Node *);
 
 #endif

@@ -53,7 +53,7 @@ void yyerror(const char *s);
 %%
 
 start : %empty
-      | programa {global_tree = $1;}
+      | programa {setGlobalTree($1);}
       ;
 
 programa : definicao            {$$ = $1;}
