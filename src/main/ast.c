@@ -2,10 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-
-Node *charType = (Node*)malloc(sizeof(Node));
-charType->leaf.tag = CHARTYPE;
-
 Node *trueValue = (Node*)malloc(sizeof(Node));
 trueValue->leaf.tag = TRUE_VALUE;
 
@@ -124,4 +120,13 @@ Node *mkBoolTypeNode()
     boolType->leaf.tag = BOOLTYPE;
   }
   return boolType;
+}
+Node *mkCharTypeNode()
+{
+  if(charType==NULL)
+  {
+    charType = (Node*)malloc(sizeof(Node));
+    charType->leaf.tag = CHARTYPE;
+  }
+  return charType;
 }
