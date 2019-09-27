@@ -45,8 +45,8 @@ typedef enum node_tag_t{
   NEGATIVE,
   CALL,
   LISTEXP,
-  TRUE_VALUE,
-  FALSE_VALUE,
+  TRUEVALUE,
+  FALSEVALUE,
   STRING,
   INTEGER,
   FLOATING
@@ -108,8 +108,8 @@ Node *floatType = NULL;
 Node *boolType = NULL;
 Node *charType = NULL;
 
-extern Node *trueValue;
-extern Node *falseValue;
+Node *trueValue = NULL;
+Node *falseValue = NULL;
 
 Node *mkCteIntegerNode(NodeTag tag, int val);
 Node *mkCteStringNode(NodeTag tag, char *val);
@@ -128,5 +128,8 @@ Node *mkIntTypeNode();
 Node *mkFloatTypeNode();
 Node *mkBoolTypeNode();
 Node *mkCharTypeNode();
+
+Node *mkTrueValueNode();
+Node *mkFalseValueNode();
 
 #endif

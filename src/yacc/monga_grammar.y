@@ -167,8 +167,8 @@ fator : constante   {$$ = $1;}
       ;
 
 constante : TK_STRING {$$ = mkCteStringNode(STRING, $1);}
-        | TK_TRUE     {$$ = trueValue;}
-        | TK_FALSE    {$$ = falseValue;}
+        | TK_TRUE     {$$ = mkTrueValueNode();}
+        | TK_FALSE    {$$ = mkFalseValueNode();}
         | TK_INTEGER  {$$ = mkCteIntegerNode(INTEGER, $1);}
         | TK_FLOATING {$$ = mkCteFloatingNode(FLOATING, $1);}
         ;

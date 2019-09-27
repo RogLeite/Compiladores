@@ -2,12 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-Node *trueValue = (Node*)malloc(sizeof(Node));
-trueValue->leaf.tag = TRUE_VALUE;
-
-Node *falseValue = (Node*)malloc(sizeof(Node));
-falseValue->leaf.tag = FALSE_VALUE;
-
 Node *mkCteIntegerNode(NodeTag tag, int val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
@@ -129,4 +123,22 @@ Node *mkCharTypeNode()
     charType->leaf.tag = CHARTYPE;
   }
   return charType;
+}
+Node *mkTrueValueNode()
+{
+  if(trueValue==NULL)
+  {
+    trueValue = (Node*)malloc(sizeof(Node));
+    trueValue->leaf.tag = TRUEVALUE;
+  }
+  return trueValue;
+}
+Node *mkFalseValueNode()
+{
+  if(falseValue==NULL)
+  {
+    falseValue = (Node*)malloc(sizeof(Node));
+    falseValue->leaf.tag = FALSEVALUE;
+  }
+  return falseValue;
 }
