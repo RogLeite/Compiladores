@@ -24,6 +24,7 @@ Node *mkCteStringNode(NodeTag tag, char *val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->cte_string.tag = tag;
+  newNode->cte_string.value = (char*)malloc(sizeof(char)*(strlen(val)+1));
   strcpy(newNode->cte_string.value, val);
   return newNode;
 }
@@ -67,6 +68,7 @@ Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third)
 Node *mkIdLeafNode(NodeTag tag, char *id)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
+  newNode->id_leaf.id = (char*)malloc(sizeof(char)*(strlen(id)+1));
   strcpy(newNode->id_leaf.id, id);
   newNode->id_leaf.tag = tag;
   return newNode;
@@ -75,6 +77,7 @@ Node *mkIdUniNode(NodeTag tag, char *id, Node *first)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->id_uni.tag = tag;
+  newNode->id_uni.id = (char*)malloc(sizeof(char)*(strlen(id)+1));
   strcpy(newNode->id_uni.id, id);
   newNode->id_uni.n1 = first;
   return newNode;
@@ -83,6 +86,7 @@ Node *mkIdBiNode(NodeTag tag, char *id, Node *first, Node *second)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->id_bi.tag = tag;
+  newNode->id_bi.id = (char*)malloc(sizeof(char)*(strlen(id)+1));
   strcpy(newNode->id_bi.id, id);
   newNode->id_bi.n1 = first;
   newNode->id_bi.n2 = second;
@@ -92,6 +96,7 @@ Node *mkIdTriNode(NodeTag tag, char *id, Node *first, Node *second, Node *third)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->id_tri.tag = tag;
+  newNode->id_tri.id = (char*)malloc(sizeof(char)*(strlen(id)+1));
   strcpy(newNode->id_tri.id, id);
   newNode->id_tri.n1 = first;
   newNode->id_tri.n2 = second;

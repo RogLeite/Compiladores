@@ -49,7 +49,7 @@ while                           {storeLineno(); return TK_WHILE; }
 
 void storeString()
 {
-  char* str = malloc(strlen(yytext)*sizeof(char));
+  char* str = (char*)malloc((strlen(yytext)+1)*sizeof(char));
   int i = 0;
   while(yytext[i] != '\0')
   {

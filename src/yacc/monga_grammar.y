@@ -184,4 +184,4 @@ lista_exp : exp                 {$$ = $1;}
           ;
 %%
 
-void yyerror (const char *s){fprintf(stderr, "%s\n", s);}
+void yyerror (const char *s){fprintf(stderr, "%s Line: %d\n", s, yylval.i);}
