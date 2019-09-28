@@ -31,7 +31,7 @@ while                           {storeLineno(); return TK_WHILE; }
 [a-zA-Z_][a-zA-Z_0-9]*          {storeString(); return TK_ID;}
 \"([^"\\\n]|\\[nt"\\])*\"       {storeString(); return TK_STRING;}
 [0-9]+                          {storeInt(); return TK_INTEGER;}
-0[xX]{HEX}+                        {storeInt(); return TK_INTEGER;}
+0[xX]{HEX}+                     {storeInt(); return TK_INTEGER;}
 ([0-9]+("."[0-9]*)?|"."[0-9]+)([eE][-+]?[0-9]+)?    {storeFloat(); return TK_FLOATING;}
 0x({HEX}+("."{HEX}*)?|"."{HEX}+)([pP][-+]?[0-9]+)?  {storeFloat(); return TK_FLOATING;}
 
@@ -51,7 +51,7 @@ void storeString()
 {
   char* str = (char*)malloc((strlen(yytext)+1)*sizeof(char));
   int i = 0;
-  while(yytext[i] != '\0')
+  while(yytext[i] != '\0' || i<strlen(yytext))
   {
     if (yytext[i] != '\\')
     {
@@ -77,6 +77,7 @@ void storeString()
     }
     ++i;
   }
+  str[i] = '\0';
   yylval.s = str;
 }
 void storeInt()
