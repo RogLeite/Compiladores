@@ -22,4 +22,8 @@ echo
 echo Testando ola_mundo.mng
 ./grammatic_tester < $DATAPATH/ola_mundo.mng
 
+echo
+echo Testando simpler_main.mng
+./grammatic_tester < $DATAPATH/simpler_main.mng
+
 rm grammatic_tester
