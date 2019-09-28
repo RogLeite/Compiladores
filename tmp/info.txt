@@ -1,0 +1,1 @@
+essa pasta deve conter apenas esse arquivo, os outros são apagados após a execução
