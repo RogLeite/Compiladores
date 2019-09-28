@@ -12,6 +12,8 @@ void storeInt();
 void storeFloat();
 void storeLineno();
 %}
+%option nounput
+%option noinput
 HEX       [0-9A-Fa-f]
 %%
 [ \t]                           ;

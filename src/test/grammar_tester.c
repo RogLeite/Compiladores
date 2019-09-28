@@ -14,10 +14,14 @@ int main(void)
   if(yyparse()==0)
   {
     printf("Parsed the program!\n");
+#ifdef PRINT_TREES
+    printf("\nARVORE DO PROGRAMA:\n");
     printTree(getGlobalTree(),0);
-    printf("\n");
+#endif
   }
   else
     printf("Did not parse the program :C\n");
+
+  printf("\n\n-----------------------------------------\n-----------------------------------------\n");
   return 0;
 }

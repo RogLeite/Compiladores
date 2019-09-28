@@ -13,7 +13,15 @@ $ ./lexic_tests.sh
 ```
 $ ./grammatic_tests.sh
 ```
- - Não esqueça de verificar a permissão para execução. Caso não tenha, execute: ``` chmod +x *_tests.sh ``` 
+
+ - Para visualizar as árvores sintáticas do programa
+ ```
+ $ ./grammatic_tests.sh PRINT_TREES
+ ```
+Obs.: As strings exibidas no valor dos nós da árvore(Value: ...) tiveram os caracteres escapados expandidos
+Dívida técnica: Tratar as áspas no início e final da string
+
+ - Não esqueça de verificar a permissão para execução. Caso não tenha, execute: ``` chmod +x *_tests.sh ```
 
 O arquivo em flex, com as definições léxicas de Monga estão no arquivo ``` src/flex/monga_lexic.l ```
 
