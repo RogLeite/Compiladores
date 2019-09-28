@@ -21,7 +21,11 @@ $ ./grammatic_tests.sh
 Obs.: As strings exibidas no valor dos nós da árvore(Value: ...) tiveram os caracteres escapados expandidos
 Dívida técnica: Tratar as áspas no início e final da string
 
- - Não esqueça de verificar a permissão para execução. Caso não tenha, execute: ``` chmod +x *_tests.sh ```
+ - Não esqueça de verificar a permissão para execução. Caso não tenha, execute do diretório raiz:
+```
+$ chmod +x *_tests.sh
+$ chmod +x scripts/make_*.sh
+```
 
 O arquivo em flex, com as definições léxicas de Monga estão no arquivo ``` src/flex/monga_lexic.l ```
 
