@@ -13,7 +13,7 @@
 #ifndef READABLE
 #define READABLE 0
 #endif
-
+int yylex();
 char* tk_names[] = {
           NULL,
           "TK_AS",
