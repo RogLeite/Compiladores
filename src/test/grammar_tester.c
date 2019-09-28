@@ -12,7 +12,11 @@
 int main(void)
 {
   if(yyparse()==0)
+  {
     printf("Parsed the program!\n");
+    printTree(getGlobalTree(),0);
+    printf("\n");
+  }
   else
     printf("Did not parse the program :C\n");
   return 0;

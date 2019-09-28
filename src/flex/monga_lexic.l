@@ -50,34 +50,37 @@ while                           {storeLineno(); return TK_WHILE; }
 void storeString()
 {
   char* str = (char*)malloc((strlen(yytext)+1)*sizeof(char));
-  int i = 0;
-  while(yytext[i] != '\0' || i<strlen(yytext))
+  int i_str = 0;
+  int i_yy = 0;
+  while(yytext[i_yy] != '\0' || i_yy<strlen(yytext))
   {
-    if (yytext[i] != '\\')
+    if (yytext[i_yy] != '\\')
     {
-      str[i] = yytext[i];
+      str[i_str] = yytext[i_yy];
     }
     else
     {
-      switch (yytext[i+1])
+      switch (yytext[i_yy+1])
       {
         case 'n' :
-          str[i] = '\n';
+          str[i_str] = '\n';
         break;
         case 't' :
-          str[i] = '\t';
+          str[i_str] = '\t';
         break;
         case '\"' :
-          str[i] = '\"';
+          str[i_str] = '\"';
         break;
         case '\\' :
-          str[i] = '\\';
+          str[i_str] = '\\';
         break;
       }
+      i_yy++;
     }
-    ++i;
+    i_yy++;
+    i_str++;
   }
-  str[i] = '\0';
+  str[i_str] = '\0';
   yylval.s = str;
 }
 void storeInt()

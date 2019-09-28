@@ -52,7 +52,7 @@ void yyerror(const char *s);
 %start start
 %%
 
-start : %empty
+start : %empty   {setGlobalTree(NULL);}
       | programa {setGlobalTree($1);}
       ;
 
@@ -90,7 +90,7 @@ parametro : TK_ID ':' tipo  {$$ = mkIdUniNode(PARAM, $1, $3);free($1);};
 bloco : '{' '}'                         {$$ = mkLeafNode(BLOCK);}
       | '{' comandos '}'                {$$ = mkUniNode(BLOCK, $2);}
       | '{' defs_variaveis '}'          {$$ = mkUniNode(BLOCK, $2);}
-      | '{' defs_variaveis comandos '}' {$$ = mkBiNode(BLOCK, $2, $3);}
+      | '{' defs_variaveis comandos '}' {$$ = mkBiNode(BIBLOCK, $2, $3);}
       ;
 
 
