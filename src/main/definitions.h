@@ -98,13 +98,14 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 12 "../src/yacc/monga_grammar.y" /* yacc.c:1909  */
+#line 16 "../src/yacc/monga_grammar.y" /* yacc.c:1909  */
 
   int i;
   double d;
-  char* s;
+  char *s;
+  Node *n;
 
-#line 108 "../src/main/definitions.h" /* yacc.c:1909  */
+#line 109 "../src/main/definitions.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -3,8 +3,23 @@
 
 typedef union tree_node_t Node;
 
+typedef enum node_type_t{
+  CTE_FLOATING = 0,
+  CTE_INTEGER,
+  CTE_STRING,
+  LEAF,
+  UNI,
+  BI,
+  TRI,
+  ID_LEAF,
+  ID_UNI,
+  ID_BI,
+  ID_TRI,
+}NodeType;
+
 typedef enum node_tag_t{
-  BLOCK,
+  BLOCK = 0, //
+  BIBLOCK,
   VARDEC,
   DEFS,
   INTTYPE,
@@ -55,47 +70,58 @@ typedef enum node_tag_t{
 typedef union tree_node_t{
   struct{
     NodeTag tag;
+    NodeType n_type;
     double value;
   } cte_floating;
   struct{
     NodeTag tag;
+    NodeType n_type;
     int value;
   } cte_integer;
   struct{
     NodeTag tag;
+    NodeType n_type;
     char *value;
   } cte_string;
   struct{
     NodeTag tag;
+    NodeType n_type;
   } leaf;
   struct{
-    NodeTag tag ;
+    NodeTag tag;
+    NodeType n_type;
     Node *n1;
   } uni;
   struct{
-    NodeTag tag ;
+    NodeTag tag;
+    NodeType n_type;
     Node *n1,*n2;
   } bi;
   struct{
-    NodeTag tag ;
+    NodeTag tag;
+    NodeType n_type;
     Node *n1,*n2,*n3;
   } tri;
   struct{
     NodeTag tag;
+    NodeType n_type;
     char *id;
   } id_leaf;
   struct{
     NodeTag tag;
+    NodeType n_type;
     char *id;
     Node *n1;
   } id_uni;
   struct{
     NodeTag tag;
+    NodeType n_type;
     char *id;
     Node *n1, *n2;
   } id_bi;
   struct{
     NodeTag tag;
+    NodeType n_type;
     char *id;
     Node *n1, *n2, *n3;
   } id_tri;
@@ -133,5 +159,8 @@ Node *mkTrueValueNode();
 Node *mkFalseValueNode();
 
 void setGlobalTree(Node *);
+Node *getGlobalTree();
+
+void printTree(Node *, int identation);
 
 #endif
