@@ -116,16 +116,16 @@ var : TK_ID                {$$ = mkIdLeafNode(SIMPLEVAR, $1);free($1);}
     | fator '[' exp ']'    {$$ = mkBiNode(ARRAYVAR, $1, $3);}
     ;
 
-exp : exp_and TK_OR exp    {$$ = mkBiNode(OR, $1, $3);}
+exp : exp TK_OR exp_and    {$$ = mkBiNode(OR, $1, $3);}
     | exp_and              {$$ = $1;}
     ;
 
-exp_and : exp_igualdade TK_AND exp_and  {$$ = mkBiNode(AND, $1, $3);}
+exp_and : exp_and TK_AND exp_igualdade  {$$ = mkBiNode(AND, $1, $3);}
         | exp_igualdade                 {$$ = $1;}
         ;
 
-exp_igualdade : exp_comparativa TK_EQ exp_igualdade {$$ = mkBiNode(EQUAL, $1, $3);}
-              | exp_comparativa TK_NE exp_igualdade {$$ = mkBiNode(NOTEQUAL, $1, $3);}
+exp_igualdade : exp_igualdade TK_EQ exp_comparativa {$$ = mkBiNode(EQUAL, $1, $3);}
+              | exp_igualdade TK_NE exp_comparativa {$$ = mkBiNode(NOTEQUAL, $1, $3);}
               | exp_comparativa                     {$$ = $1;}
               ;
 
@@ -136,13 +136,13 @@ exp_comparativa : exp_aditiva TK_LE exp_aditiva {$$ = mkBiNode(LESSOREQUAL, $1, 
                 | exp_aditiva                   {$$ = $1;}
                 ;
 
-exp_aditiva : exp_multiplicativa '+' exp_aditiva  {$$ = mkBiNode(ADD, $1, $3);}
-            | exp_multiplicativa '-' exp_aditiva  {$$ = mkBiNode(SUBTRACT, $1, $3);}
+exp_aditiva : exp_aditiva '+' exp_multiplicativa  {$$ = mkBiNode(ADD, $1, $3);}
+            | exp_aditiva '-' exp_multiplicativa  {$$ = mkBiNode(SUBTRACT, $1, $3);}
             | exp_multiplicativa                  {$$ = $1;}
             ;
 
-exp_multiplicativa : exp_as '*' exp_multiplicativa  {$$ = mkBiNode(MULTIPLY, $1, $3);}
-                   | exp_as '/' exp_multiplicativa  {$$ = mkBiNode(DIVIDE, $1, $3);}
+exp_multiplicativa : exp_multiplicativa '*' exp_as  {$$ = mkBiNode(MULTIPLY, $1, $3);}
+                   | exp_multiplicativa '/' exp_as  {$$ = mkBiNode(DIVIDE, $1, $3);}
                    | exp_as                         {$$ = $1;}
                    ;
 
