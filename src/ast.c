@@ -16,50 +16,50 @@ Node *trueValue = NULL;
 Node *falseValue = NULL;
 
 char *type_name[] = {
-  "CTE_FLOATING",
-  "CTE_INTEGER",
-  "CTE_STRING",
+  "CONSTANT_DOUBLE",
+  "CONSTANT_INTEGER",
+  "CONSTANT_STRING",
   "LEAF",
-  "UNI",
-  "BI",
-  "TRI",
-  "ID_LEAF",
-  "ID_UNI",
-  "ID_BI",
-  "ID_TRI"
+  "ONE_CHILD",
+  "TWO_CHILDREN",
+  "THREE_CHILDREN",
+  "WITH_ID_AND_LEAF",
+  "WITH_ID_AND_ONE_CHILD",
+  "WITH_ID_AND_TWO_CHILDREN",
+  "WITH_ID_AND_THREE_CHILDREN"
 };
 
 char *tag_name[] = {
   "BLOCK",
-  "BIBLOCK",
-  "VARDEC",
+  "BI_BLOCK",
+  "VAR_DEC",
   "DEFS",
   "INTTYPE",
   "FLOATTYPE",
   "BOOLTYPE",
   "CHARTYPE",
   "ARRAYDEC",
-  "TYPEDFUNCDEF",
-  "FUNCDEF",
-  "PARAMLIST",
+  "TYPED_FUNC_DEF",
+  "FUNC_DEF",
+  "PARAM_LIST",
   "PARAM",
-  "VARDECS",
+  "VAR_DECS",
   "COMMANDS",
-  "IFELSE",
+  "IF_ELSE",
   "IF",
   "WHILE",
   "ASSIGN",
   "RETVAL",
   "RET",
   "PRINT",
-  "SIMPLEVAR",
-  "ARRAYVAR",
+  "SIMPLE_VAR",
+  "ARRAY_VAR",
   "OR",
   "AND",
   "EQUAL",
-  "NOTEQUAL",
-  "LESSOREQUAL",
-  "GREATEROREQUAL",
+  "NOT_EQUAL",
+  "LESS_OR_EQUAL",
+  "GREATER_OR_EQUAL",
   "LESS",
   "GREATER",
   "ADD",
@@ -71,7 +71,7 @@ char *tag_name[] = {
   "NOT",
   "NEGATIVE",
   "CALL",
-  "LISTEXP",
+  "LIST_EXP",
   "TRUEVALUE",
   "FALSEVALUE",
   "STRING",
@@ -258,74 +258,80 @@ Node *getGlobalTree()
 }
 void printTree(Node *n, int identation)
 {
-  if(n==NULL)
-    return;
+  // if(n==NULL)
+  //   return;
 
   printf("\n");
   int i = 0;
-  for (; i < identation-2;) {
+  for (; i < identation-1;) {
     printf("| ");
     i++;
   }
   if (i<identation) {
-    printf("\\_");
+    printf("|____");
     i++;
   }
-  //printf("__");
-  printf("NodeType: %s | NodeTag: %s ", type_name[n->leaf.n_type], tag_name[n->leaf.tag]);
-  char *tmp;
-  switch(n->leaf.n_type){
-    case CTE_FLOATING :
-      printf("| Value: %f ", n->cte_floating.value);
-      break;
-    case CTE_INTEGER :
-      printf("| Value: %d ", n->cte_integer.value);
-      break;
-    case CTE_STRING :
-      tmp = expandEscapes(n->cte_string.value);
-      printf("| Value: %s ", tmp);
-      free(tmp);
-      break;
-    case ID_LEAF :
-      tmp = expandEscapes(n->id_leaf.id);
-      printf("| Id: %s", tmp);
-      free(tmp);
-      break;
-    case LEAF :
-      break;
-    case ID_UNI :
-      tmp = expandEscapes(n->id_uni.id);
-      printf("| Id: %s", tmp);
-      free(tmp);
-      printTree(n->id_uni.n1, identation+1);
-      break;
-    case UNI :
-      printTree(n->uni.n1, identation+1);
-      break;
-    case ID_BI :
-      tmp = expandEscapes(n->id_bi.id);
-      printf("| Id: %s", tmp);
-      free(tmp);
-      printTree(n->id_bi.n1, identation+1);
-      printTree(n->id_bi.n2, identation+1);
-      break;
-    case BI :
-      printTree(n->bi.n1, identation+1);
-      printTree(n->bi.n2, identation+1);
-      break;
-    case ID_TRI :
-      tmp = expandEscapes(n->id_tri.id);
-      printf("| Id: %s", tmp);
-      free(tmp);
-      printTree(n->id_tri.n1, identation+1);
-      printTree(n->id_tri.n2, identation+1);
-      printTree(n->id_tri.n3, identation+1);
-      break;
-    case TRI :
-      printTree(n->tri.n1, identation+1);
-      printTree(n->tri.n2, identation+1);
-      printTree(n->tri.n3, identation+1);
-      break;
+  if (n==NULL)
+  {
+    printf("{vazio}");
+  }
+  else
+  {
+    printf("NodeType: %s | NodeTag: %s ", type_name[n->leaf.n_type], tag_name[n->leaf.tag]);
+    char *tmp;
+    switch(n->leaf.n_type){
+      case CTE_FLOATING :
+        printf("| Value: %f ", n->cte_floating.value);
+        break;
+      case CTE_INTEGER :
+        printf("| Value: %d ", n->cte_integer.value);
+        break;
+      case CTE_STRING :
+        tmp = expandEscapes(n->cte_string.value);
+        printf("| Value: %s ", tmp);
+        free(tmp);
+        break;
+      case ID_LEAF :
+        tmp = expandEscapes(n->id_leaf.id);
+        printf("| Id: %s", tmp);
+        free(tmp);
+        break;
+      case LEAF :
+        break;
+      case ID_UNI :
+        tmp = expandEscapes(n->id_uni.id);
+        printf("| Id: %s", tmp);
+        free(tmp);
+        printTree(n->id_uni.n1, identation+1);
+        break;
+      case UNI :
+        printTree(n->uni.n1, identation+1);
+        break;
+      case ID_BI :
+        tmp = expandEscapes(n->id_bi.id);
+        printf("| Id: %s", tmp);
+        free(tmp);
+        printTree(n->id_bi.n1, identation+1);
+        printTree(n->id_bi.n2, identation+1);
+        break;
+      case BI :
+        printTree(n->bi.n1, identation+1);
+        printTree(n->bi.n2, identation+1);
+        break;
+      case ID_TRI :
+        tmp = expandEscapes(n->id_tri.id);
+        printf("| Id: %s", tmp);
+        free(tmp);
+        printTree(n->id_tri.n1, identation+1);
+        printTree(n->id_tri.n2, identation+1);
+        printTree(n->id_tri.n3, identation+1);
+        break;
+      case TRI :
+        printTree(n->tri.n1, identation+1);
+        printTree(n->tri.n2, identation+1);
+        printTree(n->tri.n3, identation+1);
+        break;
+    }
   }
 }
 char *expandEscapes(char *src)
