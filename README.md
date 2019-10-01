@@ -5,17 +5,23 @@
 
 Da pasta raiz você pode:
 ----------------------------------
- - Para executar os testes léxicos:
+ - Dar make no compilador, resultando no executável `monga_compiler`, e usá-lo num arquivo a tua escolha. O argumento PRINT_TREES do make.sh é opcional e permite ver a árvore sintática do programa compilado:
+```
+$ ./make.sh [PRINT_TREES]
+$ ./monga_compiler < teu_programa_em_monga
+```
+
+ - Executar os testes léxicos:
 ```
 $ ./lexic_tests.sh
 ```
 
- - Para executar os testes gramaticais:
+ - Executar os testes gramaticais:
 ```
 $ ./grammatic_tests.sh
 ```
 
- - Para visualizar as árvores sintáticas do programa
+ - Visualizar as árvores sintáticas dos testes
  ```
  $ ./grammatic_tests.sh PRINT_TREES
  ```
@@ -25,6 +31,7 @@ Dívida técnica: Tratar as áspas no início e final da string
 
  - Não esqueça de verificar a permissão para execução. Caso não tenha, execute do diretório raiz:
 ```
+$ chmod +x make.sh
 $ chmod +x *_tests.sh
 $ chmod +x scripts/make_*.sh
 ```
@@ -52,7 +59,7 @@ O programa consiste em apenas uma declaração de função, a ``` main ```, que 
  - O primeiro filho é: ```{vazio}```. Como a ```main``` foi declarada sem ter parâmetros, o nó filho que corresponderia a lista de parâmetros não existe.
  - O segundo filho é ```NodeType: LEAF | NodeTag: INTTYPE```. Esse nó não tem filhos próprios pois o ```NodeType``` é ```LEAF``` e, pela ```NodeTag```, corresponde ao tipo inteiro da linguagem.
  - O terceiro filho é ```NodeType: ONE_CHILD | NodeTag: BLOCK```. Não tem identificador correspondente por ser um Bloco, e tem apenas um filho, denotado por ```| |____```.
- - Esse filho do bloco (e neto da raiz) é o nó: ```NodeType: TWO_CHILDREN | NodeTag: VARDECS```. É a declaração de variáveis, com dois filhos, denotados por ```| | |____```. O primeiro, ```NodeType: WITH_ID_AND_ONE_CHILD | NodeTag: VARDEC | Id: var```, é uma declaração e tem um filho, o tipo da variável. O segundo é a continuação, que pode ser outra declaração de variáveis ou, como nesse caso, uma série de comandos (```NodeType: TWO_CHILDREN | NodeTag: COMMANDS```). 
+ - Esse filho do bloco (e neto da raiz) é o nó: ```NodeType: TWO_CHILDREN | NodeTag: VARDECS```. É a declaração de variáveis, com dois filhos, denotados por ```| | |____```. O primeiro, ```NodeType: WITH_ID_AND_ONE_CHILD | NodeTag: VARDEC | Id: var```, é uma declaração e tem um filho, o tipo da variável. O segundo é a continuação, que pode ser outra declaração de variáveis ou, como nesse caso, uma série de comandos (```NodeType: TWO_CHILDREN | NodeTag: COMMANDS```).
 
 Arquivos Importantes
 ----------------------------

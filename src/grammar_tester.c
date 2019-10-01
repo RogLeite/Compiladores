@@ -11,17 +11,18 @@
 
 int main(void)
 {
+  printf("\n");
   if(yyparse()==0)
   {
-    printf("Parsed the program!\n");
+    printf("Programa parsed com sucesso!\n");
 #ifdef PRINT_TREES
     printf("\nARVORE DO PROGRAMA:\n");
     printTree(getGlobalTree(),0);
 #endif
   }
   else
-    printf("Did not parse the program :C\n");
+    printf("Programa não foi parsed :C\n");
 
-  printf("\n\n-----------------------------------------\n-----------------------------------------\n");
+  printf("\n-----------------------------------------\n-----------------------------------------\n");
   return 0;
 }
