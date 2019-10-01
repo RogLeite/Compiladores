@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_YY_SRC_MAIN_DEFINITIONS_H_INCLUDED
-# define YY_YY_SRC_MAIN_DEFINITIONS_H_INCLUDED
+#ifndef YY_YY_SRC_DEFINITIONS_H_INCLUDED
+# define YY_YY_SRC_DEFINITIONS_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -98,14 +98,14 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 16 "../src/yacc/monga_grammar.y" /* yacc.c:1909  */
+#line 16 "../src/monga_grammar.y" /* yacc.c:1909  */
 
   int i;
   double d;
   char *s;
   Node *n;
 
-#line 109 "../src/main/definitions.h" /* yacc.c:1909  */
+#line 109 "../src/definitions.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -118,4 +118,4 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_SRC_MAIN_DEFINITIONS_H_INCLUDED  */
+#endif /* !YY_YY_SRC_DEFINITIONS_H_INCLUDED  */

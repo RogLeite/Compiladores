@@ -5,9 +5,9 @@
 %{
 #include <stdio.h>
 #include <string.h>
-#include "main/ast.h"
-#include "main/interpreter.h"
-#include "main/lex_defs.h"
+#include "ast.h"
+#include "interpreter.h"
+#include "lex_defs.h"
 
 void yyerror(const char *s);
 

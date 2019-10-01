@@ -1,7 +1,7 @@
 #!/bin/bash
 SRCPATH=../src
 SCRIPTSPATH=scripts/
-DATAPATH=../../data
+DATAPATH=../data
 
 echo
 echo TESTING GRAMMAR
@@ -13,7 +13,7 @@ else
   ./make_grammatic_tester.sh $1
 fi
 
-cd $SRCPATH/test/
+cd $SRCPATH/
 echo
 echo Testando: test_simple_main.mng
 ./grammatic_tester < $DATAPATH/test_simple_main.mng

@@ -3,8 +3,8 @@
   * Rodrigo Leite - 1413150 - 08/setembro/2019
   **/
 %{
-#include "main/ast.h"
-#include "main/interpreter.h"
+#include "ast.h"
+#include "interpreter.h"
 #include <string.h>
 #include <stdlib.h>
 void storeString();

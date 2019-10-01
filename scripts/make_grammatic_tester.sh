@@ -1,17 +1,17 @@
 #!/bin/bash
 TEMPFILE=../tmp
 SRCPATH=../src
-if [ -r $SRCPATH/flex/monga_lexic.l ] && [ -s $SRCPATH/flex/monga_lexic.l ] && [ -r $SRCPATH/yacc/monga_grammar.y ] && [ -s $SRCPATH/yacc/monga_grammar.y ]
+if [ -r $SRCPATH/monga_lexic.l ] && [ -s $SRCPATH/monga_lexic.l ] && [ -r $SRCPATH/monga_grammar.y ] && [ -s $SRCPATH/monga_grammar.y ]
 then
   #A fazer: importar essas variáveis de um arquivo de config
-  yacc --output=$TEMPFILE/tmp_grammatic.c --defines=$SRCPATH/main/definitions.h $SRCPATH/yacc/monga_grammar.y
-  flex --outfile=$TEMPFILE/tmp_lexic.c --header-file=$SRCPATH/main/lex_defs.h $SRCPATH/flex/monga_lexic.l $SRCPATH/main/definitions.h
+  yacc --output=$TEMPFILE/tmp_grammatic.c --defines=$SRCPATH/definitions.h $SRCPATH/monga_grammar.y
+  flex --outfile=$TEMPFILE/tmp_lexic.c --header-file=$SRCPATH/lex_defs.h $SRCPATH/monga_lexic.l $SRCPATH/definitions.h
   if [[ -z $1 ]]; then
-    gcc  -Wall -I$SRCPATH  $SRCPATH/test/grammar_tester.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/main/ast.c -o $SRCPATH/test/grammatic_tester -lfl
+    gcc  -Wall -I$SRCPATH  $SRCPATH/grammar_tester.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c -o $SRCPATH/grammatic_tester -lfl
   else
-    gcc  -Wall -D$1 -I$SRCPATH  $SRCPATH/test/grammar_tester.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/main/ast.c -o $SRCPATH/test/grammatic_tester -lfl
+    gcc  -Wall -D$1 -I$SRCPATH  $SRCPATH/grammar_tester.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c -o $SRCPATH/grammatic_tester -lfl
   fi
-  #gcc -fsanitize=address -Wall -I$SRCPATH  $SRCPATH/test/grammar_tester.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/main/ast.c -o $SRCPATH/test/grammatic_tester -lfl
+  #gcc -fsanitize=address -Wall -I$SRCPATH  $SRCPATH/grammar_tester.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c -o $SRCPATH/grammatic_tester -lfl
   rm $TEMPFILE/tmp_lexic.c
   rm $TEMPFILE/tmp_grammatic.c
 else

@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include "main/ast.h"
-#include "main/interpreter.h"
+#include "ast.h"
+#include "interpreter.h"
 
 
 int main(void)

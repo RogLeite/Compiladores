@@ -1,16 +1,16 @@
 #!/bin/bash
 
 SRCPATH=../src
-SCRIPTSPATH=../../scripts
-DATAPATH=../../data
-TEMPPATH=../../tmp
+SCRIPTSPATH=../scripts
+DATAPATH=../data
+TEMPPATH=../tmp
 
 echo TESTING LEXIC
 echo
 cd scripts/
 ./make_generate_expected.sh READABLE=1
 
-cd $SRCPATH/test/
+cd $SRCPATH/
 
 ./generate_expected < $DATAPATH/test_lexic_tokens.txt > $TEMPPATH/output.txt
 echo Testando data/test_lexic_tokens.txt

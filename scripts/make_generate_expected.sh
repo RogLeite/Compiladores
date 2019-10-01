@@ -2,19 +2,19 @@
 TEMPFILE=../tmp
 BUILDPATH=../build
 SRCPATH=../src
-if [ -r $SRCPATH/flex/monga_lexic.l ] && [ -s $SRCPATH/flex/monga_lexic.l ]
+if [ -r $SRCPATH/monga_lexic.l ] && [ -s $SRCPATH/monga_lexic.l ]
 then
   #A fazer: importar essas variáveis de um arquivo de config
   #echo Construindo parser
-  yacc --output=$TEMPFILE/tmp_grammatic.c --defines=$SRCPATH/main/definitions.h $SRCPATH/yacc/monga_grammar.y
-  flex --outfile=$TEMPFILE/tmp_gen_expected.c --header-file=$SRCPATH/main/lex_defs.h $SRCPATH/flex/monga_lexic.l $SRCPATH/main/definitions.h
+  yacc --output=$TEMPFILE/tmp_grammatic.c --defines=$SRCPATH/definitions.h $SRCPATH/monga_grammar.y
+  flex --outfile=$TEMPFILE/tmp_gen_expected.c --header-file=$SRCPATH/lex_defs.h $SRCPATH/monga_lexic.l $SRCPATH/definitions.h
 
   #echo Building...
   if [ -z $1 ]
   then
-    gcc -Wall -I$SRCPATH $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c $TEMPFILE/tmp_grammatic.c $SRCPATH/main/ast.c -o $SRCPATH/test/generate_expected -lfl
+    gcc -Wall -I$SRCPATH $SRCPATH/generate_expected.c $TEMPFILE/tmp_gen_expected.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c -o $SRCPATH/generate_expected -lfl
   else
-    gcc -Wall -I$SRCPATH -D$1 $SRCPATH/test/generate_expected.c $TEMPFILE/tmp_gen_expected.c $TEMPFILE/tmp_grammatic.c $SRCPATH/main/ast.c -o $SRCPATH/test/generate_expected -lfl
+    gcc -Wall -I$SRCPATH -D$1 $SRCPATH/generate_expected.c $TEMPFILE/tmp_gen_expected.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c -o $SRCPATH/generate_expected -lfl
   fi
   #echo Limpando tmp
 

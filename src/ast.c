@@ -1,4 +1,4 @@
-#include "main/ast.h"
+#include "ast.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
