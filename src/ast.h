@@ -18,8 +18,7 @@ typedef enum node_type_t{
 }NodeType;
 
 typedef enum node_tag_t{
-  BLOCK = 0, //
-  BIBLOCK,
+  BLOCK = 0, 
   VARDEC,
   DEFS,
   INTTYPE,
