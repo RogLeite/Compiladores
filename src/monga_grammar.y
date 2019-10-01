@@ -88,18 +88,17 @@ lista_params : parametro                    {$$ = $1;}
 parametro : TK_ID ':' tipo  {$$ = mkIdUniNode(PARAM, $1, $3);free($1);};
 
 bloco : '{' '}'                         {$$ = mkLeafNode(BLOCK);}
-      | '{' comandos '}'                {$$ = mkUniNode(BLOCK, $2);}
       | '{' defs_variaveis '}'          {$$ = mkUniNode(BLOCK, $2);}
-      | '{' defs_variaveis comandos '}' {$$ = mkBiNode(BIBLOCK, $2, $3);}
       ;
 
 
 defs_variaveis : def_variavel                 {$$ = $1;}
-               | defs_variaveis def_variavel  {$$ = mkBiNode(VARDECS, $1, $2);}
+               | comandos                     {$$ = $1;}
+               | def_variavel defs_variaveis  {$$ = mkBiNode(VARDECS, $1, $2);}
                ;
 
 comandos : comando              {$$ = $1;}
-         | comandos comando     {$$ = mkBiNode(COMMANDS, $1, $2);}
+         | comando comandos     {$$ = mkBiNode(COMMANDS, $1, $2);}
          ;
 
 comando : TK_IF exp bloco TK_ELSE bloco {$$ = mkTriNode(IFELSE, $2, $3, $5);}
