@@ -48,7 +48,6 @@ char *tag_name[] = {
   "IF",
   "WHILE",
   "ASSIGN",
-  "RETVAL",
   "RET",
   "PRINT",
   "SIMPLEVAR",
@@ -75,40 +74,39 @@ char *tag_name[] = {
   "FALSEVALUE",
   "STRING",
   "INTEGER",
-  "FLOATING"
+  "FLOATING",
+  "ID"
 };
 
 
-Node *mkCteIntegerNode(NodeTag tag, int val)
+Node *mkCteIntegerNode(int val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->cte_integer.tag = tag;
-  newNode->cte_integer.n_type = CTE_INTEGER;
-  newNode->cte_integer.value = val;
+  newNode->tag = INTEGER;
+  newNode->cte_integer.i = val;
   return newNode;
 }
 Node *mkCteStringNode(NodeTag tag, char *val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->cte_string.tag = tag;
-  newNode->cte_string.n_type = CTE_STRING;
-  newNode->cte_string.value = (char*)malloc(sizeof(char)*(strlen(val)+1));
-  strcpy(newNode->cte_string.value, val);
+  newNode->tag = STRING;
+  newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
+  strcpy(newNode->content.string, val);
   return newNode;
 }
-Node *mkCteFloatingNode(NodeTag tag, double val)
+Node *mkCteFloatingNode(double val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->cte_floating.tag = tag;
-  newNode->cte_floating.n_type = CTE_FLOATING;
-  newNode->cte_floating.value = val;
+  newNode->tag = CTE_FLOATING;
+  newNode->content.d = val;
   return newNode;
 }
-Node *mkLeafNode(NodeTag tag)
+Node *mkIdNode(char *id)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->leaf.tag = tag;
-  newNode->leaf.n_type = LEAF;
+  newNode->tag = ID;
+  newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
+  strcpy(newNode->content.string, val);
   return newNode;
 }
 Node *mkUniNode(NodeTag tag, Node *first)
@@ -138,46 +136,15 @@ Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third)
   newNode->tri.n3 = third;
   return newNode;
 }
-Node *mkIdLeafNode(NodeTag tag, char *id)
+
+Node *mkQuadNode(NodeTag tag, Node *first, Node *second, Node *third, Node *fourth)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->id_leaf.tag = tag;
-  newNode->id_leaf.n_type = ID_LEAF;
-  newNode->id_leaf.id = (char*)malloc(sizeof(char)*(strlen(id)+1));
-  strcpy(newNode->id_leaf.id, id);
-  return newNode;
-}
-Node *mkIdUniNode(NodeTag tag, char *id, Node *first)
-{
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->id_uni.tag = tag;
-  newNode->id_uni.n_type = ID_UNI;
-  newNode->id_uni.id = (char*)malloc(sizeof(char)*(strlen(id)+1));
-  strcpy(newNode->id_uni.id, id);
-  newNode->id_uni.n1 = first;
-  return newNode;
-}
-Node *mkIdBiNode(NodeTag tag, char *id, Node *first, Node *second)
-{
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->id_bi.tag = tag;
-  newNode->id_bi.n_type = ID_BI;
-  newNode->id_bi.id = (char*)malloc(sizeof(char)*(strlen(id)+1));
-  strcpy(newNode->id_bi.id, id);
-  newNode->id_bi.n1 = first;
-  newNode->id_bi.n2 = second;
-  return newNode;
-}
-Node *mkIdTriNode(NodeTag tag, char *id, Node *first, Node *second, Node *third)
-{
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->id_tri.tag = tag;
-  newNode->id_tri.n_type = ID_TRI;
-  newNode->id_tri.id = (char*)malloc(sizeof(char)*(strlen(id)+1));
-  strcpy(newNode->id_tri.id, id);
-  newNode->id_tri.n1 = first;
-  newNode->id_tri.n2 = second;
-  newNode->id_tri.n3 = third;
+  newNode->tri.tag = tag;
+  newNode->tri.n_type = TRI;
+  newNode->tri.n1 = first;
+  newNode->tri.n2 = second;
+  newNode->tri.n3 = third;
   return newNode;
 }
 
@@ -186,8 +153,7 @@ Node *mkIntTypeNode()
   if(intType==NULL)
   {
     intType = (Node*)malloc(sizeof(Node));
-    intType->leaf.tag = INTTYPE;
-    intType->leaf.n_type = LEAF;
+    intType->tag = INTTYPE;
   }
   return intType;
 }
@@ -196,8 +162,7 @@ Node *mkFloatTypeNode()
   if(floatType==NULL)
   {
     floatType = (Node*)malloc(sizeof(Node));
-    floatType->leaf.tag = FLOATTYPE;
-    floatType->leaf.n_type = LEAF;
+    floatType->tag = FLOATTYPE;
   }
   return floatType;
 }
@@ -206,8 +171,7 @@ Node *mkBoolTypeNode()
   if(boolType==NULL)
   {
     boolType = (Node*)malloc(sizeof(Node));
-    boolType->leaf.tag = BOOLTYPE;
-    boolType->leaf.n_type = LEAF;
+    boolType->tag = BOOLTYPE;
   }
   return boolType;
 }
@@ -216,8 +180,7 @@ Node *mkCharTypeNode()
   if(charType==NULL)
   {
     charType = (Node*)malloc(sizeof(Node));
-    charType->leaf.tag = CHARTYPE;
-    charType->leaf.n_type = LEAF;
+    charType->tag = CHARTYPE;
   }
   return charType;
 }
@@ -226,8 +189,7 @@ Node *mkTrueValueNode()
   if(trueValue==NULL)
   {
     trueValue = (Node*)malloc(sizeof(Node));
-    trueValue->leaf.tag = TRUEVALUE;
-    trueValue->leaf.n_type = LEAF;
+    trueValue->tag = TRUEVALUE;
   }
   return trueValue;
 }
@@ -236,8 +198,7 @@ Node *mkFalseValueNode()
   if(falseValue==NULL)
   {
     falseValue = (Node*)malloc(sizeof(Node));
-    falseValue->leaf.tag = FALSEVALUE;
-    falseValue->leaf.n_type = LEAF;
+    falseValue->tag = FALSEVALUE;
   }
   return falseValue;
 }

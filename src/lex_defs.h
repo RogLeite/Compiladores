@@ -2,9 +2,9 @@
 #define yyHEADER_H 1
 #define yyIN_HEADER 1
 
-#line 6 "../src/lex_defs.h"
+#line 6 "src/lex_defs.h"
 
-#line 8 "../src/lex_defs.h"
+#line 8 "src/lex_defs.h"
 
 #define  YY_INT_ALIGNED short int
 
@@ -466,9 +466,9 @@ extern int yylex (void);
 #undef yyTABLES_NAME
 #endif
 
-#line 50 "../src/monga_lexic.l"
+#line 50 "src/monga_lexic.l"
 
 
-#line 473 "../src/lex_defs.h"
+#line 473 "src/lex_defs.h"
 #undef yyIN_HEADER
 #endif /* yyHEADER_H */

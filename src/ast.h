@@ -1,30 +1,16 @@
 #ifndef AST_H
 #define AST_H
 
-typedef union tree_node_t Node;
-
-typedef enum node_type_t{
-  CTE_FLOATING = 0,
-  CTE_INTEGER,
-  CTE_STRING,
-  LEAF,
-  UNI,
-  BI,
-  TRI,
-  ID_LEAF,
-  ID_UNI,
-  ID_BI,
-  ID_TRI,
-}NodeType;
+typedef struct node_s Node;
 
 typedef enum node_tag_t{
-  BLOCK = 0, 
+  BLOCK = 0,
   VARDEC,
   DEFS,
-  INTTYPE,
-  FLOATTYPE,
-  BOOLTYPE,
-  CHARTYPE,
+  INTTYPE,//Leaf
+  FLOATTYPE,//Leaf
+  BOOLTYPE,//Leaf
+  CHARTYPE,//Leaf
   ARRAYDEC,
   TYPEDFUNCDEF,
   FUNCDEF,
@@ -36,8 +22,7 @@ typedef enum node_tag_t{
   IF,
   WHILE,
   ASSIGN,
-  RETVAL,
-  RET,
+  RET,//Uni
   PRINT,
   SIMPLEVAR,
   ARRAYVAR,
@@ -59,72 +44,44 @@ typedef enum node_tag_t{
   NEGATIVE,
   CALL,
   LISTEXP,
-  TRUEVALUE,
-  FALSEVALUE,
-  STRING,
-  INTEGER,
-  FLOATING
+  TRUEVALUE,//Leaf
+  FALSEVALUE,//Leaf
+  STRING,//Leaf
+  INTEGER,//Leaf
+  FLOATING,//Leaf
+  ID,//Leaf
 } NodeTag;
 
-typedef union tree_node_t{
-  struct{
+enum ops_e{
+  SYMBOL_OR,
+  SYMBOL_AND,
+  SYMBOL_EQUAL,
+  SYMBOL_NOTEQUAL,
+  SYMBOL_LESSOREQUAL,
+  SYMBOL_GREATEROREQUAL,
+  SYMBOL_LESS,
+  SYMBOL_GREATER,
+  SYMBOL_ADD,
+  SYMBOL_SUBTRACT,
+  SYMBOL_MULTIPLY,
+  SYMBOL_DIVIDE,
+  SYMBOL_NOT,
+  SYMBOL_NEGATIVE,
+};
+
+typedef struct node_s{
     NodeTag tag;
-    NodeType n_type;
-    double value;
-  } cte_floating;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    int value;
-  } cte_integer;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    char *value;
-  } cte_string;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-  } leaf;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    Node *n1;
-  } uni;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    Node *n1,*n2;
-  } bi;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    Node *n1,*n2,*n3;
-  } tri;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    char *id;
-  } id_leaf;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    char *id;
-    Node *n1;
-  } id_uni;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    char *id;
-    Node *n1, *n2;
-  } id_bi;
-  struct{
-    NodeTag tag;
-    NodeType n_type;
-    char *id;
-    Node *n1, *n2, *n3;
-  } id_tri;
-} Node;
+    union content_u{
+      char *string;
+      int i;
+      double d;
+      enum ops_e op;
+      struct Pair{
+        Node *value;
+        Node *next;
+      } pair;
+    }content;
+}Node;
 
 extern Node *global_tree;
 
@@ -136,18 +93,15 @@ extern Node *charType;
 extern Node *trueValue;
 extern Node *falseValue;
 
-Node *mkCteIntegerNode(NodeTag tag, int val);
-Node *mkCteStringNode(NodeTag tag, char *val);
-Node *mkCteFloatingNode(NodeTag tag, double val);
+Node *mkCteIntegerNode(int val);
+Node *mkCteStringNode(char *val);
+Node *mkCteFloatingNode(double val);
 
-Node *mkLeafNode(NodeTag tag);
+Node *mkIdNode(char *id);
 Node *mkUniNode(NodeTag tag, Node *first);
 Node *mkBiNode(NodeTag tag, Node *first, Node *second);
 Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third);
-Node *mkIdLeafNode(NodeTag tag, char *id);
-Node *mkIdUniNode(NodeTag tag, char *id, Node *first);
-Node *mkIdBiNode(NodeTag tag, char *id, Node *first, Node *second);
-Node *mkIdTriNode(NodeTag tag, char *id, Node *first, Node *second, Node *third);
+Node *mkQuadNode(NodeTag tag, Node *first, Node *second, Node *third, Node *fourth);
 
 Node *mkIntTypeNode();
 Node *mkFloatTypeNode();
