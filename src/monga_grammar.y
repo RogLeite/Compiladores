@@ -52,7 +52,7 @@ void yyerror(const char *s);
 %start start
 %%
 
-start : %empty   {setGlobalTree(NULL);}
+start : %empty   {setGlobalTree(mkNullNode());}
       | programa {setGlobalTree($1);}
       ;
 
@@ -77,7 +77,7 @@ def_funcao : TK_ID '(' parametros ')' ':' tipo bloco {$$ = mkQuadNode(TYPEDFUNCD
            | TK_ID '(' parametros ')' bloco          {$$ = mkTriNode(FUNCDEF, mkCteStringNode(ID, $1), $3, $5);free($1);}
            ;
 
-parametros : %empty       {$$ = NULL;}
+parametros : %empty       {$$ = mkNullNode();}
            | lista_params {$$ = $1;}
            ;
 
@@ -87,7 +87,7 @@ lista_params : parametro                    {$$ = $1;}
 
 parametro : TK_ID ':' tipo  {$$ = mkBiNode(PARAM, mkCteStringNode(ID, $1), $3);free($1);};
 
-bloco : '{' '}'                         {$$ = mkUniNode(BLOCK, NULL);}
+bloco : '{' '}'                         {$$ = mkUniNode(BLOCK, mkNullNode());}
       | '{' defs_variaveis '}'          {$$ = mkUniNode(BLOCK, $2);}
       ;
 
@@ -106,43 +106,43 @@ comando : TK_IF exp bloco TK_ELSE bloco {$$ = mkTriNode(IFELSE, $2, $3, $5);}
         | TK_WHILE exp bloco            {$$ = mkBiNode(WHILE, $2, $3);}
         | var '=' exp ';'               {$$ = mkBiNode(ASSIGN, $1, $3);}
         | TK_RETURN exp ';'             {$$ = mkUniNode(RET, $2);}
-        | TK_RETURN ';'                 {$$ = mkUniNode(RET, NULL);}
+        | TK_RETURN ';'                 {$$ = mkUniNode(RET, mkNullNode());}
         | chamada ';'                   {$$ = $1;}
         | '@' exp ';'                   {$$ = mkUniNode(PRINT, $2);}
         | bloco                         {$$ = $1;}
         ;
 
-var : TK_ID                {$$ = mkIdLeafNode(SIMPLEVAR, $1);free($1);}
+var : TK_ID                {$$ = mkUniNode(SIMPLEVAR, mkCteStringNode(ID, $1));free($1);}
     | fator '[' exp ']'    {$$ = mkBiNode(ARRAYVAR, $1, $3);}
     ;
 
-exp : exp TK_OR exp_and    {$$ = mkBiNode(OR, $1, $3);}
+exp : exp TK_OR exp_and    {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(OR), $1, $3);}
     | exp_and              {$$ = $1;}
     ;
 
-exp_and : exp_and TK_AND exp_igualdade  {$$ = mkBiNode(AND, $1, $3);}
+exp_and : exp_and TK_AND exp_igualdade  {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(AND), $1, $3);}
         | exp_igualdade                 {$$ = $1;}
         ;
 
-exp_igualdade : exp_igualdade TK_EQ exp_comparativa {$$ = mkBiNode(EQUAL, $1, $3);}
-              | exp_igualdade TK_NE exp_comparativa {$$ = mkBiNode(NOTEQUAL, $1, $3);}
+exp_igualdade : exp_igualdade TK_EQ exp_comparativa {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(EQUAL), $1, $3);}
+              | exp_igualdade TK_NE exp_comparativa {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(NOTEQUAL), $1, $3);}
               | exp_comparativa                     {$$ = $1;}
               ;
 
-exp_comparativa : exp_aditiva TK_LE exp_aditiva {$$ = mkBiNode(LESSOREQUAL, $1, $3);}
-                | exp_aditiva TK_GE exp_aditiva {$$ = mkBiNode(GREATEROREQUAL, $1, $3);}
-                | exp_aditiva '<' exp_aditiva   {$$ = mkBiNode(LESS, $1, $3);}
-                | exp_aditiva '>' exp_aditiva   {$$ = mkBiNode(GREATER, $1, $3);}
+exp_comparativa : exp_aditiva TK_LE exp_aditiva {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(LESSOREQUAL), $1, $3);}
+                | exp_aditiva TK_GE exp_aditiva {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(GREATEROREQUAL), $1, $3);}
+                | exp_aditiva '<' exp_aditiva   {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(LESS), $1, $3);}
+                | exp_aditiva '>' exp_aditiva   {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(GREATER), $1, $3);}
                 | exp_aditiva                   {$$ = $1;}
                 ;
 
-exp_aditiva : exp_aditiva '+' exp_multiplicativa  {$$ = mkBiNode(ADD, $1, $3);}
-            | exp_aditiva '-' exp_multiplicativa  {$$ = mkBiNode(SUBTRACT, $1, $3);}
+exp_aditiva : exp_aditiva '+' exp_multiplicativa  {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(ADD), $1, $3);}
+            | exp_aditiva '-' exp_multiplicativa  {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(SUBTRACT), $1, $3);}
             | exp_multiplicativa                  {$$ = $1;}
             ;
 
-exp_multiplicativa : exp_multiplicativa '*' exp_as  {$$ = mkBiNode(MULTIPLY, $1, $3);}
-                   | exp_multiplicativa '/' exp_as  {$$ = mkBiNode(DIVIDE, $1, $3);}
+exp_multiplicativa : exp_multiplicativa '*' exp_as  {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(MULTIPLY), $1, $3);}
+                   | exp_multiplicativa '/' exp_as  {$$ = mkTriNode(OPERATION_BINARIA, mkOperatorNode(DIVIDE), $1, $3);}
                    | exp_as                         {$$ = $1;}
                    ;
 
@@ -154,8 +154,8 @@ exp_new : TK_NEW tipo '[' exp ']' {$$ = mkBiNode(NEW, $2, $4);}
         | exp_unaria              {$$ = $1;}
         ;
 
-exp_unaria : '!' fator     {$$ = mkUniNode(NOT, $2);}
-           | '-' fator     {$$ = mkUniNode(NEGATIVE, $2);}
+exp_unaria : '!' fator     {$$ = mkBiNode(OPERATION_UNARIA, mkOperatorNode(NOT), $2);}
+           | '-' fator     {$$ = mkBiNode(OPERATION_UNARIA, mkOperatorNode(NEGATIVE), $2);}
            | fator         {$$ = $1;}
            ;
 
@@ -174,7 +174,7 @@ constante : TK_STRING {$$ = mkCteStringNode(STRING, $1);free($1);}
 
 chamada : TK_ID '(' lista_opcional_exp ')' {$$ = mkBiNode(CALL, mkCteStringNode(ID, $1), $3);free($1);} ;
 
-lista_opcional_exp : %empty     {$$ = NULL;}
+lista_opcional_exp : %empty     {$$ = mkNullNode();}
                    | lista_exp  {$$ = $1;}
                    ;
 

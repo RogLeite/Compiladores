@@ -4,28 +4,46 @@
 typedef struct node_s Node;
 
 typedef enum node_tag_t{
-  BLOCK = 0,
-  VARDEC,
-  DEFS,
-  INTTYPE,//Leaf
+  INTTYPE = 0,//Leaf
   FLOATTYPE,//Leaf
   BOOLTYPE,//Leaf
   CHARTYPE,//Leaf
-  ARRAYDEC,
-  TYPEDFUNCDEF,
-  FUNCDEF,
-  PARAMLIST,
-  PARAM,
-  VARDECS,
-  COMMANDS,
-  IFELSE,
-  IF,
-  WHILE,
-  ASSIGN,
+  TRUEVALUE,//Leaf
+  FALSEVALUE,//Leaf
+  INTEGER,//Uni wrapped Leaf
+  FLOATING,//Uni wrapped Leaf
+  STRING,//Uni wrapped Leaf
+  ID,//Uni wrapped Leaf
+  OPERATOR,//Uni wrapped Leaf
+  WRAPPER,//Uni
+  EMPTY,//Uni
+  BLOCK,//Uni
   RET,//Uni
-  PRINT,
-  SIMPLEVAR,
-  ARRAYVAR,
+  PRINT,//Uni
+  SIMPLEVAR,//Uni
+  ARRAYDEC,//Uni
+  ARRAYVAR,//Bi
+  CAST,//Bi
+  NEW,//Bi
+  CALL,//Bi
+  LISTEXP,//Bi
+  OPERATION_UNARIA,//Bi
+  VARDEC,//Bi
+  DEFS,//Bi
+  PARAMLIST,//Bi
+  PARAM,//Bi
+  VARDECS,//Bi
+  COMMANDS,//Bi
+  IF,//Bi
+  WHILE,//Bi
+  ASSIGN,//Bi
+  FUNCDEF,//Tri
+  IFELSE,//Tri
+  OPERATION_BINARIA, //Tri
+  TYPEDFUNCDEF,//Quad
+} NodeTag;
+
+typedef enum ops_e{
   OR,
   AND,
   EQUAL,
@@ -38,64 +56,36 @@ typedef enum node_tag_t{
   SUBTRACT,
   MULTIPLY,
   DIVIDE,
-  CAST,
-  NEW,
   NOT,
   NEGATIVE,
-  CALL,
-  LISTEXP,
-  TRUEVALUE,//Leaf
-  FALSEVALUE,//Leaf
-  STRING,//Leaf
-  INTEGER,//Leaf
-  FLOATING,//Leaf
-  ID,//Leaf
-} NodeTag;
+}Operators;
 
-enum ops_e{
-  SYMBOL_OR,
-  SYMBOL_AND,
-  SYMBOL_EQUAL,
-  SYMBOL_NOTEQUAL,
-  SYMBOL_LESSOREQUAL,
-  SYMBOL_GREATEROREQUAL,
-  SYMBOL_LESS,
-  SYMBOL_GREATER,
-  SYMBOL_ADD,
-  SYMBOL_SUBTRACT,
-  SYMBOL_MULTIPLY,
-  SYMBOL_DIVIDE,
-  SYMBOL_NOT,
-  SYMBOL_NEGATIVE,
-};
+typedef union content_u{
+  char *string;
+  int i;
+  double d;
+  Operators op;
+  struct Pair{
+    Node *value;
+    Node *next;
+  } pair;
+} NodeContent;
 
 typedef struct node_s{
     NodeTag tag;
-    union content_u{
-      char *string;
-      int i;
-      double d;
-      enum ops_e op;
-      struct Pair{
-        Node *value;
-        Node *next;
-      } pair;
-    }content;
+    NodeContent content;
 }Node;
 
 extern Node *global_tree;
 
-extern Node *intType;
-extern Node *floatType;
-extern Node *boolType;
-extern Node *charType;
-
-extern Node *trueValue;
-extern Node *falseValue;
-
 Node *mkCteIntegerNode(int val);
 Node *mkCteStringNode(NodeTag tag, char *val);
 Node *mkCteFloatingNode(double val);
+Node *mkOperatorNode(Operators val);
+
+//Serve para criar um nó que representa vazio, mas
+//que mantenha a integridade da árvore
+Node *mkNullNode();
 
 Node *mkUniNode(NodeTag tag, Node *first);
 Node *mkBiNode(NodeTag tag, Node *first, Node *second);
