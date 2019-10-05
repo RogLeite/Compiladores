@@ -89,7 +89,7 @@ Node *mkCteIntegerNode(int val)
 Node *mkCteStringNode(NodeTag tag, char *val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = STRING;
+  newNode->tag = tag;
   newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
   strcpy(newNode->content.string, val);
   return newNode;
@@ -99,14 +99,6 @@ Node *mkCteFloatingNode(double val)
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = CTE_FLOATING;
   newNode->content.d = val;
-  return newNode;
-}
-Node *mkIdNode(char *id)
-{
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = ID;
-  newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
-  strcpy(newNode->content.string, val);
   return newNode;
 }
 Node *mkUniNode(NodeTag tag, Node *first)

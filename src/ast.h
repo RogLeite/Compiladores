@@ -94,10 +94,9 @@ extern Node *trueValue;
 extern Node *falseValue;
 
 Node *mkCteIntegerNode(int val);
-Node *mkCteStringNode(char *val);
+Node *mkCteStringNode(NodeTag tag, char *val);
 Node *mkCteFloatingNode(double val);
 
-Node *mkIdNode(char *id);
 Node *mkUniNode(NodeTag tag, Node *first);
 Node *mkBiNode(NodeTag tag, Node *first, Node *second);
 Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third);

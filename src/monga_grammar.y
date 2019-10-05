@@ -64,7 +64,7 @@ definicao : def_variavel  {$$ = $1;}
           | def_funcao    {$$ = $1;}
           ;
 
-def_variavel : TK_ID ':' tipo ';' {$$ = mkBiNode(VARDEC, mkIdNode($1), $3);free($1);};
+def_variavel : TK_ID ':' tipo ';' {$$ = mkBiNode(VARDEC, mkCteStringNode(ID, $1), $3);free($1);};
 
 tipo : TK_INT       {$$ = mkIntTypeNode();}
      | TK_CHAR      {$$ = mkCharTypeNode();}
@@ -73,8 +73,8 @@ tipo : TK_INT       {$$ = mkIntTypeNode();}
      | '[' tipo ']' {$$ = mkUniNode(ARRAYDEC, $2);}
      ;
 
-def_funcao : TK_ID '(' parametros ')' ':' tipo bloco {$$ = mkQuadNode(TYPEDFUNCDEF, mkIdNode($1), $3, $6, $7);free($1);}
-           | TK_ID '(' parametros ')' bloco          {$$ = mkTriNode(FUNCDEF, mkIdNode($1), $3, $5);free($1);}
+def_funcao : TK_ID '(' parametros ')' ':' tipo bloco {$$ = mkQuadNode(TYPEDFUNCDEF, mkCteStringNode(ID, $1), $3, $6, $7);free($1);}
+           | TK_ID '(' parametros ')' bloco          {$$ = mkTriNode(FUNCDEF, mkCteStringNode(ID, $1), $3, $5);free($1);}
            ;
 
 parametros : %empty       {$$ = NULL;}
@@ -85,7 +85,7 @@ lista_params : parametro                    {$$ = $1;}
              | lista_params ',' parametro   {$$ = mkBiNode(PARAMLIST, $1, $3);}
              ;
 
-parametro : TK_ID ':' tipo  {$$ = mkBiNode(PARAM, mkIdNode($1), $3);free($1);};
+parametro : TK_ID ':' tipo  {$$ = mkBiNode(PARAM, mkCteStringNode(ID, $1), $3);free($1);};
 
 bloco : '{' '}'                         {$$ = mkUniNode(BLOCK, NULL);}
       | '{' defs_variaveis '}'          {$$ = mkUniNode(BLOCK, $2);}
@@ -165,14 +165,14 @@ fator : constante   {$$ = $1;}
       | var         {$$ = $1;}
       ;
 
-constante : TK_STRING {$$ = mkCteStringNode($1);free($1);}
+constante : TK_STRING {$$ = mkCteStringNode(STRING, $1);free($1);}
         | TK_TRUE     {$$ = mkTrueValueNode();}
         | TK_FALSE    {$$ = mkFalseValueNode();}
         | TK_INTEGER  {$$ = mkCteIntegerNode($1);}
         | TK_FLOATING {$$ = mkCteFloatingNode($1);}
         ;
 
-chamada : TK_ID '(' lista_opcional_exp ')' {$$ = mkBiNode(CALL, mkIdNode($1), $3);free($1);} ;
+chamada : TK_ID '(' lista_opcional_exp ')' {$$ = mkBiNode(CALL, mkCteStringNode(ID, $1), $3);free($1);} ;
 
 lista_opcional_exp : %empty     {$$ = NULL;}
                    | lista_exp  {$$ = $1;}
