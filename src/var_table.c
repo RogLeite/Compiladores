@@ -75,12 +75,19 @@ int newId(char *name, Node *node)
   char *id;
   if(isIdInScope(name))
     return -1;
+
   novo = (Empilhavel*)malloc(sizeof(Empilhavel));
+  if (novo == NULL) return -1;
+
   novo->tag = VAR;
+
   id = (char*)malloc(sizeof(char)*(strlen(name)+1));
+  if (id == NULL) return -1;
+
   strcpy(novo->val.pair.id, name);
   novo->val.pair.node = node;
   push(novo);
+  return 0;
 }
 
 Node *getId(char *id)
