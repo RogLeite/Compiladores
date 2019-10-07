@@ -32,7 +32,6 @@ typedef struct pilha_s
 int isIdInScope(char *id);
 
 int scopeCounter = 0;
-Empilhavel *base = NULL;
 Empilhavel *topo = NULL;
 
 int enterScope()
@@ -76,9 +75,14 @@ int newId(char *name, Node *node)
   push(novo);
 }
 
-Node *getId(char *name)
+Node *getId(char *id)
 {
-
+  for(Empilhavel *curr=topo;curr!=NULL;curr = topo->next)
+  {
+    if(curr->tag==VAR && strcmp(id, curr->val.pair.id)==0)
+      return curr->val.pair.node;
+  }
+  return NULL;
 }
 
 void push(Empilhavel *bloco)

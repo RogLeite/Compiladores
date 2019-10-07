@@ -22,6 +22,6 @@ int newId(char *name, Node *node);
 retorna NULL se não encontrou o nome
 retorna o ponteiro se encontrou
 */
-Node *getId(char *name);
+Node *getId(char *id);
 
 #endif
