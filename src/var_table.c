@@ -1,3 +1,7 @@
+/*
+* Tabela de Variáveis para costura da ast.h
+* Rodrigo Leite - 1413150 - 07/Outubro/2019
+**/
 #include "var_table.h"
 #include <stdlib.h>
 #include <string.h>

@@ -1,3 +1,7 @@
+/*
+* Árvore de Sintaxe Abstrata
+* Rodrigo Leite - 1413150 - 07/Outubro/2019
+**/
 #include "ast.h"
 #include <string.h>
 #include <stdlib.h>

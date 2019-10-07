@@ -1,3 +1,7 @@
+/*
+* Tabela de Variáveis para costura da ast.h
+* Rodrigo Leite - 1413150 - 07/Outubro/2019
+**/
 #ifndef VAR_TABLE_H
 #define VAR_TABLE_H
 
