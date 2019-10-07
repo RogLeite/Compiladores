@@ -98,8 +98,10 @@ Empilhavel *pop()
 
 int isIdInScope(char *id)
 {
-  for(Empilhavel *curr=topo;curr->tag!=SCOPE;curr = topo->next)
+  for(Empilhavel *curr=topo;curr!=NULL && curr->tag!=SCOPE;curr = topo->next)
   {
-    if(/*TODO STRING COMPARE*/)
+    if(strcmp(id, curr->val.pair.id)==0)
+      return 1;
   }
+  return 0;
 }
