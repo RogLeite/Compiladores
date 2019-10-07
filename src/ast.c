@@ -269,7 +269,7 @@ void printTree(Node *n, int identation)
         case STRING :
         case ID :
           tmp = expandEscapes(n->content.string);
-          printf("| Value: %s ", tmp);
+          printf("| Value: \"%s\" ", tmp);
           free(tmp);
           break;
         case OPERATOR :

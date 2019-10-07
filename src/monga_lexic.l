@@ -7,7 +7,7 @@
 #include "interpreter.h"
 #include <string.h>
 #include <stdlib.h>
-void storeString();
+void storeString(int isString);
 void storeInt();
 void storeFloat();
 void storeLineno();
@@ -30,8 +30,8 @@ bool                            {storeLineno(); return TK_BOOL;}
 false                           {storeLineno(); return TK_FALSE; }
 true                            {storeLineno(); return TK_TRUE;}
 while                           {storeLineno(); return TK_WHILE; }
-[a-zA-Z_][a-zA-Z_0-9]*          {storeString(); return TK_ID;}
-\"([^"\\\n]|\\[nt"\\])*\"       {storeString(); return TK_STRING;}
+[a-zA-Z_][a-zA-Z_0-9]*          {storeString(0); return TK_ID;}
+\"([^"\\\n]|\\[nt"\\])*\"       {storeString(1); return TK_STRING;}
 [0-9]+                          {storeInt(); return TK_INTEGER;}
 0[xX]{HEX}+                     {storeInt(); return TK_INTEGER;}
 ([0-9]+("."[0-9]*)?|"."[0-9]+)([eE][-+]?[0-9]+)?    {storeFloat(); return TK_FLOATING;}
@@ -49,12 +49,12 @@ while                           {storeLineno(); return TK_WHILE; }
 . printf("MISMATCH: \"%s\" Line: %i\n", yytext, yylineno);
 %%
 
-void storeString()
+void storeString(int isString)
 {
   char* str = (char*)malloc((strlen(yytext)+1)*sizeof(char));
   int i_str = 0;
-  int i_yy = 0;
-  while(yytext[i_yy] != '\0' || i_yy<strlen(yytext))
+  int i_yy = isString;
+  while(yytext[i_yy] != '\0' && i_yy<strlen(yytext)-isString)
   {
     if (yytext[i_yy] != '\\')
     {
