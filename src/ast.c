@@ -221,58 +221,67 @@ void setNextNode(Node *current, Node *next)
 }
 void printTree(Node *n, int identation)
 {
-  printf("\n");
-  int i = 0;
-  for (; i < identation-1;) {
-    printf("| ");
-    i++;
-  }
-  if (i<identation) {
-    printf("|____");
-    i++;
-  }
-  if (n==NULL)
+  if(n!=NULL && n->tag == WRAPPER)
   {
-    printf("{vazio}");
+    printTree(n->content.pair.value, identation);
+    if(n->content.pair.next != NULL)
+      printTree(n->content.pair.next, identation);
   }
   else
   {
-    char *tmp;
-    printf("NodeTag: %s ", tag_name[n->tag]);
-    switch(n->tag){
-      case INTTYPE :
-      case FLOATTYPE :
-      case BOOLTYPE :
-      case CHARTYPE :
-      case TRUEVALUE :
-      case FALSEVALUE :
-      case EMPTY :
-        if(n->content.pair.next != NULL)
-          {
+    printf("\n");
+    int i = 0;
+    for (; i < identation-1;) {
+      printf("| ");
+      i++;
+    }
+    if (i<identation) {
+      printf("|____");
+      i++;
+    }
+    if (n==NULL)
+    {
+      printf("{vazio}");
+    }
+    else
+    {
+      char *tmp;
+      printf("NodeTag: %s ", tag_name[n->tag]);
+      switch(n->tag){
+        case INTTYPE :
+        case FLOATTYPE :
+        case BOOLTYPE :
+        case CHARTYPE :
+        case TRUEVALUE :
+        case FALSEVALUE :
+        case EMPTY :
+          if(n->content.pair.next != NULL)
+            {
+              printTree(n->content.pair.next, identation);
+            }
+          break;
+        case FLOATING :
+          printf("| Value: %f ", n->content.d);
+          break;
+        case INTEGER :
+          printf("| Value: %d ", n->content.i);
+          break;
+        case STRING :
+        case ID :
+          tmp = expandEscapes(n->content.string);
+          printf("| Value: %s ", tmp);
+          free(tmp);
+          break;
+        case OPERATOR :
+          printf("| Operator: %s ", op_name[n->content.op]);
+          break;
+        //UniNode
+        default :
+          printTree(n->content.pair.value, identation+1);
+          if(n->content.pair.next != NULL)
             printTree(n->content.pair.next, identation);
-          }
-        break;
-      case FLOATING :
-        printf("| Value: %f ", n->content.d);
-        break;
-      case INTEGER :
-        printf("| Value: %d ", n->content.i);
-        break;
-      case STRING :
-      case ID :
-        tmp = expandEscapes(n->content.string);
-        printf("| Value: %s ", tmp);
-        free(tmp);
-        break;
-      case OPERATOR :
-        printf("| Operator: %s ", op_name[n->content.op]);
-        break;
-      //UniNode
-      default :
-        printTree(n->content.pair.value, identation+1);
-        if(n->content.pair.next != NULL)
-          printTree(n->content.pair.next, identation);
-        break;
+          break;
+      }
     }
   }
 }
