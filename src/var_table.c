@@ -3,9 +3,13 @@
 * Rodrigo Leite - 1413150 - 07/Outubro/2019
 **/
 #include "var_table.h"
+#include "ast.h"
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct pilha_s Empilhavel;
+void push(Empilhavel *);
+Empilhavel *pop();
 
 typedef enum stack_tag
 {

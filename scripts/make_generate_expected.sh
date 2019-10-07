@@ -12,9 +12,9 @@ then
   #echo Building...
   if [ -z $1 ]
   then
-    gcc -Wall -I$SRCPATH $SRCPATH/generate_expected.c $TEMPFILE/tmp_gen_expected.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c -o $SRCPATH/generate_expected -lfl
+    gcc -Wall -I$SRCPATH $SRCPATH/generate_expected.c $TEMPFILE/tmp_gen_expected.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o $SRCPATH/generate_expected -lfl
   else
-    gcc -Wall -I$SRCPATH -D$1 $SRCPATH/generate_expected.c $TEMPFILE/tmp_gen_expected.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c -o $SRCPATH/generate_expected -lfl
+    gcc -Wall -I$SRCPATH -D$1 $SRCPATH/generate_expected.c $TEMPFILE/tmp_gen_expected.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o $SRCPATH/generate_expected -lfl
   fi
   #echo Limpando tmp
 

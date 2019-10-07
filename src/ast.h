@@ -25,7 +25,7 @@ typedef enum node_tag_t{
   RET,//Uni
   PRINT,//Uni
   SIMPLEVAR,//Uni
-  ARRAYDEC,//Uni
+  ARRAYTYPE,//Uni
   ARRAYVAR,//Bi
   CAST,//Bi
   NEW,//Bi
@@ -107,6 +107,7 @@ Node *mkFalseValueNode();
 void setGlobalTree(Node *);
 Node *getGlobalTree();
 
-void printTree(Node *, int identation);
+void printTree(Node *tree, int identation);
+int stitchTree(Node *tree);
 
 #endif

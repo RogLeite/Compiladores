@@ -3,6 +3,7 @@
 * Rodrigo Leite - 1413150 - 07/Outubro/2019
 **/
 #include "ast.h"
+#include "var_table.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,7 +31,7 @@ char *tag_name[] = {
 "RET",
 "PRINT",
 "SIMPLEVAR",
-"ARRAYDEC",
+"ARRAYTYPE",
 "ARRAYVAR",
 "CAST",
 "NEW",
@@ -275,6 +276,52 @@ void printTree(Node *n, int identation)
     }
   }
 }
+
+int stitchTree(Node *tree)
+{
+  switch (tree->tag){
+    case INTTYPE :
+    case FLOATTYPE :
+    case BOOLTYPE :
+    case CHARTYPE :
+    case TRUEVALUE :
+    case FALSEVALUE :
+    case EMPTY :
+      if(tree->content.pair.next != NULL)
+        if(stitchTree(tree->content.pair.next)==-1) return -1;
+      break;
+    case TYPEDFUNCDEF :
+    case FUNCDEF :
+    case BLOCK :
+
+      enterScope();
+
+      if(tree->content.pair.value != NULL)
+        if(stitchTree(tree->content.pair.value)==-1) return -1;
+
+      if(leaveScope()==-1)
+      {
+        printf("Erro, não há escopo para sair\n");
+        return -1;
+      }
+
+      if(tree->content.pair.next != NULL)
+        if(stitchTree(tree->content.pair.next)==-1) return -1;
+
+      break;
+    case VARDEC :
+    case ARRAYTYPE :
+
+    default :
+      if(tree->content.pair.value != NULL)
+        if(stitchTree(tree->content.pair.value)==-1) return -1;
+      if(tree->content.pair.next != NULL)
+        if(stitchTree(tree->content.pair.next)==-1) return -1;
+      break;
+  }
+  return 0;
+}
+
 char *expandEscapes(char *src)
 {
   char* str = (char*)malloc((strlen(src)*2+1)*sizeof(char));

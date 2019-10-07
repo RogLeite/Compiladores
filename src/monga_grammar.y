@@ -70,7 +70,7 @@ tipo : TK_INT       {$$ = mkIntTypeNode();}
      | TK_CHAR      {$$ = mkCharTypeNode();}
      | TK_FLOAT     {$$ = mkFloatTypeNode();}
      | TK_BOOL      {$$ = mkBoolTypeNode();}
-     | '[' tipo ']' {$$ = mkUniNode(ARRAYDEC, $2);}
+     | '[' tipo ']' {$$ = mkUniNode(ARRAYTYPE, $2);}
      ;
 
 def_funcao : TK_ID '(' parametros ')' ':' tipo bloco {$$ = mkQuadNode(TYPEDFUNCDEF, mkCteStringNode(ID, $1), $3, $6, $7);free($1);}
