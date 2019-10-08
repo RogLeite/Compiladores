@@ -27,8 +27,6 @@ $ ./grammatic_tests.sh
  ```
 Obs.: As strings exibidas no valor dos nós da árvore(Value: ...) tiveram os caracteres escapados expandidos.
 
-Dívida técnica: Tratar as áspas no início e final da string
-
  - Não esqueça de verificar a permissão para execução. Caso não tenha, execute do diretório raiz:
 ```
 $ chmod +x make.sh
@@ -40,32 +38,24 @@ Exemplo de Árvore
 Essa é a árvore do programa ``` data/test_simple_main.mng ```
 ```
 NodeTag: TYPEDFUNCDEF
-|____NodeTag: WRAPPER
-| |____NodeTag: ID | Value: main
+|____NodeTag: ID | Value: "main"
 |____NodeTag: EMPTY
 |____NodeTag: INTTYPE
 |____NodeTag: BLOCK
 | |____NodeTag: VARDECS
 | | |____NodeTag: VARDEC
-| | | |____NodeTag: WRAPPER
-| | | | |____NodeTag: ID | Value: var
+| | | |____NodeTag: ID | Value: "var"
 | | | |____NodeTag: INTTYPE
 | | |____NodeTag: COMMANDS
 | | | |____NodeTag: ASSIGN
 | | | | |____NodeTag: SIMPLEVAR
-| | | | | |____NodeTag: WRAPPER
-| | | | | | |____NodeTag: ID | Value: var
-| | | | |____NodeTag: WRAPPER
-| | | | | |____NodeTag: INTEGER | Value: 0
+| | | | | |____NodeTag: ID | Value: "var"
+| | | | |____NodeTag: INTEGER | Value: 0
 | | | |____NodeTag: RET
 | | | | |____NodeTag: SIMPLEVAR
-| | | | | |____NodeTag: WRAPPER
-| | | | | | |____NodeTag: ID | Value: var
-
-
+| | | | | |____NodeTag: ID | Value: "var"
 ```
 O programa consiste em apenas uma declaração de função, a ``` main ```, que define uma variável inteira ``` var ```, atribui a ela o valor ``` 0 ``` e retorna ```var```.
- - Os nós de tag ```WRAPPER``` existem em volta de nós cujo conteúdo é um valor (e não outras árvores)
  - Os nós de tag ```EMPTY``` existem em lugares onde a gramática encontrou um ```%empty```. Sua primeira aparição na árvore acima indica que a função foi declarada como não recebendo parâmetros.
 
 
