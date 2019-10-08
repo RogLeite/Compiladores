@@ -10,6 +10,11 @@
 
 char *expandEscapes(char *src);
 void setNextNode(Node *current, Node *next);
+char *getVardecId(Node *current);
+Node *getVardecType(Node *node);
+Node *ignoreWrapper(Node *node);
+Node *getValueNode(Node *curr);
+Node *getNextNode(Node *curr);
 
 Node *global_tree = NULL;
 
@@ -296,8 +301,8 @@ int stitchTree(Node *tree)
     case TRUEVALUE :
     case FALSEVALUE :
     case EMPTY :
-      if(tree->content.pair.next != NULL)
-        if(stitchTree(tree->content.pair.next)==-1) return -1;
+      if(getNextNode(tree) != NULL)
+        if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
     case TYPEDFUNCDEF :
     case FUNCDEF :
@@ -305,8 +310,8 @@ int stitchTree(Node *tree)
 
       enterScope();
 
-      if(tree->content.pair.value != NULL)
-        if(stitchTree(tree->content.pair.value)==-1) return -1;
+      if(getValueNode(tree) != NULL)
+        if(stitchTree(getValueNode(tree))==-1) return -1;
 
       if(leaveScope()==-1)
       {
@@ -314,21 +319,55 @@ int stitchTree(Node *tree)
         return -1;
       }
 
-      if(tree->content.pair.next != NULL)
-        if(stitchTree(tree->content.pair.next)==-1) return -1;
+      if(getNextNode(tree) != NULL)
+        if(stitchTree(getNextNode(tree))==-1) return -1;
 
       break;
+    case ARRAYVAR :
+    case SIMPLEVAR :
+      //TODO
+      break;
     case VARDEC :
-    case ARRAYTYPE :
-
+      if(newId(getVardecId(tree), tree)==-1)return -1;
     default :
-      if(tree->content.pair.value != NULL)
-        if(stitchTree(tree->content.pair.value)==-1) return -1;
-      if(tree->content.pair.next != NULL)
-        if(stitchTree(tree->content.pair.next)==-1) return -1;
+      if(getValueNode(tree) != NULL)
+        if(stitchTree(getValueNode(tree))==-1) return -1;
+      if(getNextNode(tree) != NULL)
+        if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
   }
   return 0;
+}
+
+char *getVardecId(Node *node)
+{
+  if(node->tag != VARDEC) return NULL;
+  Node *idNode = ignoreWrapper(getValueNode(node));
+  if(idNode==NULL)return NULL;
+  return idNode->content.string;
+}
+Node *getVardecType(Node *node)
+{
+  if(node->tag != VARDEC) return NULL;
+  return getNextNode(getValueNode(node));
+}
+
+Node *ignoreWrapper(Node *node)
+{
+  if(node->tag!=WRAPPER)return NULL;
+  return getValueNode(node);
+}
+
+Node *getValueNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return curr->content.pair.value;
+}
+
+Node *getNextNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return curr->content.pair.next;
 }
 
 char *expandEscapes(char *src)

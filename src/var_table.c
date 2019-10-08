@@ -73,7 +73,7 @@ int newId(char *name, Node *node)
 {
   Empilhavel *novo;
   char *id;
-  if(isIdInScope(name))
+  if(name==NULL || isIdInScope(name))
     return -1;
 
   novo = (Empilhavel*)malloc(sizeof(Empilhavel));

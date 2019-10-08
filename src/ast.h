@@ -19,7 +19,7 @@ typedef enum node_tag_t{
   STRING,//Uni wrapped Leaf
   ID,//Uni wrapped Leaf
   OPERATOR,//Uni wrapped Leaf
-  WRAPPER,//Uni
+  WRAPPER,//Uni DEVE SEMPRE SER O PRIMEIRO UNI
   EMPTY,//Uni
   BLOCK,//Uni
   RET,//Uni
@@ -78,6 +78,7 @@ typedef union content_u{
 typedef struct node_s{
     NodeTag tag;
     NodeContent content;
+    //TODO Node *reference;
 }Node;
 
 extern Node *global_tree;
