@@ -37,7 +37,7 @@ Exemplo de Árvore
 -------------------------------
 Essa é a árvore do programa ``` data/test_simple_main.mng ```
 ```
-NodeTag: TYPEDFUNCDEF
+NodeTag: FUNCDEF
 |____NodeTag: ID | Value: "main"
 |____NodeTag: EMPTY
 |____NodeTag: INTTYPE

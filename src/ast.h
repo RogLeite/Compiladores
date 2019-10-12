@@ -41,10 +41,9 @@ typedef enum node_tag_t{
   IF,//Bi
   WHILE,//Bi
   ASSIGN,//Bi
-  FUNCDEF,//Tri
   IFELSE,//Tri
   OPERATION_BINARIA, //Tri
-  TYPEDFUNCDEF,//Quad
+  FUNCDEF,//Quad
 } NodeTag;
 
 typedef enum ops_e{

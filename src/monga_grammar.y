@@ -73,8 +73,8 @@ tipo : TK_INT       {$$ = mkIntTypeNode();}
      | '[' tipo ']' {$$ = mkUniNode(ARRAYTYPE, $2);}
      ;
 
-def_funcao : TK_ID '(' parametros ')' ':' tipo bloco {$$ = mkQuadNode(TYPEDFUNCDEF, mkCteStringNode(ID, $1), $3, $6, $7);free($1);}
-           | TK_ID '(' parametros ')' bloco          {$$ = mkTriNode(FUNCDEF, mkCteStringNode(ID, $1), $3, $5);free($1);}
+def_funcao : TK_ID '(' parametros ')' ':' tipo bloco {$$ = mkQuadNode(FUNCDEF, mkCteStringNode(ID, $1), $3, $6, $7);free($1);}
+           | TK_ID '(' parametros ')' bloco          {$$ = mkQuadNode(FUNCDEF, mkCteStringNode(ID, $1), $3, mkNullNode(), $5);free($1);}
            ;
 
 parametros : %empty       {$$ = mkNullNode();}

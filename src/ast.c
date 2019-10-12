@@ -52,10 +52,9 @@ char *tag_name[] = {
 "IF",
 "WHILE",
 "ASSIGN",
-"FUNCDEF",
 "IFELSE",
 "OPERATION_BINARIA",
-"TYPEDFUNCDEF"
+"FUNCDEF"
 };
 
 char *op_name[] = {
@@ -304,7 +303,6 @@ int stitchTree(Node *tree)
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
-    case TYPEDFUNCDEF :
     case FUNCDEF :
     case BLOCK :
 
