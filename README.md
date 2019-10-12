@@ -5,9 +5,9 @@
 
 Da pasta raiz você pode:
 ----------------------------------
- - Dar make no compilador, resultando no executável `monga_compiler`, e usá-lo num arquivo a tua escolha. O argumento PRINT_TREES do make.sh é opcional e permite ver a árvore sintática do programa compilado:
+ - Dar make no compilador, resultando no executável `monga_compiler`, e usá-lo num arquivo a tua escolha. Ao ser executado, a árvore sintática costudara do programa é exibida:
 ```
-$ ./make.sh [PRINT_TREES]
+$ ./make.sh
 $ ./monga_compiler < teu_programa_em_monga
 ```
 

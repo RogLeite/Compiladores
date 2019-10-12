@@ -15,8 +15,10 @@ int main(void)
   if(yyparse()==0)
   {
     printf("Programa parsed com sucesso!\n");
+#ifdef PRINT_TREES
     printTree(getGlobalTree(),0);
     printf("\n");
+#endif
     if(stitchTree(getGlobalTree())==-1)
       printf("Árvore não foi costurada com sucesso\n");
     printTree(getGlobalTree(),0);
