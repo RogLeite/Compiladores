@@ -12,6 +12,8 @@ char *expandEscapes(char *src);
 void setNextNode(Node *current, Node *next);
 char *getVardecId(Node *current);
 Node *getVardecType(Node *node);
+char *getFuncdefId(Node *current);
+Node *getFuncdefType(Node *node);
 Node *ignoreWrapper(Node *node);
 Node *getValueNode(Node *curr);
 Node *getNextNode(Node *curr);
@@ -303,7 +305,6 @@ int stitchTree(Node *tree)
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
-    case FUNCDEF :
     case BLOCK :
 
       enterScope();
@@ -320,13 +321,34 @@ int stitchTree(Node *tree)
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
 
-      break;
     case ARRAYVAR :
+      break;
     case SIMPLEVAR :
       //TODO
       break;
+    case FUNCDEF :
+      if(newId(getFuncdefId(tree), tree)==-1)return -1;
+
+      enterScope();
+      if(getValueNode(tree) != NULL)
+        if(stitchTree(getValueNode(tree))==-1) return -1;
+      if(leaveScope()==-1)
+      {
+        printf("Erro, não há escopo para sair\n");
+        return -1;
+      }
+
+      if(getNextNode(tree) != NULL)
+        if(stitchTree(getNextNode(tree))==-1) return -1;
+
+      break;
     case VARDEC :
       if(newId(getVardecId(tree), tree)==-1)return -1;
+      if(getValueNode(tree) != NULL)
+        if(stitchTree(getValueNode(tree))==-1) return -1;
+      if(getNextNode(tree) != NULL)
+        if(stitchTree(getNextNode(tree))==-1) return -1;
+      break;
     default :
       if(getValueNode(tree) != NULL)
         if(stitchTree(getValueNode(tree))==-1) return -1;
@@ -348,6 +370,18 @@ Node *getVardecType(Node *node)
 {
   if(node->tag != VARDEC) return NULL;
   return getNextNode(getValueNode(node));
+}
+char *getFuncdefId(Node *node)
+{
+  if(node->tag != FUNCDEF) return NULL;
+  Node *idNode = ignoreWrapper(getValueNode(node));
+  if(idNode==NULL)return NULL;
+  return idNode->content.string;
+}
+Node *getFuncdefType(Node *node)
+{
+  if(node->tag != FUNCDEF) return NULL;
+  return getNextNode(getNextNode(getValueNode(node)));
 }
 
 Node *ignoreWrapper(Node *node)
