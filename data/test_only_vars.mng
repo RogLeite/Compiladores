@@ -1,0 +1,16 @@
+name : [char];
+integer : int;
+integer2 : int;
+number : float;
+over : bool;
+main(over : bool, paramChar:char)
+{
+  over : bool;
+  number = 20.0;
+  integer2 = 2;
+  integer = 1;
+  integer2 = 3;
+  name = new char[3];
+  paramChar = "c";
+  over = true;
+}

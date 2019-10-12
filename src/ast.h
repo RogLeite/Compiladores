@@ -77,7 +77,7 @@ typedef union content_u{
 typedef struct node_s{
     NodeTag tag;
     NodeContent content;
-    //TODO Node *reference;
+    Node *reference;
 }Node;
 
 extern Node *global_tree;

@@ -5,6 +5,7 @@
 #include "var_table.h"
 #include "ast.h"
 #include <stdlib.h>
+//#include <stdio.h>
 #include <string.h>
 
 typedef struct pilha_s Empilhavel;
@@ -45,26 +46,28 @@ Empilhavel *topo = NULL;
 int enterScope()
 {
   Empilhavel *novo = (Empilhavel *)malloc(sizeof(Empilhavel));
+  if (novo == NULL) {
+    return -1;
+  }
   novo->tag = SCOPE;
   novo->val.scope = scopeCounter;
+  novo->next = NULL;
   scopeCounter++;
+  //printf("\tEntrou %d\n", scopeCounter);
   push(novo);
   return scopeCounter;
 }
 
 int leaveScope()
 {
-  if(scopeCounter<1)
+  Empilhavel *curr;
+  for(curr=pop();curr->tag!=SCOPE;curr = pop())
   {
-    return -1;
+    free(curr->val.pair.id);
+    //printf("\tSaiu %d\n", scopeCounter);
+    free(curr);
   }
-  for(Empilhavel *curr=topo;curr->tag!=SCOPE;curr = topo->next)
-  {
-    Empilhavel *popped = pop();
-    free(popped->val.pair.id);
-    free(popped);
-  }
-  free(pop());
+  free(curr);
   scopeCounter--;
   return scopeCounter;
 }
@@ -72,27 +75,31 @@ int leaveScope()
 int newId(char *name, Node *node)
 {
   Empilhavel *novo;
-  char *id;
-  if(name==NULL || isIdInScope(name))
+
+  if(name==NULL || isIdInScope(name)==1)
+  {
+    //printf("\t%s\n",(name == NULL?"nome == NULL":"Id in scope"));
     return -1;
+  }
 
   novo = (Empilhavel*)malloc(sizeof(Empilhavel));
   if (novo == NULL) return -1;
 
   novo->tag = VAR;
 
-  id = (char*)malloc(sizeof(char)*(strlen(name)+1));
-  if (id == NULL) return -1;
+  novo->val.pair.id = (char*)malloc(sizeof(char)*(strlen(name)+1));
+  if (novo->val.pair.id == NULL) return -1;
 
   strcpy(novo->val.pair.id, name);
   novo->val.pair.node = node;
+  novo->next = NULL;
   push(novo);
   return 0;
 }
 
 Node *getId(char *id)
 {
-  for(Empilhavel *curr=topo;curr!=NULL;curr = topo->next)
+  for(Empilhavel *curr=topo;curr!=NULL;curr = curr->next)
   {
     if(curr->tag==VAR && strcmp(id, curr->val.pair.id)==0)
       return curr->val.pair.node;
@@ -102,7 +109,10 @@ Node *getId(char *id)
 
 void push(Empilhavel *bloco)
 {
+  if(scopeCounter == 0)
+    enterScope();
   bloco->next = topo;
+  //printf("Pushed %s: %d on top of %d\n", (bloco->tag?"VAR":"SCOPE"), bloco, topo);
   topo = bloco;
 }
 
@@ -112,15 +122,18 @@ Empilhavel *pop()
   if(topo==NULL)
     return NULL;
   topo = no->next;
+  //printf("Popped %s: %d\n",(no->tag?"VAR":"SCOPE"), no);
   return no;
 }
 
 int isIdInScope(char *id)
 {
-  for(Empilhavel *curr=topo;curr!=NULL && curr->tag!=SCOPE;curr = topo->next)
+  for(Empilhavel *curr=topo;((curr!=NULL) && (curr->tag!=SCOPE));curr = curr->next)
   {
     if(strcmp(id, curr->val.pair.id)==0)
+    {
       return 1;
+    }
   }
   return 0;
 }

@@ -10,7 +10,7 @@
 
 char *expandEscapes(char *src);
 void setNextNode(Node *current, Node *next);
-char *getVardecId(Node *current);
+char *getVarId(Node *current);
 Node *getVardecType(Node *node);
 char *getFuncdefId(Node *current);
 Node *getFuncdefType(Node *node);
@@ -81,6 +81,7 @@ Node *mkCteIntegerNode(int val)
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = INTEGER;
   newNode->content.i = val;
+  newNode->reference = NULL;
   newNode = mkUniNode(WRAPPER, newNode);
   return newNode;
 }
@@ -90,6 +91,7 @@ Node *mkCteStringNode(NodeTag tag, char *val)
   newNode->tag = tag;
   newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
   strcpy(newNode->content.string, val);
+  newNode->reference = NULL;
   newNode = mkUniNode(WRAPPER, newNode);
   return newNode;
 }
@@ -98,6 +100,7 @@ Node *mkCteFloatingNode(double val)
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = FLOATING;
   newNode->content.d = val;
+  newNode->reference = NULL;
   newNode = mkUniNode(WRAPPER, newNode);
   return newNode;
 }
@@ -106,6 +109,7 @@ Node *mkOperatorNode(Operators val)
     Node *newNode = (Node*)malloc(sizeof(Node));
     newNode->tag = OPERATOR;
     newNode->content.op = val;
+    newNode->reference = NULL;
     newNode = mkUniNode(WRAPPER, newNode);
     return newNode;
 }
@@ -115,6 +119,7 @@ Node *mkNullNode()
   newNode->tag = EMPTY;
   newNode->content.pair.value = NULL;
   newNode->content.pair.next = NULL;
+  newNode->reference = NULL;
   return newNode;
 }
 Node *mkUniNode(NodeTag tag, Node *first)
@@ -123,6 +128,7 @@ Node *mkUniNode(NodeTag tag, Node *first)
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->content.pair.next = NULL;
+  newNode->reference = NULL;
   return newNode;
 }
 Node *mkBiNode(NodeTag tag, Node *first, Node *second)
@@ -130,6 +136,7 @@ Node *mkBiNode(NodeTag tag, Node *first, Node *second)
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
   newNode->content.pair.value = first;
+  newNode->reference = NULL;
   setNextNode(newNode, NULL);
   setNextNode(first, second);
   return newNode;
@@ -139,6 +146,7 @@ Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third)
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
   newNode->content.pair.value = first;
+  newNode->reference = NULL;
   setNextNode(newNode, NULL);
   setNextNode(first, second);
   setNextNode(second, third);
@@ -150,6 +158,7 @@ Node *mkQuadNode(NodeTag tag, Node *first, Node *second, Node *third, Node *four
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
   newNode->content.pair.value = first;
+  newNode->reference = NULL;
   setNextNode(newNode, NULL);
   setNextNode(first, second);
   setNextNode(second, third);
@@ -163,6 +172,7 @@ Node *mkIntTypeNode()
   newNode->tag = INTTYPE;
   newNode->content.pair.value = NULL;
   newNode->content.pair.next = NULL;
+  newNode->reference = NULL;
   return newNode;
 }
 Node *mkFloatTypeNode()
@@ -171,6 +181,7 @@ Node *mkFloatTypeNode()
   newNode->tag = FLOATTYPE;
   newNode->content.pair.value = NULL;
   newNode->content.pair.next = NULL;
+  newNode->reference = NULL;
   return newNode;
 }
 Node *mkBoolTypeNode()
@@ -179,6 +190,7 @@ Node *mkBoolTypeNode()
   newNode->tag = BOOLTYPE;
   newNode->content.pair.value = NULL;
   newNode->content.pair.next = NULL;
+  newNode->reference = NULL;
   return newNode;
 }
 Node *mkCharTypeNode()
@@ -187,6 +199,7 @@ Node *mkCharTypeNode()
   newNode->tag = CHARTYPE;
   newNode->content.pair.value = NULL;
   newNode->content.pair.next = NULL;
+  newNode->reference = NULL;
   return newNode;
 }
 Node *mkTrueValueNode()
@@ -195,6 +208,7 @@ Node *mkTrueValueNode()
   newNode->tag = TRUEVALUE;
   newNode->content.pair.value = NULL;
   newNode->content.pair.next = NULL;
+  newNode->reference = NULL;
   return newNode;
 }
 Node *mkFalseValueNode()
@@ -203,6 +217,7 @@ Node *mkFalseValueNode()
   newNode->tag = FALSEVALUE;
   newNode->content.pair.value = NULL;
   newNode->content.pair.next = NULL;
+  newNode->reference = NULL;
   return newNode;
 }
 void setGlobalTree(Node *tree)
@@ -283,6 +298,8 @@ void printTree(Node *n, int identation)
           break;
         //UniNode
         default :
+          if(n->reference!=NULL)
+            printf("| Referencia: %s ", getVarId(n->reference));
           printTree(n->content.pair.value, identation+1);
           if(n->content.pair.next != NULL)
             printTree(n->content.pair.next, identation);
@@ -294,6 +311,8 @@ void printTree(Node *n, int identation)
 
 int stitchTree(Node *tree)
 {
+  char *id;
+  Node *idNode;
   switch (tree->tag){
     case INTTYPE :
     case FLOATTYPE :
@@ -321,13 +340,19 @@ int stitchTree(Node *tree)
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
 
-    case ARRAYVAR :
       break;
     case SIMPLEVAR :
-      //TODO
+      idNode = getId(getVarId(tree));
+      if(idNode == NULL)
+      {
+        printf("Não foi encontrado um id\n");
+        return -1;
+      }
+      tree->reference = idNode;
       break;
     case FUNCDEF :
-      if(newId(getFuncdefId(tree), tree)==-1)return -1;
+      id = getFuncdefId(tree);
+      if(newId(id, tree)==-1)return -1;
 
       enterScope();
       if(getValueNode(tree) != NULL)
@@ -342,8 +367,9 @@ int stitchTree(Node *tree)
         if(stitchTree(getNextNode(tree))==-1) return -1;
 
       break;
+    case PARAM :
     case VARDEC :
-      if(newId(getVardecId(tree), tree)==-1)return -1;
+      if(newId(getVarId(tree), tree)==-1)return -1;
       if(getValueNode(tree) != NULL)
         if(stitchTree(getValueNode(tree))==-1) return -1;
       if(getNextNode(tree) != NULL)
@@ -359,10 +385,11 @@ int stitchTree(Node *tree)
   return 0;
 }
 
-char *getVardecId(Node *node)
+char *getVarId(Node *node)
 {
-  if(node->tag != VARDEC) return NULL;
-  Node *idNode = ignoreWrapper(getValueNode(node));
+  Node *idNode;
+  if(node->tag != VARDEC && node->tag != SIMPLEVAR && node->tag != PARAM) return NULL;
+  idNode = ignoreWrapper(getValueNode(node));
   if(idNode==NULL)return NULL;
   return idNode->content.string;
 }
