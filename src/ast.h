@@ -17,6 +17,7 @@ typedef enum node_tag_t{
   INTEGER,//Uni wrapped Value
   FLOATING,//Uni wrapped Value
   STRING,//Uni wrapped Value
+  CHARACTER,//Uni wrapped Value
   ID,//Uni wrapped Value
   OPERATOR,//Uni wrapped Value
   WRAPPER,//Uni DEVE SEMPRE SER O PRIMEIRO UNI

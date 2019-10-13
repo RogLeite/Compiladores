@@ -7,7 +7,7 @@
 #include <string.h>
 #include "ast.h"
 #include "interpreter.h"
-#define TK_NAME_SIZE 12
+#define TK_NAME_SIZE 13
 #define TK_INITIAL_INDEX 258
 
 #ifndef READABLE
@@ -28,6 +28,7 @@ char* tk_names[] = {
           "TK_WHILE",
           "TK_ID",
           "TK_STRING",
+          "TK_CHARACTER",
           "TK_INTEGER",
           "TK_FLOATING",
           "TK_EQ",

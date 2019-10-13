@@ -31,6 +31,7 @@ false                           {storeLineno(); return TK_FALSE; }
 true                            {storeLineno(); return TK_TRUE;}
 while                           {storeLineno(); return TK_WHILE; }
 [a-zA-Z_][a-zA-Z_0-9]*          {storeString(0); return TK_ID;}
+\"([^"\\\n]|\\[nt"\\])\"        {storeString(1); return TK_CHARACTER;}
 \"([^"\\\n]|\\[nt"\\])*\"       {storeString(1); return TK_STRING;}
 [0-9]+                          {storeInt(); return TK_INTEGER;}
 0[xX]{HEX}+                     {storeInt(); return TK_INTEGER;}

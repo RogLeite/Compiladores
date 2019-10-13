@@ -11,7 +11,7 @@ $ ./make.sh
 $ ./monga_compiler < teu_programa_em_monga
 ```
 
- - Executar os testes léxicos:
+ - Executar os testes léxicos(DEPRECADO COM A INSERÇÃO DO TK_CHARACTER):
 ```
 $ ./lexic_tests.sh
 ```

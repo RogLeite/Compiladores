@@ -57,16 +57,17 @@ extern int yydebug;
     TK_WHILE = 267,
     TK_ID = 268,
     TK_STRING = 269,
-    TK_INTEGER = 270,
-    TK_FLOATING = 271,
-    TK_EQ = 272,
-    TK_NE = 273,
-    TK_LE = 274,
-    TK_GE = 275,
-    TK_AND = 276,
-    TK_OR = 277,
-    TK_FALSE = 278,
-    TK_TRUE = 279
+    TK_CHARACTER = 270,
+    TK_INTEGER = 271,
+    TK_FLOATING = 272,
+    TK_EQ = 273,
+    TK_NE = 274,
+    TK_LE = 275,
+    TK_GE = 276,
+    TK_AND = 277,
+    TK_OR = 278,
+    TK_FALSE = 279,
+    TK_TRUE = 280
   };
 #endif
 /* Tokens.  */
@@ -82,30 +83,31 @@ extern int yydebug;
 #define TK_WHILE 267
 #define TK_ID 268
 #define TK_STRING 269
-#define TK_INTEGER 270
-#define TK_FLOATING 271
-#define TK_EQ 272
-#define TK_NE 273
-#define TK_LE 274
-#define TK_GE 275
-#define TK_AND 276
-#define TK_OR 277
-#define TK_FALSE 278
-#define TK_TRUE 279
+#define TK_CHARACTER 270
+#define TK_INTEGER 271
+#define TK_FLOATING 272
+#define TK_EQ 273
+#define TK_NE 274
+#define TK_LE 275
+#define TK_GE 276
+#define TK_AND 277
+#define TK_OR 278
+#define TK_FALSE 279
+#define TK_TRUE 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 16 "../src/monga_grammar.y" /* yacc.c:1909  */
+#line 16 "src/monga_grammar.y" /* yacc.c:1909  */
 
   int i;
   double d;
   char *s;
   Node *n;
 
-#line 109 "../src/definitions.h" /* yacc.c:1909  */
+#line 111 "src/definitions.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

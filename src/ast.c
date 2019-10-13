@@ -43,6 +43,7 @@ char *tag_name[] = {
 "INTEGER",
 "FLOATING",
 "STRING",
+"CHARACTER",
 "ID",
 "OPERATOR",
 "WRAPPER",
@@ -106,7 +107,7 @@ Node *mkCteStringNode(NodeTag tag, char *val)
   newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
   strcpy(newNode->content.string, val);
   newNode->reference = NULL;
-  newNode->type = mkArrayTypeNode(mkCharTypeNode());
+  newNode->type = (tag==CHARACTER)?mkCharTypeNode():mkArrayTypeNode(mkCharTypeNode());
   newNode = mkUniNode(WRAPPER, newNode);
   return newNode;
 }
@@ -296,6 +297,7 @@ void printTree(Node *n, int identation)
             printType(n->type);
           }
           break;
+        case CHARACTER :
         case STRING :
           tmp = expandEscapes(n->content.string);
           printf("| Value: \"%s\" ", tmp);
@@ -430,6 +432,7 @@ Node *typeTree(Node *tree, Info *info)
     case INTEGER :
     case FLOATING :
     case STRING :
+    case CHARACTER :
       return getType(tree);
       break;
     case SIMPLEVAR :
@@ -492,6 +495,9 @@ Node *typeTree(Node *tree, Info *info)
           return NULL;
           break;
       }
+      break;
+    case OPERATION_BINARIA :
+
       break;
     default :
       newType = typeTree(getValueNode(tree), info);

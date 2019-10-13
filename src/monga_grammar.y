@@ -32,6 +32,7 @@ void yyerror(const char *s);
 %token <i> TK_WHILE
 %token <s> TK_ID
 %token <s> TK_STRING
+%token <s> TK_CHARACTER
 %token <i> TK_INTEGER
 %token <d> TK_FLOATING
 %token <i> TK_EQ
@@ -165,11 +166,12 @@ fator : constante   {$$ = $1;}
       | var         {$$ = $1;}
       ;
 
-constante : TK_STRING {$$ = mkCteStringNode(STRING, $1);free($1);}
-        | TK_TRUE     {$$ = mkTrueValueNode();}
-        | TK_FALSE    {$$ = mkFalseValueNode();}
-        | TK_INTEGER  {$$ = mkCteIntegerNode($1);}
-        | TK_FLOATING {$$ = mkCteFloatingNode($1);}
+constante : TK_STRING  {$$ = mkCteStringNode(STRING, $1);free($1);}
+        | TK_CHARACTER {$$ = mkCteStringNode(CHARACTER, $1);free($1);}
+        | TK_TRUE      {$$ = mkTrueValueNode();}
+        | TK_FALSE     {$$ = mkFalseValueNode();}
+        | TK_INTEGER   {$$ = mkCteIntegerNode($1);}
+        | TK_FLOATING  {$$ = mkCteFloatingNode($1);}
         ;
 
 chamada : TK_ID '(' lista_opcional_exp ')' {$$ = mkBiNode(CALL, mkCteStringNode(ID, $1), $3);free($1);} ;
