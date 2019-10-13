@@ -27,6 +27,7 @@ int isCharType(Node *type);
 int isFloatType(Node *type);
 int isBoolType(Node *type);
 int isArrayType(Node *type);
+Node *promoteChar(Node *charNode);
 int cmpType(Node *type1, Node *type2);
 void printType(Node *node);
 Node *global_tree = NULL;
@@ -443,16 +444,44 @@ Node *typeTree(Node *tree, Info *info)
       // printf("type2:");printType(type2);
       if(!isArrayType(type1))
       {
-        printf("Indexação ilegal: %s não é um array\n", getVarId(getValueNode(tree)->reference));
+        printf("Tipagem: Indexação ilegal: %s não é um array\n", getVarId(getValueNode(tree)->reference));
+      }
+      if(isCharType(type2))
+      {
+        printf("Tipagem: char promovido para int\n");
+        type2 = promoteChar(type2);
       }
       if(!isIntType(type2))
       {
-       printf("Indexação ilegal da variável %s: Tipo", getVarId(getValueNode(tree)->reference));
+       printf("Tipagem: Indexação ilegal da variavel %s: Tipo", getVarId(getValueNode(tree)->reference));
        printType(type2);
        printf("não pode indexar um array\n");
       }
       return (isArrayType(type1))?getValueNode(type1):NULL;
       break;
+    // case OPERATION_UNARIA :
+    //   type1 = typeTree(getSecondNode(tree), info);
+    //   switch (ignoreWrapper(getValueNode(tree))->content.op) {
+    //     case NOT:
+    //       if(!isBoolType(type1))
+    //       {
+    //         printf("Tipagem: Operador ! não pode ser usado no tipo");
+    //         printType(type1);
+    //         printf("\n");
+    //         return NULL;
+    //       }
+    //       return mkBoolTypeNode();
+    //       break;
+    //     case NEGATIVE:
+    //       if(isCharType(type1))
+    //       {
+    //         printf("Tipagem: char promovido para int\n");
+    //         type1 = promoteChar(type1);
+    //       }
+    //       if(!isIntType(type1) || )
+    //       break;
+    //   }
+    //   break;
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
@@ -491,7 +520,7 @@ Node *getFuncdefType(Node *node)
 
 Node *ignoreWrapper(Node *node)
 {
-  if(node->tag!=WRAPPER)return NULL;
+  if(node->tag!=WRAPPER)return node;
   return getValueNode(node);
 }
 
@@ -593,7 +622,10 @@ int isArrayType(Node *type)
 {
   return (type->tag==ARRAYTYPE)?1:0;
 }
-
+Node *promoteChar(Node *charNode)
+{
+  return charNode;
+}
 int cmpType(Node *type1, Node *type2)
 {
   if(isArrayType(type1) && isArrayType(type2))
