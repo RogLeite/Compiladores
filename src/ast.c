@@ -19,7 +19,12 @@ Node *getValueNode(Node *curr);
 Node *getNextNode(Node *curr);
 void setType(Node *node, Node *type);
 Node *getType(Node *node);
-int cmpType(Node *e1, Node *e2);
+int isIntType(Node *type);
+int isCharType(Node *type);
+int isFloatType(Node *type);
+int isBoolType(Node *type);
+int isArrayType(Node *type);
+int cmpType(Node *type1, Node *type2);
 void printType(Node *node);
 Node *global_tree = NULL;
 
@@ -538,9 +543,33 @@ char *expandEscapes(char *src)
   return str;
 }
 
-int cmpType(Node *e1, Node *e2)
+int isIntType(Node *type)
 {
-  return 1;
+  return (type->tag==INTTYPE)?1:0;
+}
+int isCharType(Node *type)
+{
+  return (type->tag==CHARTYPE)?1:0;
+}
+int isFloatType(Node *type)
+{
+  return (type->tag==FLOATTYPE)?1:0;
+}
+int isBoolType(Node *type)
+{
+  return (type->tag==BOOLTYPE)?1:0;
+}
+int isArrayType(Node *type)
+{
+  return (type->tag==ARRAYTYPE)?1:0;
+}
+
+int cmpType(Node *type1, Node *type2)
+{
+  if(isArrayType(type1) && isArrayType(type2))
+    return cmpType(getValueNode(type1), getValueNode(type2));
+  else
+    return (type1->tag == type2->tag)?1:0;
 }
 void printType(Node *node) {
   if(node==NULL) return;
