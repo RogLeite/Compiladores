@@ -2,6 +2,7 @@
 * Árvore de Sintaxe Abstrata
 * Rodrigo Leite - 1413150 - 07/Outubro/2019
 **/
+#define VERBOSE_CASTING 1
 #include "ast.h"
 #include "var_table.h"
 #include <string.h>
@@ -448,7 +449,7 @@ Node *typeTree(Node *tree, Info *info)
       }
       if(isCharType(type2))
       {
-        printf("Tipagem: char promovido para int\n");
+        if(VERBOSE_CASTING){printf("Tipagem: char promovido para int\n");}
         type2 = promoteChar(type2);
       }
       if(!isIntType(type2))
@@ -459,29 +460,39 @@ Node *typeTree(Node *tree, Info *info)
       }
       return (isArrayType(type1))?getValueNode(type1):NULL;
       break;
-    // case OPERATION_UNARIA :
-    //   type1 = typeTree(getSecondNode(tree), info);
-    //   switch (ignoreWrapper(getValueNode(tree))->content.op) {
-    //     case NOT:
-    //       if(!isBoolType(type1))
-    //       {
-    //         printf("Tipagem: Operador ! não pode ser usado no tipo");
-    //         printType(type1);
-    //         printf("\n");
-    //         return NULL;
-    //       }
-    //       return mkBoolTypeNode();
-    //       break;
-    //     case NEGATIVE:
-    //       if(isCharType(type1))
-    //       {
-    //         printf("Tipagem: char promovido para int\n");
-    //         type1 = promoteChar(type1);
-    //       }
-    //       if(!isIntType(type1) || )
-    //       break;
-    //   }
-    //   break;
+    case OPERATION_UNARIA :
+      type1 = typeTree(getSecondNode(tree), info);
+      switch (ignoreWrapper(getValueNode(tree))->content.op) {
+        case NOT:
+          if(!isBoolType(type1))
+          {
+            printf("Tipagem: Operador ! não pode ser usado no tipo");
+            printType(type1);
+            printf("\n");
+            return NULL;
+          }
+          return type1;
+          break;
+        case NEGATIVE:
+          if(isCharType(type1))
+          {
+            if(VERBOSE_CASTING){printf("Tipagem: char promovido para int\n");}
+            type1 = promoteChar(type1);
+          }
+          if(!isIntType(type1) && !isFloatType(type1))
+          {
+            printf("Tipagem: Operador - não pode ser usado no tipo");
+            printType(type1);
+            printf("\n");
+            return NULL;
+          }
+          return type1;
+          break;
+        default :
+          return NULL;
+          break;
+      }
+      break;
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
