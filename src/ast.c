@@ -17,7 +17,10 @@ Node *getFuncdefType(Node *node);
 Node *ignoreWrapper(Node *node);
 Node *getValueNode(Node *curr);
 Node *getNextNode(Node *curr);
-
+void setType(Node *node, Node *type);
+Node *getType(Node *node);
+int cmpType(Node *e1, Node *e2);
+void printType(Node *node);
 Node *global_tree = NULL;
 
 char *tag_name[] = {
@@ -82,6 +85,7 @@ Node *mkCteIntegerNode(int val)
   newNode->tag = INTEGER;
   newNode->content.i = val;
   newNode->reference = NULL;
+  newNode->type = mkIntTypeNode();
   newNode = mkUniNode(WRAPPER, newNode);
   return newNode;
 }
@@ -92,6 +96,7 @@ Node *mkCteStringNode(NodeTag tag, char *val)
   newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
   strcpy(newNode->content.string, val);
   newNode->reference = NULL;
+  newNode->type = mkArrayTypeNode(mkCharTypeNode());
   newNode = mkUniNode(WRAPPER, newNode);
   return newNode;
 }
@@ -101,6 +106,7 @@ Node *mkCteFloatingNode(double val)
   newNode->tag = FLOATING;
   newNode->content.d = val;
   newNode->reference = NULL;
+  newNode->type = mkFloatTypeNode();
   newNode = mkUniNode(WRAPPER, newNode);
   return newNode;
 }
@@ -110,6 +116,7 @@ Node *mkOperatorNode(Operators val)
     newNode->tag = OPERATOR;
     newNode->content.op = val;
     newNode->reference = NULL;
+    newNode->type = NULL;
     newNode = mkUniNode(WRAPPER, newNode);
     return newNode;
 }
@@ -123,6 +130,7 @@ Node *mkUniNode(NodeTag tag, Node *first)
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
+  newNode->type = NULL;
   setNextNode(newNode, NULL);
   return newNode;
 }
@@ -132,6 +140,7 @@ Node *mkBiNode(NodeTag tag, Node *first, Node *second)
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
+  newNode->type = NULL;
   setNextNode(newNode, NULL);
   setNextNode(first, second);
   return newNode;
@@ -142,6 +151,7 @@ Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third)
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
+  newNode->type = NULL;
   setNextNode(newNode, NULL);
   setNextNode(first, second);
   setNextNode(second, third);
@@ -154,6 +164,7 @@ Node *mkQuadNode(NodeTag tag, Node *first, Node *second, Node *third, Node *four
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
+  newNode->type = NULL;
   setNextNode(newNode, NULL);
   setNextNode(first, second);
   setNextNode(second, third);
@@ -177,13 +188,21 @@ Node *mkCharTypeNode()
 {
   return mkUniNode(CHARTYPE, NULL);
 }
+Node *mkArrayTypeNode(Node *subtype)
+{
+  return mkUniNode(ARRAYTYPE, subtype);
+}
 Node *mkTrueValueNode()
 {
-  return mkUniNode(TRUEVALUE, NULL);
+  Node *newNode = mkUniNode(TRUEVALUE, NULL);
+  newNode->type = mkBoolTypeNode();
+  return newNode;
 }
 Node *mkFalseValueNode()
 {
-  return mkUniNode(FALSEVALUE, NULL);
+  Node *newNode = mkUniNode(FALSEVALUE, NULL);
+  newNode->type = mkBoolTypeNode();
+  return newNode;
 }
 void setGlobalTree(Node *tree)
 {
@@ -241,18 +260,42 @@ void printTree(Node *n, int identation)
         case TRUEVALUE :
         case FALSEVALUE :
         case EMPTY :
+          if(getType(n)!=NULL)
+          {
+            printf("| Tipo:");
+            printType(n->type);
+          }
           if(n->content.pair.next != NULL)
-            {
-              printTree(n->content.pair.next, identation);
-            }
+          {
+            printTree(n->content.pair.next, identation);
+          }
           break;
         case FLOATING :
           printf("| Value: %f ", n->content.d);
+          if(getType(n)!=NULL)
+          {
+            printf("| Tipo:");
+            printType(n->type);
+          }
           break;
         case INTEGER :
           printf("| Value: %d ", n->content.i);
+          if(getType(n)!=NULL)
+          {
+            printf("| Tipo:");
+            printType(n->type);
+          }
           break;
         case STRING :
+          tmp = expandEscapes(n->content.string);
+          printf("| Value: \"%s\" ", tmp);
+          free(tmp);
+          if(getType(n)!=NULL)
+          {
+            printf("| Tipo:");
+            printType(n->type);
+          }
+          break;
         case ID :
           tmp = expandEscapes(n->content.string);
           printf("| Value: \"%s\" ", tmp);
@@ -260,11 +303,21 @@ void printTree(Node *n, int identation)
           break;
         case OPERATOR :
           printf("| Operator: %s ", op_name[n->content.op]);
+          if(getType(n)!=NULL)
+          {
+            printf("| Tipo:");
+            printType(n->type);
+          }
           break;
         //UniNode
         default :
           if(n->reference!=NULL)
             printf("| Referencia: %s ", getVarId(n->reference));
+          if(getType(n)!=NULL)
+          {
+            printf("| Tipo:");
+            printType(getType(n));
+          }
           printTree(n->content.pair.value, identation+1);
           if(n->content.pair.next != NULL)
             printTree(n->content.pair.next, identation);
@@ -337,6 +390,7 @@ int stitchTree(Node *tree)
     case PARAM :
     case VARDEC :
       if(newId(getVarId(tree), tree)==-1)return -1;
+      setType(tree, getVardecType(tree));
       if(getValueNode(tree) != NULL)
         if(stitchTree(getValueNode(tree))==-1) return -1;
       if(getNextNode(tree) != NULL)
@@ -349,6 +403,37 @@ int stitchTree(Node *tree)
         if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
   }
+  return 0;
+}
+
+Node *typeTree(Node *tree, Info *info)
+{
+  Node *newType;
+  if(tree==NULL) return NULL;//mkNullNode();
+
+  switch (tree->tag) {
+    case TRUEVALUE :
+    case FALSEVALUE :
+    case INTEGER :
+    case FLOATING :
+    case STRING :
+      typeTree(getNextNode(tree), info);
+      return getType(tree);
+      break;
+    case SIMPLEVAR :
+      newType = getType(tree->reference);
+      setType(tree, newType);
+      typeTree(getNextNode(tree), info);
+      return newType;
+      break;
+    default :
+      newType = NULL;
+      typeTree(getValueNode(tree), info);
+      typeTree(getNextNode(tree), info);
+      return newType;
+      break;
+  }
+
   return 0;
 }
 
@@ -396,6 +481,19 @@ Node *getNextNode(Node *curr)
   return curr->content.pair.next;
 }
 
+void setType(Node *node, Node *type)
+{
+  if(node!=NULL)
+    node->type = type;
+}
+
+Node *getType(Node *node)
+{
+  if(node!=NULL)
+    return node->type;
+  return NULL;
+}
+
 char *expandEscapes(char *src)
 {
   char* str = (char*)malloc((strlen(src)*2+1)*sizeof(char));
@@ -432,4 +530,32 @@ char *expandEscapes(char *src)
   }
   str[i_str] = '\0';
   return str;
+}
+
+int cmpType(Node *e1, Node *e2)
+{
+  return 1;
+}
+void printType(Node *node) {
+  if(node==NULL) return;
+  switch (node->tag) {
+    case INTTYPE:
+      printf(" int ");
+      break;
+    case CHARTYPE:
+      printf(" char ");
+      break;
+    case FLOATTYPE:
+      printf(" float ");
+      break;
+    case BOOLTYPE:
+      printf(" bool ");
+      break;
+    case ARRAYTYPE:
+      printf(" [");
+      printType(getValueNode(node));
+      printf("] ");
+    default :
+      return;
+  }
 }

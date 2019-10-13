@@ -78,7 +78,13 @@ typedef struct node_s{
     NodeTag tag;
     NodeContent content;
     Node *reference;
+    Node *type;
 }Node;
+
+typedef struct info_s
+{
+  Node *funcRetType;
+}Info;
 
 extern Node *global_tree;
 
@@ -100,6 +106,7 @@ Node *mkIntTypeNode();
 Node *mkFloatTypeNode();
 Node *mkBoolTypeNode();
 Node *mkCharTypeNode();
+Node *mkArrayTypeNode(Node *subtype);
 
 Node *mkTrueValueNode();
 Node *mkFalseValueNode();
@@ -109,5 +116,6 @@ Node *getGlobalTree();
 
 void printTree(Node *tree, int identation);
 int stitchTree(Node *tree);
+Node *typeTree(Node *tree, Info *info);
 
 #endif

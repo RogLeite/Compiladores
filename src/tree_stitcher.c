@@ -21,6 +21,7 @@ int main(void)
 #endif
     if(stitchTree(getGlobalTree())==-1)
       printf("Árvore não foi costurada com sucesso\n");
+    typeTree(getGlobalTree(), NULL);
     printTree(getGlobalTree(),0);
     printf("\n");
   }
