@@ -16,6 +16,9 @@ char *getFuncdefId(Node *current);
 Node *getFuncdefType(Node *node);
 Node *ignoreWrapper(Node *node);
 Node *getValueNode(Node *curr);
+Node *getSecondNode(Node *curr);
+Node *getThirdNode(Node *curr);
+Node *getFourthNode(Node *curr);
 Node *getNextNode(Node *curr);
 void setType(Node *node, Node *type);
 Node *getType(Node *node);
@@ -459,7 +462,7 @@ char *getVarId(Node *node)
 Node *getVardecType(Node *node)
 {
   if(node->tag != VARDEC && node->tag != PARAM) return NULL;
-  return getNextNode(getValueNode(node));
+  return getSecondNode(node);
 }
 char *getFuncdefId(Node *node)
 {
@@ -471,7 +474,7 @@ char *getFuncdefId(Node *node)
 Node *getFuncdefType(Node *node)
 {
   if(node->tag != FUNCDEF) return NULL;
-  return getNextNode(getNextNode(getValueNode(node)));
+  return getThirdNode(node);
 }
 
 Node *ignoreWrapper(Node *node)
@@ -484,6 +487,21 @@ Node *getValueNode(Node *curr)
 {
   if(curr==NULL || curr->tag<WRAPPER)return NULL;
   return curr->content.pair.value;
+}
+Node *getSecondNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return getNextNode(getValueNode(curr));
+}
+Node *getThirdNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return getNextNode(getSecondNode(curr));
+}
+Node *getFourthNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return getNextNode(getThirdNode(curr));
 }
 
 Node *getNextNode(Node *curr)
