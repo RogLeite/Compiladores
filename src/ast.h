@@ -14,11 +14,11 @@ typedef enum node_tag_t{
   CHARTYPE,//Leaf
   TRUEVALUE,//Leaf
   FALSEVALUE,//Leaf
-  INTEGER,//Uni wrapped Leaf
-  FLOATING,//Uni wrapped Leaf
-  STRING,//Uni wrapped Leaf
-  ID,//Uni wrapped Leaf
-  OPERATOR,//Uni wrapped Leaf
+  INTEGER,//Uni wrapped Value
+  FLOATING,//Uni wrapped Value
+  STRING,//Uni wrapped Value
+  ID,//Uni wrapped Value
+  OPERATOR,//Uni wrapped Value
   WRAPPER,//Uni DEVE SEMPRE SER O PRIMEIRO UNI
   EMPTY,//Uni
   BLOCK,//Uni

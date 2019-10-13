@@ -115,20 +115,15 @@ Node *mkOperatorNode(Operators val)
 }
 Node *mkNullNode()
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = EMPTY;
-  newNode->content.pair.value = NULL;
-  newNode->content.pair.next = NULL;
-  newNode->reference = NULL;
-  return newNode;
+  return mkUniNode(EMPTY, NULL);
 }
 Node *mkUniNode(NodeTag tag, Node *first)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
   newNode->content.pair.value = first;
-  newNode->content.pair.next = NULL;
   newNode->reference = NULL;
+  setNextNode(newNode, NULL);
   return newNode;
 }
 Node *mkBiNode(NodeTag tag, Node *first, Node *second)
@@ -168,57 +163,27 @@ Node *mkQuadNode(NodeTag tag, Node *first, Node *second, Node *third, Node *four
 
 Node *mkIntTypeNode()
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = INTTYPE;
-  newNode->content.pair.value = NULL;
-  newNode->content.pair.next = NULL;
-  newNode->reference = NULL;
-  return newNode;
+  return mkUniNode(INTTYPE, NULL);
 }
 Node *mkFloatTypeNode()
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = FLOATTYPE;
-  newNode->content.pair.value = NULL;
-  newNode->content.pair.next = NULL;
-  newNode->reference = NULL;
-  return newNode;
+  return mkUniNode(FLOATTYPE, NULL);
 }
 Node *mkBoolTypeNode()
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = BOOLTYPE;
-  newNode->content.pair.value = NULL;
-  newNode->content.pair.next = NULL;
-  newNode->reference = NULL;
-  return newNode;
+  return mkUniNode(BOOLTYPE, NULL);
 }
 Node *mkCharTypeNode()
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = CHARTYPE;
-  newNode->content.pair.value = NULL;
-  newNode->content.pair.next = NULL;
-  newNode->reference = NULL;
-  return newNode;
+  return mkUniNode(CHARTYPE, NULL);
 }
 Node *mkTrueValueNode()
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = TRUEVALUE;
-  newNode->content.pair.value = NULL;
-  newNode->content.pair.next = NULL;
-  newNode->reference = NULL;
-  return newNode;
+  return mkUniNode(TRUEVALUE, NULL);
 }
 Node *mkFalseValueNode()
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
-  newNode->tag = FALSEVALUE;
-  newNode->content.pair.value = NULL;
-  newNode->content.pair.next = NULL;
-  newNode->reference = NULL;
-  return newNode;
+  return mkUniNode(FALSEVALUE, NULL);
 }
 void setGlobalTree(Node *tree)
 {
@@ -313,8 +278,6 @@ int stitchTree(Node *tree)
 {
   char *id;
   Node *idNode;
-  if(tree !=NULL)
-    printf("-Costura: %s\n", tag_name[tree->tag]);
   switch (tree->tag){
     case INTTYPE :
     case FLOATTYPE :
@@ -324,9 +287,9 @@ int stitchTree(Node *tree)
     case FALSEVALUE :
     case EMPTY :
       if(getValueNode(tree) != NULL)
-        if(stitchTree(getValueNode(tree))==-1) return -1;
+        {if(stitchTree(getValueNode(tree))==-1) return -1;}
       if(getNextNode(tree) != NULL)
-        if(stitchTree(getNextNode(tree))==-1) return -1;
+        {if(stitchTree(getNextNode(tree))==-1) return -1;}
       break;
     case BLOCK :
 
@@ -399,7 +362,7 @@ char *getVarId(Node *node)
 }
 Node *getVardecType(Node *node)
 {
-  if(node->tag != VARDEC) return NULL;
+  if(node->tag != VARDEC && node->tag != PARAM) return NULL;
   return getNextNode(getValueNode(node));
 }
 char *getFuncdefId(Node *node)
@@ -429,7 +392,7 @@ Node *getValueNode(Node *curr)
 
 Node *getNextNode(Node *curr)
 {
-  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  if(curr==NULL || (curr->tag<WRAPPER && curr->tag>=INTEGER))return NULL;
   return curr->content.pair.next;
 }
 
