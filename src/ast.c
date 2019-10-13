@@ -419,8 +419,8 @@ int stitchTree(Node *tree)
 
 Node *typeTree(Node *tree, Info *info)
 {
-  Node *newType;
-  if(tree==NULL) return NULL;//mkNullNode();
+  Node *newType, *type1, *type2;
+  if(tree==NULL) return NULL;
 
   switch (tree->tag) {
     case TRUEVALUE :
@@ -428,7 +428,6 @@ Node *typeTree(Node *tree, Info *info)
     case INTEGER :
     case FLOATING :
     case STRING :
-      typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
     case SIMPLEVAR :
@@ -438,11 +437,24 @@ Node *typeTree(Node *tree, Info *info)
       return newType;
       break;
     case ARRAYVAR :
-
+      type1 = typeTree(getValueNode(tree), info);
+      type2 = typeTree(getSecondNode(tree), info);
+      // printf("type1:");printType(type1);
+      // printf("type2:");printType(type2);
+      if(!isArrayType(type1))
+      {
+        printf("Indexação ilegal: %s não é um array\n", getVarId(getValueNode(tree)->reference));
+      }
+      if(!isIntType(type2))
+      {
+       printf("Indexação ilegal da variável %s: Tipo", getVarId(getValueNode(tree)->reference));
+       printType(type2);
+       printf("não pode indexar um array\n");
+      }
+      return (isArrayType(type1))?getValueNode(type1):NULL;
       break;
     default :
-      newType = NULL;
-      typeTree(getValueNode(tree), info);
+      newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
       return newType;
       break;
