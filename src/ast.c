@@ -426,6 +426,9 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getNextNode(tree), info);
       return newType;
       break;
+    case ARRAYVAR :
+
+      break;
     default :
       newType = NULL;
       typeTree(getValueNode(tree), info);
