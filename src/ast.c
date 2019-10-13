@@ -313,6 +313,8 @@ int stitchTree(Node *tree)
 {
   char *id;
   Node *idNode;
+  if(tree !=NULL)
+    printf("-Costura: %s\n", tag_name[tree->tag]);
   switch (tree->tag){
     case INTTYPE :
     case FLOATTYPE :
@@ -321,6 +323,8 @@ int stitchTree(Node *tree)
     case TRUEVALUE :
     case FALSEVALUE :
     case EMPTY :
+      if(getValueNode(tree) != NULL)
+        if(stitchTree(getValueNode(tree))==-1) return -1;
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
