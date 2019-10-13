@@ -1,0 +1,5 @@
+main()
+{
+  str : [char];
+  str = 1;
+}
