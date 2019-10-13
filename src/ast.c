@@ -369,6 +369,9 @@ int stitchTree(Node *tree)
         return -1;
       }
       tree->reference = idNode;
+
+      if(getNextNode(tree) != NULL)
+        if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
     case FUNCDEF :
       id = getFuncdefId(tree);

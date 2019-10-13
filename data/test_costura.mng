@@ -2,4 +2,5 @@ main()
 {
   str : [char];
   str = 1;
+  str = str + 1;
 }
