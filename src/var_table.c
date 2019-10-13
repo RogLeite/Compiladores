@@ -64,10 +64,10 @@ int leaveScope()
   for(curr=pop();curr->tag!=SCOPE;curr = pop())
   {
     free(curr->val.pair.id);
-    //printf("\tSaiu %d\n", scopeCounter);
     free(curr);
   }
   free(curr);
+  //printf("\tSaiu %d\n", scopeCounter);
   scopeCounter--;
   return scopeCounter;
 }
@@ -112,7 +112,7 @@ void push(Empilhavel *bloco)
   if(scopeCounter == 0)
     enterScope();
   bloco->next = topo;
-  //printf("Pushed %s: %d on top of %d\n", (bloco->tag?"VAR":"SCOPE"), bloco, topo);
+  //printf("Pushed %s: %p on top of %p\n", (bloco->tag?"VAR":"SCOPE"), bloco, topo);
   topo = bloco;
 }
 
@@ -122,7 +122,7 @@ Empilhavel *pop()
   if(topo==NULL)
     return NULL;
   topo = no->next;
-  //printf("Popped %s: %d\n",(no->tag?"VAR":"SCOPE"), no);
+  //printf("Popped %s: %p\n",(no->tag?"VAR":"SCOPE"), no);
   return no;
 }
 
