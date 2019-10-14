@@ -632,6 +632,26 @@ Node *typeTree(Node *tree, Info *info)
           setType(tree, NULL);
           return getType(tree);
           break;
+        case OR :
+        case AND :
+          if( !isBoolType(type1) )
+          {
+            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(type1);printf("\n");
+            setType(tree, NULL);
+            return NULL;
+          }
+          if( !isBoolType(type2) )
+          {
+            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(type2);printf("\n");
+            setType(tree, NULL);
+            return NULL;
+          }
+
+          setType(tree, mkBoolTypeNode());
+          return getType(tree);
+          break;
         default :
           setType(tree, NULL);
           return NULL;
