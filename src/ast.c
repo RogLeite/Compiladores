@@ -514,6 +514,46 @@ Node *typeTree(Node *tree, Info *info)
           setType(tree, type1);
           return getType(tree);
           break;
+        //Casos análogos aos aritméticos, mas tipam para bool
+        case LESSOREQUAL :
+        case GREATEROREQUAL :
+        case LESS :
+        case GREATER :
+          type1 = promoteIfIsChar(getSecondNode(tree));
+          type2 = promoteIfIsChar(getThirdNode(tree));
+          if( !isIntType(type1)&&!isFloatType(type1) )
+          {
+            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(type1);printf("\n");
+            setType(tree, NULL);
+            return NULL;
+          }
+          if( !isIntType(type2)&&!isFloatType(type2) )
+          {
+            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(type2);printf("\n");
+            setType(tree, NULL);
+            return NULL;
+          }
+          if(isIntType(type1)&&cmpType(type1, type2))
+          {
+            setType(tree, mkBoolTypeNode());
+            return getType(tree);
+          }
+          if(isFloatType(type1)&&cmpType(type1, type2))
+          {
+            setType(tree, mkBoolTypeNode());
+            return getType(tree);
+          }
+          //Ultimo caso é que um deles é float o outro int
+          //basta promover o int para float
+          if(isIntType(type1))
+            type1 = promoteToFloat(getSecondNode(tree));
+          if(isIntType(type2))
+            type2 = promoteToFloat(getThirdNode(tree));
+          setType(tree, mkBoolTypeNode());
+          return getType(tree);
+          break;
         default :
           setType(tree, NULL);
           return NULL;
