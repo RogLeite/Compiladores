@@ -1,7 +1,7 @@
 main()
 {
-  a : char;
-  b : int;
+  a : int;
+  b : float;
   c : bool;
-  c = b <= a;
+  c = (a~=(b == a));
 }

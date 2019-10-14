@@ -465,12 +465,14 @@ Node *typeTree(Node *tree, Info *info)
       // printf("type2:");printType(type2);
       if(!isArrayType(type1))
       {
-        printf("Tipagem: Indexação ilegal: %s não é um array\n", getVarId(getValueNode(tree)->reference));
+        printf("Tipagem: Indexação ilegal: %s não é um array\n",
+                getVarId(getValueNode(tree)->reference));
       }
       type2 = promoteIfIsChar(getSecondNode(tree));
       if(!isIntType(type2))
       {
-       printf("Tipagem: Indexação ilegal da variavel %s: Tipo", getVarId(getValueNode(tree)->reference));
+       printf("Tipagem: Indexação ilegal da variavel %s: Tipo",
+                getVarId(getValueNode(tree)->reference));
        printType(type2);
        printf("não pode indexar um array\n");
       }
@@ -576,12 +578,7 @@ Node *typeTree(Node *tree, Info *info)
             setType(tree, NULL);
             return NULL;
           }
-          if(isIntType(type1)&&cmpType(type1, type2))
-          {
-            setType(tree, mkBoolTypeNode());
-            return getType(tree);
-          }
-          if(isFloatType(type1)&&cmpType(type1, type2))
+          if((isIntType(type1)||isFloatType(type1))&&cmpType(type1, type2))
           {
             setType(tree, mkBoolTypeNode());
             return getType(tree);
@@ -593,6 +590,46 @@ Node *typeTree(Node *tree, Info *info)
           if(isIntType(type2))
             type2 = promoteToFloat(getThirdNode(tree));
           setType(tree, mkBoolTypeNode());
+          return getType(tree);
+          break;
+        case EQUAL :
+        case NOTEQUAL :
+          type1 = promoteIfIsChar(getSecondNode(tree));
+          type2 = promoteIfIsChar(getThirdNode(tree));
+          if( !isIntType(type1)&&!isFloatType(type1)&&!isBoolType(type1) )
+          {
+            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(type1);printf("\n");
+            setType(tree, NULL);
+            return NULL;
+          }
+          if( !isIntType(type2)&&!isFloatType(type2)&&!isBoolType(type2) )
+          {
+            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(type2);printf("\n");
+            setType(tree, NULL);
+            return NULL;
+          }
+          if(cmpType(type1, type2))
+          {
+            setType(tree, mkBoolTypeNode());
+            return getType(tree);
+          }
+          if(isFloatType(type1)&&isIntType(type2))
+          {
+            type2 = promoteToFloat(getThirdNode(tree));
+            setType(tree, mkBoolTypeNode());
+            return getType(tree);
+          }
+          if(isIntType(type1)&&isFloatType(type2))
+          {
+            type1 = promoteToFloat(getSecondNode(tree));
+            setType(tree, mkBoolTypeNode());
+            return getType(tree);
+          }
+          printf("Tipagem: operador %s não pode ser usado com a combinação de tipos:", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+          printType(type1);printf("e");printType(type2);printf("\n");
+          setType(tree, NULL);
           return getType(tree);
           break;
         default :
