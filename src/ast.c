@@ -460,6 +460,10 @@ Node *typeTree(Node *tree, Info *info)
     case CHARACTER :
       return getType(tree);
       break;
+    case EMPTY :
+      setType(tree, NULL);
+      return getType(tree);
+      break;
     case SIMPLEVAR :
       typeTree(getNextNode(tree), info);
       newType = getType(tree->reference);
@@ -743,6 +747,19 @@ Node *typeTree(Node *tree, Info *info)
       setType(tree, type1);
       return getType(tree);
       break;
+    case RET :
+      type1 = typeTree(getValueNode(tree), info);
+      if(!cmpType(type1, info->funcRetType))
+      {
+        printf("Tipagem: Tipo do retorno (");printType(type1);
+        printf(") incompatível com tipo da função (");printType(info->funcRetType);
+        printf(")\n");
+      }
+
+      typeTree(getNextNode(tree), info);
+      setType(tree, NULL);
+      return getType(tree);
+      break;
     case WRAPPER :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
@@ -944,7 +961,9 @@ Node *promoteToFloat(Node *node)
 }
 int cmpType(Node *type1, Node *type2)
 {
-  if(isArrayType(type1) && isArrayType(type2))
+  if(type1 == NULL && type2 == NULL)
+    return 1;
+  else if(isArrayType(type1) && isArrayType(type2))
     return cmpType(getValueNode(type1), getValueNode(type2));
   else
     return (type1->tag == type2->tag)?1:0;

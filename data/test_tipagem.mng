@@ -1,5 +1,10 @@
 main(a:int):[int]
 {
-  b:int;
+  b:[int];
+  c:[char];
   a = "c"as int;
+
+  if(a==a)
+  {return b;}
+  else {return c;}
 }
