@@ -538,14 +538,14 @@ Node *typeTree(Node *tree, Info *info)
           type2 = promoteIfIsChar(getThirdNode(tree));
           if( !isIntType(type1)&&!isFloatType(type1) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type1);printf("\n");
             setType(tree, NULL);
             return NULL;
           }
           if( !isIntType(type2)&&!isFloatType(type2) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type2);printf("\n");
             setType(tree, NULL);
             return NULL;
@@ -578,14 +578,14 @@ Node *typeTree(Node *tree, Info *info)
           type2 = promoteIfIsChar(getThirdNode(tree));
           if( !isIntType(type1)&&!isFloatType(type1) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type1);printf("\n");
             setType(tree, NULL);
             return NULL;
           }
           if( !isIntType(type2)&&!isFloatType(type2) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type2);printf("\n");
             setType(tree, NULL);
             return NULL;
@@ -610,14 +610,14 @@ Node *typeTree(Node *tree, Info *info)
           type2 = promoteIfIsChar(getThirdNode(tree));
           if( !isIntType(type1)&&!isFloatType(type1)&&!isBoolType(type1) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type1);printf("\n");
             setType(tree, NULL);
             return NULL;
           }
           if( !isIntType(type2)&&!isFloatType(type2)&&!isBoolType(type2) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type2);printf("\n");
             setType(tree, NULL);
             return NULL;
@@ -695,6 +695,27 @@ Node *typeTree(Node *tree, Info *info)
     //   setType(tree, NULL);
     //   return getType(tree);
     //   break;
+    case IFELSE :
+      typeTree(getThirdNode(tree), info);
+    case IF :
+      typeTree(getSecondNode(tree), info);
+      type1 = typeTree(getValueNode(tree), info);
+      if(!isBoolType(type1))
+      {
+         printf("Tipagem: Condição de um if espera bool, é:");
+         printType(type1);printf("\n");
+         setType(tree, NULL);
+         return getType(NULL);
+      }
+      setType(tree, NULL);
+      return getType(NULL);
+      break;
+    case WRAPPER :
+      newType = typeTree(getValueNode(tree), info);
+      typeTree(getNextNode(tree), info);
+      setType(tree, newType);
+      return getType(tree);
+      break;
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
@@ -842,22 +863,27 @@ char *expandEscapes(char *src)
 
 int isIntType(Node *type)
 {
+  if(type==NULL)return 0;
   return (type->tag==INTTYPE)?1:0;
 }
 int isCharType(Node *type)
 {
+  if(type==NULL)return 0;
   return (type->tag==CHARTYPE)?1:0;
 }
 int isFloatType(Node *type)
 {
+  if(type==NULL)return 0;
   return (type->tag==FLOATTYPE)?1:0;
 }
 int isBoolType(Node *type)
 {
+  if(type==NULL)return 0;
   return (type->tag==BOOLTYPE)?1:0;
 }
 int isArrayType(Node *type)
 {
+  if(type==NULL)return 0;
   return (type->tag==ARRAYTYPE)?1:0;
 }
 Node *promoteIfIsChar(Node *node)
