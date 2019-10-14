@@ -450,10 +450,7 @@ Node *typeTree(Node *tree, Info *info)
       {
         printf("Tipagem: Indexação ilegal: %s não é um array\n", getVarId(getValueNode(tree)->reference));
       }
-      if(isCharType(type2))
-      {
-        type2 = promoteIfIsChar(type2);
-      }
+      type2 = promoteIfIsChar(getSecondNode(tree));
       if(!isIntType(type2))
       {
        printf("Tipagem: Indexação ilegal da variavel %s: Tipo", getVarId(getValueNode(tree)->reference));
@@ -478,10 +475,7 @@ Node *typeTree(Node *tree, Info *info)
           return getType(tree);
           break;
         case NEGATIVE:
-          if(isCharType(type1))
-          {
-            type1 = promoteIfIsChar(type1);
-          }
+          type1 = promoteIfIsChar(getSecondNode(tree));
           if(!isIntType(type1) && !isFloatType(type1))
           {
             printf("Tipagem: Operador - não pode ser usado no tipo");
@@ -641,14 +635,14 @@ int isArrayType(Node *type)
 {
   return (type->tag==ARRAYTYPE)?1:0;
 }
-Node *promoteIfIsChar(Node *charNode)
+Node *promoteIfIsChar(Node *node)
 {
-  if(isCharType(charNode))//if(charNode!=NULL&&isCharType(charNode->type))
+  if(node!=NULL&&isCharType(getType(node)))
   {
       if(VERBOSE_CASTING){printf("Tipagem: char promovido para int\n");}
       //Ptomove
   }
-  return charNode;
+  return getType(node);
 }
 int cmpType(Node *type1, Node *type2)
 {
