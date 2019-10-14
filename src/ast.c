@@ -90,6 +90,22 @@ char *op_name[] = {
   "NOT",              //"!",
   "NEGATIVE"          //"-"
 };
+char *op_symbol[] = {
+  "||",
+  "&&",
+  "==",
+  "~=",
+  "<=",
+  ">=",
+  "<",
+  ">",
+  "+",
+  "-",
+  "*",
+  "/",
+  "!",
+  "-"
+};
 
 Node *mkCteIntegerNode(int val)
 {
@@ -506,14 +522,14 @@ Node *typeTree(Node *tree, Info *info)
           type2 = promoteIfIsChar(getThirdNode(tree));
           if( !isIntType(type1)&&!isFloatType(type1) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", (ignoreWrapper(getValueNode(tree))->content.op)==DIVIDE?"/":"*");
+            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type1);printf("\n");
             setType(tree, NULL);
             return NULL;
           }
           if( !isIntType(type2)&&!isFloatType(type2) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", (ignoreWrapper(getValueNode(tree))->content.op)==DIVIDE?"/":"*");
+            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type2);printf("\n");
             setType(tree, NULL);
             return NULL;
