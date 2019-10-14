@@ -760,6 +760,9 @@ Node *typeTree(Node *tree, Info *info)
       setType(tree, NULL);
       return getType(tree);
       break;
+    // case PARAM :
+    // case VARDEC :
+    //   break;
     case WRAPPER :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
