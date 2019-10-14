@@ -683,6 +683,11 @@ Node *typeTree(Node *tree, Info *info)
       }
       setType(tree, mkArrayTypeNode(type1));
       return getType(tree);
+    case CAST :
+      type1 = typeTree(getValueNode(tree), info);
+      type2 = typeTree(getSecondNode(tree), info);
+      setType(tree, type2);
+      return getType(tree);
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
