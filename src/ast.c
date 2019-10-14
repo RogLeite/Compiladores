@@ -465,7 +465,7 @@ Node *typeTree(Node *tree, Info *info)
       return getType(tree);
       break;
     case SIMPLEVAR :
-      typeTree(getNextNode(tree), info);
+      //typeTree(getNextNode(tree), info);
       newType = getType(tree->reference);
       //printf("SIMPLEVAR type:");printType(newType);printf("\n");
       setType(tree, newType);
@@ -685,17 +685,17 @@ Node *typeTree(Node *tree, Info *info)
        printType(type2);
        printf("não descreve um inteiro\n");
        setType(tree, NULL);
-       typeTree(getNextNode(tree), info);
+       //typeTree(getNextNode(tree), info);
        return getType(NULL);
       }
       setType(tree, mkArrayTypeNode(type1));
-      typeTree(getNextNode(tree), info);
+      //typeTree(getNextNode(tree), info);
       return getType(tree);
     case CAST :
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
       setType(tree, type2);
-      typeTree(getNextNode(tree), info);
+      //typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
     // case PRINT :
