@@ -690,11 +690,11 @@ Node *typeTree(Node *tree, Info *info)
       setType(tree, type2);
       return getType(tree);
       break;
-    case PRINT :
-      type1 = typeTree(getValueNode(tree), info);
-      setType(tree, NULL);
-      return getType(tree);
-      break;
+    // case PRINT :
+    //   type1 = typeTree(getValueNode(tree), info);
+    //   setType(tree, NULL);
+    //   return getType(tree);
+    //   break;
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
