@@ -390,6 +390,7 @@ int stitchTree(Node *tree)
         if(stitchTree(getNextNode(tree))==-1) return -1;
 
       break;
+    case CALL :
     case SIMPLEVAR :
       idNode = getId(getVarId(tree));
       if(idNode == NULL)
@@ -672,7 +673,11 @@ Node *typeTree(Node *tree, Info *info)
 char *getVarId(Node *node)
 {
   Node *idNode;
-  if(node->tag != VARDEC && node->tag != SIMPLEVAR && node->tag != PARAM) return NULL;
+  if(node->tag != VARDEC
+    && node->tag != SIMPLEVAR
+    && node->tag != PARAM
+    && node->tag != CALL
+    && node->tag != FUNCDEF) return NULL;
   idNode = ignoreWrapper(getValueNode(node));
   if(idNode==NULL)return NULL;
   return idNode->content.string;

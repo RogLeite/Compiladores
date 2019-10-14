@@ -99,11 +99,16 @@ int newId(char *name, Node *node)
 
 Node *getId(char *id)
 {
+  //printf("Para->id = %s ", id);
   for(Empilhavel *curr=topo;curr!=NULL;curr = curr->next)
   {
     if(curr->tag==VAR && strcmp(id, curr->val.pair.id)==0)
+    {
+      //printf("Encontrou o nó %p\n", curr->val.pair.node);
       return curr->val.pair.node;
+    }
   }
+  //printf("Encountrou NADA\n");
   return NULL;
 }
 
