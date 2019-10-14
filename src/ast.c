@@ -716,7 +716,20 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getNextNode(tree), info);
       return getType(NULL);
       break;
-
+    case ASSIGN :
+      type1 = typeTree(getValueNode(tree), info);
+      type2 = typeTree(getSecondNode(tree), info);
+      type2 = promoteIfIsChar(getSecondNode(tree));
+      if(!cmpType(type1, type2))
+      {
+         printf("Tipagem: Atribuição ilegal de tipo");printType(type2);
+         printf("para variável de tipo");printType(type1);
+         printf("\n");
+      }
+      setType(tree, NULL);
+      typeTree(getNextNode(tree), info);
+      return getType(NULL);
+      break;
     case WRAPPER :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);

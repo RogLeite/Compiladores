@@ -1,9 +1,6 @@
 main()
 {
-  a : int;
-  while(a<1)
-  {
-    a=2;
-  }
-  while(a>1){}
+  a : [bool];
+  b :bool;
+  a = new bool[1];
 }
