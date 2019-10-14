@@ -1,7 +1,5 @@
 main()
 {
-  a : bool;
-  b : bool;
-  c : bool;
-  c = ((a==b) || (b~=a)==c);
+  a : [bool];
+  a = new bool[3];
 }

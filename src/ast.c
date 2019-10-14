@@ -445,6 +445,12 @@ Node *typeTree(Node *tree, Info *info)
   if(tree==NULL) return NULL;
 
   switch (tree->tag) {
+    case INTTYPE :
+    case BOOLTYPE :
+    case FLOATTYPE :
+    case CHARTYPE :
+    case ARRAYTYPE :
+      return tree;
     case TRUEVALUE :
     case FALSEVALUE :
     case INTEGER :
@@ -659,6 +665,20 @@ Node *typeTree(Node *tree, Info *info)
           break;
       }
       break;
+    case NEW :
+      type1 = typeTree(getValueNode(tree), info);
+      type2 = typeTree(getSecondNode(tree), info);
+      type2 = promoteIfIsChar(getSecondNode(tree));
+      if(!isIntType(type2))
+      {
+       printf("Tipagem: Construção ilegal de array: Tipo");
+       printType(type2);
+       printf("não descreve um inteiro\n");
+       setType(tree, NULL);
+       return getType(NULL);
+      }
+      setType(tree, mkArrayTypeNode(type1));
+      return getType(tree);
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
