@@ -474,6 +474,8 @@ Node *typeTree(Node *tree, Info *info)
       {
         printf("Tipagem: Indexação ilegal: %s não é um array\n",
                 getVarId(getValueNode(tree)->reference));
+        setType(tree, NULL);
+        return NULL;
       }
       type2 = promoteIfIsChar(getSecondNode(tree));
       if(!isIntType(type2))
@@ -482,8 +484,10 @@ Node *typeTree(Node *tree, Info *info)
                 getVarId(getValueNode(tree)->reference));
        printType(type2);
        printf("não pode indexar um array\n");
+       setType(tree, NULL);
+       return NULL;
       }
-      setType(tree, (isArrayType(type1))?getValueNode(type1):NULL);
+      setType(tree, getValueNode(type1));
       return getType(tree);
       break;
     case OPERATION_UNARIA :

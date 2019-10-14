@@ -1,5 +1,7 @@
 main()
 {
   a : [bool];
+  b : bool;
   a = new bool[3];
+  b = a[1];
 }
