@@ -516,6 +516,8 @@ Node *typeTree(Node *tree, Info *info)
       type2 = typeTree(getThirdNode(tree), info);
       switch (ignoreWrapper(getValueNode(tree))->content.op)
       {
+        case ADD :
+        case SUBTRACT :
         case MULTIPLY :
         case DIVIDE :
           type1 = promoteIfIsChar(getSecondNode(tree));
