@@ -698,11 +698,12 @@ Node *typeTree(Node *tree, Info *info)
     case IFELSE :
       typeTree(getThirdNode(tree), info);
     case IF :
+    case WHILE :
       typeTree(getSecondNode(tree), info);
       type1 = typeTree(getValueNode(tree), info);
       if(!isBoolType(type1))
       {
-         printf("Tipagem: Condição de um if espera bool, é:");
+         printf("Tipagem: Condição de um %s espera bool, é:", tag_name[tree->tag]);
          printType(type1);printf("\n");
          setType(tree, NULL);
          return getType(NULL);
