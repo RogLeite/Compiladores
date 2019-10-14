@@ -1,5 +1,7 @@
 main()
 {
-  b :[char];
-  b["i"] = 1;
+  a : char;
+  b : int;
+  c : bool;
+  c = b <= a;
 }
