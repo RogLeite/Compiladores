@@ -691,7 +691,7 @@ Node *typeTree(Node *tree, Info *info)
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
-      setType(tree, newType);
+      setType(tree, NULL);
       return getType(tree);
       break;
   }
@@ -764,8 +764,28 @@ Node *getNextNode(Node *curr)
 
 void setType(Node *node, Node *type)
 {
-  if(node!=NULL)
-    node->type = type;
+  if(node!=NULL&&type!=NULL)
+  {
+    switch (type->tag) {
+      case INTTYPE:
+        node->type = mkIntTypeNode();
+        break;
+      case FLOATTYPE:
+        node->type = mkFloatTypeNode();
+        break;
+      case CHARTYPE:
+        node->type = mkCharTypeNode();
+        break;
+      case BOOLTYPE:
+        node->type = mkBoolTypeNode();
+        break;
+      case ARRAYTYPE:
+        node->type = mkArrayTypeNode(getValueNode(type));
+        break;
+      default :
+        node->type = NULL;
+    }
+  }
 }
 
 Node *getType(Node *node)

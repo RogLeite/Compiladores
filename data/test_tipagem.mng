@@ -3,4 +3,5 @@ main()
   a : int;
   b : float;
   b = a as float;
+  a = (b + a) as int;
 }
