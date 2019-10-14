@@ -460,9 +460,10 @@ Node *typeTree(Node *tree, Info *info)
       return getType(tree);
       break;
     case SIMPLEVAR :
-      newType = getType(tree->reference);
-      setType(tree, newType);
       typeTree(getNextNode(tree), info);
+      newType = getType(tree->reference);
+      //printf("SIMPLEVAR type:");printType(newType);printf("\n");
+      setType(tree, newType);
       return newType;
       break;
     case ARRAYVAR :
@@ -688,6 +689,12 @@ Node *typeTree(Node *tree, Info *info)
       type2 = typeTree(getSecondNode(tree), info);
       setType(tree, type2);
       return getType(tree);
+      break;
+    case PRINT :
+      type1 = typeTree(getValueNode(tree), info);
+      setType(tree, NULL);
+      return getType(tree);
+      break;
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);

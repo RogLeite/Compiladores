@@ -2,6 +2,7 @@ main()
 {
   a : int;
   b : float;
+  c:bool;
   b = a as float;
-  a = (b + a) as int;
+  @b;
 }
