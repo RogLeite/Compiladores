@@ -1,5 +1,5 @@
 main()
 {
-  array:int;
-  array[1.1] = 1;
+  b :[char];
+  b["i"] = 1;
 }

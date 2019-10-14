@@ -28,7 +28,7 @@ int isCharType(Node *type);
 int isFloatType(Node *type);
 int isBoolType(Node *type);
 int isArrayType(Node *type);
-Node *promoteChar(Node *charNode);
+Node *promoteIfIsChar(Node *charNode);
 int cmpType(Node *type1, Node *type2);
 void printType(Node *node);
 Node *global_tree = NULL;
@@ -452,8 +452,7 @@ Node *typeTree(Node *tree, Info *info)
       }
       if(isCharType(type2))
       {
-        if(VERBOSE_CASTING){printf("Tipagem: char promovido para int\n");}
-        type2 = promoteChar(type2);
+        type2 = promoteIfIsChar(type2);
       }
       if(!isIntType(type2))
       {
@@ -461,7 +460,8 @@ Node *typeTree(Node *tree, Info *info)
        printType(type2);
        printf("não pode indexar um array\n");
       }
-      return (isArrayType(type1))?getValueNode(type1):NULL;
+      setType(tree, (isArrayType(type1))?getValueNode(type1):NULL);
+      return getType(tree);
       break;
     case OPERATION_UNARIA :
       type1 = typeTree(getSecondNode(tree), info);
@@ -474,13 +474,13 @@ Node *typeTree(Node *tree, Info *info)
             printf("\n");
             return NULL;
           }
-          return type1;
+          setType(tree, type1);
+          return getType(tree);
           break;
         case NEGATIVE:
           if(isCharType(type1))
           {
-            if(VERBOSE_CASTING){printf("Tipagem: char promovido para int\n");}
-            type1 = promoteChar(type1);
+            type1 = promoteIfIsChar(type1);
           }
           if(!isIntType(type1) && !isFloatType(type1))
           {
@@ -489,7 +489,8 @@ Node *typeTree(Node *tree, Info *info)
             printf("\n");
             return NULL;
           }
-          return type1;
+          setType(tree, type1);
+          return getType(tree);
           break;
         default :
           return NULL;
@@ -502,7 +503,8 @@ Node *typeTree(Node *tree, Info *info)
     default :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
-      return newType;
+      setType(tree, newType);
+      return getType(tree);
       break;
   }
 
@@ -639,8 +641,13 @@ int isArrayType(Node *type)
 {
   return (type->tag==ARRAYTYPE)?1:0;
 }
-Node *promoteChar(Node *charNode)
+Node *promoteIfIsChar(Node *charNode)
 {
+  if(isCharType(charNode))//if(charNode!=NULL&&isCharType(charNode->type))
+  {
+      if(VERBOSE_CASTING){printf("Tipagem: char promovido para int\n");}
+      //Ptomove
+  }
   return charNode;
 }
 int cmpType(Node *type1, Node *type2)
