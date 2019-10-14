@@ -1,6 +1,5 @@
-main()
+main(a:int):[int]
 {
-  a : [bool];
-  b :bool;
-  a = new bool[1];
+  b:int;
+  a = "c"as int;
 }

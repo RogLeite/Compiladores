@@ -441,6 +441,7 @@ int stitchTree(Node *tree)
 
 Node *typeTree(Node *tree, Info *info)
 {
+  Info *newInfo;
   Node *newType, *type1, *type2;
   if(tree==NULL) return NULL;
 
@@ -729,6 +730,18 @@ Node *typeTree(Node *tree, Info *info)
       setType(tree, NULL);
       typeTree(getNextNode(tree), info);
       return getType(NULL);
+      break;
+    case FUNCDEF :
+      typeTree(getSecondNode(tree), info);//Parametros
+      type1 = typeTree(getThirdNode(tree), info); //Tipo
+
+      newInfo = (Info*)malloc(sizeof(Info));
+      newInfo->funcRetType = type1;
+      typeTree(getFourthNode(tree), newInfo); //Bloco
+
+      typeTree(getNextNode(tree), info);
+      setType(tree, type1);
+      return getType(tree);
       break;
     case WRAPPER :
       newType = typeTree(getValueNode(tree), info);
