@@ -727,7 +727,7 @@ Node *typeTree(Node *tree, Info *info)
       break;
   }
 
-  return 0;
+  return NULL;
 }
 
 char *getVarId(Node *node)
@@ -801,9 +801,23 @@ void setType(Node *node, Node *type)
 
 Node *getType(Node *node)
 {
-  if(node!=NULL)
-    return node->type;
-  return NULL;
+  if(node==NULL)
+    return NULL;
+  switch(node->type->tag)
+  {
+    case INTTYPE :
+      return mkIntTypeNode();
+    case FLOATTYPE :
+      return mkFloatTypeNode();
+    case BOOLTYPE :
+      return mkBoolTypeNode();
+    case CHARTYPE :
+      return mkCharTypeNode();
+    case ARRAYTYPE :
+      return mkArrayTypeNode(getType(getValueNode(node->type)));
+    default :
+     return NULL;
+  }
 }
 
 char *expandEscapes(char *src)
@@ -915,5 +929,57 @@ void printType(Node *node) {
       printf("] ");
     default :
       return;
+  }
+}
+
+void freeTree(Node *tree)
+{
+  switch (tree->tag){
+    case STRING :
+    case CHARACTER :
+    case ID :
+      if(tree->content.string != NULL)
+      {
+        free(tree->content.string);
+        tree->content.string=NULL;
+      }
+    case INTEGER :
+    case FLOATING :
+    case OPERATOR :
+      // if(tree->reference != NULL)
+      // {
+      //   free(tree->reference);
+      //   tree->reference=NULL;
+      // }
+      // if(tree->type != NULL)
+      // {
+      //   free(tree->type);
+      //   tree->type=NULL;
+      // }
+      free(tree);
+      break;
+    default :
+      if(getValueNode(tree) != NULL)
+      {
+        freeTree(getValueNode(tree));
+        tree->content.pair.value = NULL;
+      }
+      if(getNextNode(tree) != NULL)
+      {
+        freeTree(getNextNode(tree));
+        tree->content.pair.next = NULL;
+      }
+      // if(tree->reference != NULL)
+      // {
+      //   free(tree->reference);
+      //   tree->reference=NULL;
+      // }
+      // if(tree->type != NULL)
+      // {
+      //   free(tree->type);
+      //   tree->type=NULL;
+      // }
+      free(tree);
+      break;
   }
 }

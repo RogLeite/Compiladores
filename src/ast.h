@@ -118,5 +118,6 @@ Node *getGlobalTree();
 void printTree(Node *tree, int identation);
 int stitchTree(Node *tree);
 Node *typeTree(Node *tree, Info *info);
+void freeTree(Node *tree);
 
 #endif

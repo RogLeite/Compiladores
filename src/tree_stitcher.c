@@ -29,5 +29,6 @@ int main(void)
     printf("Programa não foi parsed :C\n");
 
   printf("\n-----------------------------------------\n-----------------------------------------\n");
+  freeTree(getGlobalTree());
   return 0;
 }
