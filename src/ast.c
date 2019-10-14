@@ -487,12 +487,25 @@ Node *typeTree(Node *tree, Info *info)
           return getType(tree);
           break;
         default :
+          setType(tree, NULL);
           return NULL;
           break;
       }
       break;
     case OPERATION_BINARIA :
-
+      type1 = typeTree(getSecondNode(tree), info);
+      type2 = typeTree(getThirdNode(tree), info);
+      switch (ignoreWrapper(getValueNode(tree))->content.op)
+      {
+        case MULTIPLY :
+        case DIVIDE :
+          
+          break;
+        default :
+          setType(tree, NULL);
+          return NULL;
+          break;
+      }
       break;
     default :
       newType = typeTree(getValueNode(tree), info);
