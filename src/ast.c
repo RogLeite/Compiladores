@@ -680,14 +680,17 @@ Node *typeTree(Node *tree, Info *info)
        printType(type2);
        printf("não descreve um inteiro\n");
        setType(tree, NULL);
+       typeTree(getNextNode(tree), info);
        return getType(NULL);
       }
       setType(tree, mkArrayTypeNode(type1));
+      typeTree(getNextNode(tree), info);
       return getType(tree);
     case CAST :
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
       setType(tree, type2);
+      typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
     // case PRINT :
@@ -706,11 +709,14 @@ Node *typeTree(Node *tree, Info *info)
          printf("Tipagem: Condição de um %s espera bool, é:", tag_name[tree->tag]);
          printType(type1);printf("\n");
          setType(tree, NULL);
+         typeTree(getNextNode(tree), info);
          return getType(NULL);
       }
       setType(tree, NULL);
+      typeTree(getNextNode(tree), info);
       return getType(NULL);
       break;
+
     case WRAPPER :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
