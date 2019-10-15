@@ -7,11 +7,11 @@ then
   yacc --output=$TEMPFILE/tmp_grammatic.c --defines=$SRCPATH/definitions.h $SRCPATH/monga_grammar.y
   flex --outfile=$TEMPFILE/tmp_lexic.c --header-file=$SRCPATH/lex_defs.h $SRCPATH/monga_lexic.l $SRCPATH/definitions.h
   if [[ -z $1 ]]; then
-    #gcc  -Wall -I$SRCPATH  $SRCPATH/tree_stitcher.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o monga_parser -lfl
-    gcc -fsanitize=address -Wall -I$SRCPATH  $SRCPATH/tree_stitcher.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o monga_parser -lfl
+    gcc  -Wall -I$SRCPATH  $SRCPATH/tree_stitcher.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o monga_parser -lfl
+    #gcc -fsanitize=address -Wall -I$SRCPATH  $SRCPATH/tree_stitcher.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o monga_parser -lfl
   else
-    #gcc  -Wall -D$1 -I$SRCPATH  $SRCPATH/tree_stitcher.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o monga_parser -lfl
-    gcc -fsanitize=address -Wall -D$1 -I$SRCPATH  $SRCPATH/tree_stitcher.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o monga_parser -lfl
+    gcc  -Wall -D$1 -I$SRCPATH  $SRCPATH/tree_stitcher.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o monga_parser -lfl
+    #gcc -fsanitize=address -Wall -D$1 -I$SRCPATH  $SRCPATH/tree_stitcher.c $TEMPFILE/tmp_lexic.c $TEMPFILE/tmp_grammatic.c $SRCPATH/ast.c $SRCPATH/var_table.c -o monga_parser -lfl
   fi
   rm $TEMPFILE/tmp_lexic.c
   rm $TEMPFILE/tmp_grammatic.c
