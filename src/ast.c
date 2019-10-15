@@ -981,7 +981,11 @@ int cmpType(Node *type1, Node *type2)
     return (type1->tag == type2->tag)?1:0;
 }
 void printType(Node *node) {
-  if(node==NULL) return;
+  if(node==NULL)
+  {
+    printf(" NULL ");
+    return;
+  }
   switch (node->tag) {
     case INTTYPE:
       printf(" int ");
