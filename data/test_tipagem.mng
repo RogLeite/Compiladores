@@ -1,10 +1,9 @@
-foo(j:int,i:[int]):int
+foo(j:int, b:char):int
 {
   return 1;
 }
 
-main(a:int, b:[int]):int
+main(a:int, b:int)
 {
-  foo(a,b);#esse b não está vendo sua referência ao parametro
-  return a;
+  foo(a, b);
 }

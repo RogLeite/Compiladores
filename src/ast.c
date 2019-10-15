@@ -392,6 +392,19 @@ int stitchTree(Node *tree)
 
       break;
     case CALL :
+      idNode = getId(getVarId(tree));
+      if(idNode == NULL)
+      {
+        printf("Não foi encontrado um id\n");
+        return -1;
+      }
+      tree->reference = idNode;
+      //printf("Stitching: CALL (%s) \n", getVarId(tree));
+      if(getValueNode(tree) != NULL)
+        if(stitchTree(getValueNode(tree))==-1) return -1;
+      if(getNextNode(tree) != NULL)
+        if(stitchTree(getNextNode(tree))==-1) return -1;
+      break;
     case SIMPLEVAR :
       idNode = getId(getVarId(tree));
       if(idNode == NULL)
@@ -400,7 +413,7 @@ int stitchTree(Node *tree)
         return -1;
       }
       tree->reference = idNode;
-
+      //printf("Stitching: SIMPLEVAR (%s) type:", getVarId(tree));printType(getType(idNode));printf("\n");
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
@@ -424,6 +437,7 @@ int stitchTree(Node *tree)
     case PARAM :
     case VARDEC :
       if(newId(getVarId(tree), tree)==-1)return -1;
+      //printf("Stitching: %s (%s) type:", tag_name[tree->tag], getVarId(tree));printType(getVardecType(tree));printf("\n");
       setType(tree, getVardecType(tree));
       if(getValueNode(tree) != NULL)
         if(stitchTree(getValueNode(tree))==-1) return -1;
@@ -468,7 +482,7 @@ Node *typeTree(Node *tree, Info *info)
     case SIMPLEVAR :
       //typeTree(getNextNode(tree), info);
       newType = getType(tree->reference);
-      printf("SIMPLEVAR (%s) type:", getVarId(tree));printType(newType);printf("\n");
+      //printf("Typing: SIMPLEVAR (%s) type:", getVarId(tree));printType(newType);printf("\n");
       setType(tree, newType);
       return getType(tree);
       break;
@@ -1002,9 +1016,9 @@ int cmpParamsTypes(Node *dec, Node *call)
   {
     return 0;
   }
-  printf("getType(dec):");printType(getType(dec));printf("\n");
-  printf("tag = %s | ", tag_name[call->tag]);
-  printf("getType(call):");printType(getType(call));printf("\n");
+  // printf("getType(dec):");printType(getType(dec));printf("\n");
+  // printf("tag = %s | ", tag_name[call->tag]);
+  // printf("getType(call):");printType(getType(call));printf("\n");
   return cmpType(getType(dec), getType(call));
 }
 
