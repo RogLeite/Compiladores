@@ -1,9 +1,4 @@
-foo(j:int, b:char):int
+main(a:float, b:char)
 {
-  return 1;
-}
-
-main(a:int, b:int)
-{
-  foo(a, b);
+  a = a+b;
 }

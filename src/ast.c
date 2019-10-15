@@ -458,7 +458,6 @@ Node *typeTree(Node *tree, Info *info)
 {
   Info *newInfo;
   Node *newType, *type1, *type2;
-  Node *aux1;
   if(tree==NULL) return NULL;
 
   switch (tree->tag) {
@@ -499,7 +498,7 @@ Node *typeTree(Node *tree, Info *info)
         setType(tree, NULL);
         return NULL;
       }
-      type2 = promoteIfIsChar(&(getSecondNode(tree)));
+      type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
       if(!isIntType(type2))
       {
        printf("Tipagem: Indexação ilegal da variavel %s: Tipo",
@@ -528,7 +527,7 @@ Node *typeTree(Node *tree, Info *info)
           return getType(tree);
           break;
         case NEGATIVE:
-          type1 = promoteIfIsChar(&(getSecondNode(tree)));
+          type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
           if(!isIntType(type1) && !isFloatType(type1))
           {
             printf("Tipagem: Operador - não pode ser usado no tipo");
@@ -555,8 +554,8 @@ Node *typeTree(Node *tree, Info *info)
         case SUBTRACT :
         case MULTIPLY :
         case DIVIDE :
-          type1 = promoteIfIsChar(&(getSecondNode(tree)));
-          type2 = promoteIfIsChar(&(getThirdNode(tree)));
+          type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
+          type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
           if( !isIntType(type1)&&!isFloatType(type1) )
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
@@ -584,9 +583,9 @@ Node *typeTree(Node *tree, Info *info)
           //Ultimo caso é que um deles é float o outro int
           //basta promover o int para float
           if(isIntType(type1))
-            type1 = promoteToFloat(&(getSecondNode(tree)));
+            type1 = promoteToFloat(&(tree->content.pair.value->content.pair.next));
           if(isIntType(type2))
-            type2 = promoteToFloat(&(getThirdNode(tree)));
+            type2 = promoteToFloat(&(tree->content.pair.value->content.pair.next->content.pair.next));
           setType(tree, type1);
           return getType(tree);
           break;
@@ -595,8 +594,8 @@ Node *typeTree(Node *tree, Info *info)
         case GREATEROREQUAL :
         case LESS :
         case GREATER :
-          type1 = promoteIfIsChar(&(getSecondNode(tree)));
-          type2 = promoteIfIsChar(&(getThirdNode(tree)));
+          type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
+          type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
           if( !isIntType(type1)&&!isFloatType(type1) )
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
@@ -619,16 +618,16 @@ Node *typeTree(Node *tree, Info *info)
           //Ultimo caso é que um deles é float o outro int
           //basta promover o int para float
           if(isIntType(type1))
-            type1 = promoteToFloat(&(getSecondNode(tree)));
+            type1 = promoteToFloat(&(tree->content.pair.value->content.pair.next));
           if(isIntType(type2))
-            type2 = promoteToFloat(&(getThirdNode(tree)));
+            type2 = promoteToFloat(&(tree->content.pair.value->content.pair.next->content.pair.next));
           setType(tree, mkBoolTypeNode());
           return getType(tree);
           break;
         case EQUAL :
         case NOTEQUAL :
-          type1 = promoteIfIsChar(&(getSecondNode(tree)));
-          type2 = promoteIfIsChar(&(getThirdNode(tree)));
+          type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
+          type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
           if( !isIntType(type1)&&!isFloatType(type1)&&!isBoolType(type1) )
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
@@ -650,13 +649,13 @@ Node *typeTree(Node *tree, Info *info)
           }
           if(isFloatType(type1)&&isIntType(type2))
           {
-            type2 = promoteToFloat(&(getThirdNode(tree)));
+            type2 = promoteToFloat(&(tree->content.pair.value->content.pair.next->content.pair.next));
             setType(tree, mkBoolTypeNode());
             return getType(tree);
           }
           if(isIntType(type1)&&isFloatType(type2))
           {
-            type1 = promoteToFloat(&(getSecondNode(tree)));
+            type1 = promoteToFloat(&(tree->content.pair.value->content.pair.next));
             setType(tree, mkBoolTypeNode());
             return getType(tree);
           }
@@ -694,7 +693,7 @@ Node *typeTree(Node *tree, Info *info)
     case NEW :
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
-      type2 = promoteIfIsChar(&(getSecondNode(tree)));
+      type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
       if(!isIntType(type2))
       {
        printf("Tipagem: Construção ilegal de array: Tipo");
@@ -740,7 +739,7 @@ Node *typeTree(Node *tree, Info *info)
     case ASSIGN :
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
-      type2 = promoteIfIsChar(&(getSecondNode(tree)));
+      type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
       if(!cmpType(type1, type2))
       {
          printf("Tipagem: Atribuição ilegal de tipo");printType(type2);
@@ -975,14 +974,15 @@ Node *promoteIfIsChar(Node **node_ptr)
   {
       if(VERBOSE_CASTING){printf("Tipagem: char promovido para int\n");}
       //Promover, tem que inserir um cast na árvore
-      (*node_ptr) = mkBiNode(CAST, exp_node, mkFloatTypeNode());
+      (*node_ptr) = mkBiNode(CAST, exp_node, mkIntTypeNode());
+      setType((*node_ptr), mkIntTypeNode());
   }
   return getType(*node_ptr);
 }
 Node *promoteToFloat(Node **node_ptr)
 {
+  Node *exp_node = *node_ptr;
   //(*node_ptr)é o ponteiro para nó que trabalho normalmente
-  //mkBiNode(CAST, *node_ptr, mkFloatTypeNode());
   if(node_ptr!=NULL&&(*node_ptr)!=NULL&&!isFloatType(getType(*node_ptr)))
   {
       if(VERBOSE_CASTING)
@@ -990,6 +990,8 @@ Node *promoteToFloat(Node **node_ptr)
         printf("Tipagem:");
         printType(getType(*node_ptr));
         printf("promovido para float\n");
+        (*node_ptr) = mkBiNode(CAST, exp_node, mkFloatTypeNode());
+        setType((*node_ptr), mkFloatTypeNode());
       }
       //Promover, tem que inserir um cast na árvore
   }
