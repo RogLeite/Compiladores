@@ -35,29 +35,30 @@ $ chmod +x scripts/make_*.sh
 ```
 Exemplo de Árvore
 -------------------------------
-Essa é a árvore do programa ``` data/test_simple_main.mng ```
+Essa é a árvore do programa ``` data/test_simple_main.mng ``` depois de costurada e tipada
 ```
-NodeTag: FUNCDEF
+NodeTag: FUNCDEF | Tipo: int
 |____NodeTag: ID | Value: "main"
 |____NodeTag: EMPTY
 |____NodeTag: INTTYPE
 |____NodeTag: BLOCK
 | |____NodeTag: VARDECS
-| | |____NodeTag: VARDEC
+| | |____NodeTag: VARDEC | Tipo: int
 | | | |____NodeTag: ID | Value: "var"
 | | | |____NodeTag: INTTYPE
 | | |____NodeTag: COMMANDS
 | | | |____NodeTag: ASSIGN
-| | | | |____NodeTag: SIMPLEVAR
+| | | | |____NodeTag: SIMPLEVAR | Referencia: var | Tipo: int
 | | | | | |____NodeTag: ID | Value: "var"
-| | | | |____NodeTag: INTEGER | Value: 0
+| | | | |____NodeTag: INTEGER | Value: 0 | Tipo: int
 | | | |____NodeTag: RET
-| | | | |____NodeTag: SIMPLEVAR
+| | | | |____NodeTag: SIMPLEVAR | Referencia: var | Tipo: int
 | | | | | |____NodeTag: ID | Value: "var"
 ```
 O programa consiste em apenas uma declaração de função, a ``` main ```, que define uma variável inteira ``` var ```, atribui a ela o valor ``` 0 ``` e retorna ```var```.
  - Os nós de tag ```EMPTY``` existem em lugares onde a gramática encontrou um ```%empty```. Sua primeira aparição na árvore acima indica que a função foi declarada como não recebendo parâmetros.
-
+ - O campo ``` | Referencia: ``` do nó indica qual o identificador ao qual ```SIMPLEVAR``` faz referência.
+ - O campo ``` | Tipo: ``` do nó indica teu tipo, definido com a costura e tipagem. Nós podem não tem esse campo definido se houve erro durante tipagem.
 
 Arquivos Importantes
 ----------------------------

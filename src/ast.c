@@ -2,7 +2,7 @@
 * Árvore de Sintaxe Abstrata
 * Rodrigo Leite - 1413150 - 07/Outubro/2019
 **/
-#define VERBOSE_CASTING 1
+#define VERBOSE_CASTING 0
 #include "ast.h"
 #include "var_table.h"
 #include <string.h>
@@ -972,7 +972,7 @@ Node *promoteIfIsChar(Node **node_ptr)
   //(*node_ptr)é o ponteiro para nó que trabalho normalmente
   if(node_ptr!=NULL&&(*node_ptr)!=NULL&&isCharType(getType(*node_ptr)))
   {
-      if(VERBOSE_CASTING){printf("Tipagem: char promovido para int\n");}
+      if(VERBOSE_CASTING==1){printf("Tipagem: char promovido para int\n");}
       //Promover, tem que inserir um cast na árvore
       (*node_ptr) = mkBiNode(CAST, exp_node, mkIntTypeNode());
       setType((*node_ptr), mkIntTypeNode());
@@ -985,7 +985,7 @@ Node *promoteToFloat(Node **node_ptr)
   //(*node_ptr)é o ponteiro para nó que trabalho normalmente
   if(node_ptr!=NULL&&(*node_ptr)!=NULL&&!isFloatType(getType(*node_ptr)))
   {
-      if(VERBOSE_CASTING)
+      if(VERBOSE_CASTING==1)
       {
         printf("Tipagem:");
         printType(getType(*node_ptr));
