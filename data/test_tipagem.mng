@@ -5,6 +5,6 @@ foo():int
 
 main(a:int, b:int):int
 {
-  foo();
+  a = foo();
   return a;
 }
