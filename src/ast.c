@@ -743,8 +743,8 @@ Node *typeTree(Node *tree, Info *info)
       newInfo->funcRetType = type1;
       typeTree(getFourthNode(tree), newInfo); //Bloco
 
-      typeTree(getNextNode(tree), info);
       setType(tree, type1);
+      typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
     case RET :
@@ -756,8 +756,8 @@ Node *typeTree(Node *tree, Info *info)
         printf(")\n");
       }
 
-      typeTree(getNextNode(tree), info);
       setType(tree, NULL);
+      typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
     // case PARAM :
@@ -766,7 +766,6 @@ Node *typeTree(Node *tree, Info *info)
     case CALL :
       typeTree(getSecondNode(tree), info);
       newType = getType(tree->reference);
-      printf("CALL type:");printType(newType);printf("\n");
       setType(tree, newType);
       typeTree(getNextNode(tree), info);
       return newType;
@@ -774,14 +773,14 @@ Node *typeTree(Node *tree, Info *info)
 
     case WRAPPER :
       newType = typeTree(getValueNode(tree), info);
-      typeTree(getNextNode(tree), info);
       setType(tree, newType);
+      typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
     default :
       newType = typeTree(getValueNode(tree), info);
-      typeTree(getNextNode(tree), info);
       setType(tree, NULL);
+      typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
   }
