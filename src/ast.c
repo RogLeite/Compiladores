@@ -468,7 +468,7 @@ Node *typeTree(Node *tree, Info *info)
     case SIMPLEVAR :
       //typeTree(getNextNode(tree), info);
       newType = getType(tree->reference);
-      //printf("SIMPLEVAR type:");printType(newType);printf("\n");
+      printf("SIMPLEVAR (%s) type:", getVarId(tree));printType(newType);printf("\n");
       setType(tree, newType);
       return getType(tree);
       break;
@@ -1002,6 +1002,9 @@ int cmpParamsTypes(Node *dec, Node *call)
   {
     return 0;
   }
+  printf("getType(dec):");printType(getType(dec));printf("\n");
+  printf("tag = %s | ", tag_name[call->tag]);
+  printf("getType(call):");printType(getType(call));printf("\n");
   return cmpType(getType(dec), getType(call));
 }
 
