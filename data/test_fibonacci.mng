@@ -41,7 +41,7 @@ fib(n:int):[int]
 main():int
 {
   #chama fibonacci(10)
-  @fibonacci(10);
+  @fib(10);
   #retorno da main
   return 0;
 }
