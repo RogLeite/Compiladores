@@ -763,6 +763,15 @@ Node *typeTree(Node *tree, Info *info)
     // case PARAM :
     // case VARDEC :
     //   break;
+    case CALL :
+      typeTree(getSecondNode(tree), info);
+      newType = getType(tree->reference);
+      printf("CALL type:");printType(newType);printf("\n");
+      setType(tree, newType);
+      typeTree(getNextNode(tree), info);
+      return newType;
+      break;
+
     case WRAPPER :
       newType = typeTree(getValueNode(tree), info);
       typeTree(getNextNode(tree), info);
