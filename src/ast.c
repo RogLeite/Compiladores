@@ -973,8 +973,10 @@ Node *promoteToFloat(Node *node)
 }
 int cmpType(Node *type1, Node *type2)
 {
-  if(type1 == NULL && type2 == NULL)
+  if(type1==NULL && type2==NULL)
     return 1;
+  else if(type1==NULL || type2==NULL)
+    return 0;
   else if(isArrayType(type1) && isArrayType(type2))
     return cmpType(getValueNode(type1), getValueNode(type2));
   else
