@@ -31,6 +31,7 @@ int isArrayType(Node *type);
 Node *promoteIfIsChar(Node *node);
 Node *promoteToFloat(Node *node);
 int cmpType(Node *type1, Node *type2);
+int cmpParamsTypes(Node *dec, Node *call);
 void printType(Node *node);
 Node *global_tree = NULL;
 
@@ -469,7 +470,7 @@ Node *typeTree(Node *tree, Info *info)
       newType = getType(tree->reference);
       //printf("SIMPLEVAR type:");printType(newType);printf("\n");
       setType(tree, newType);
-      return newType;
+      return getType(tree);
       break;
     case ARRAYVAR :
       type1 = typeTree(getValueNode(tree), info);
@@ -766,11 +767,15 @@ Node *typeTree(Node *tree, Info *info)
     case CALL :
       typeTree(getSecondNode(tree), info);
       newType = getType(tree->reference);
+      if(!cmpParamsTypes(getSecondNode(tree->reference), getSecondNode(tree)))
+      {
+        printf("Tipagem: Tipo dos parâmetros da chamada à função %s não casam com os de sua declaração\n",
+                getFuncdefId(tree->reference));
+      }
       setType(tree, newType);
       typeTree(getNextNode(tree), info);
-      return newType;
+      return getType(tree);
       break;
-
     case WRAPPER :
       newType = typeTree(getValueNode(tree), info);
       setType(tree, newType);
@@ -981,6 +986,25 @@ int cmpType(Node *type1, Node *type2)
   else
     return (type1->tag == type2->tag)?1:0;
 }
+
+int cmpParamsTypes(Node *dec, Node *call)
+{
+  if(dec==NULL && call==NULL)
+    return 1;
+  else if(dec==NULL || call==NULL)
+    return 0;
+  else if(dec->tag == PARAMLIST && call->tag == LISTEXP)
+  {
+    return cmpParamsTypes(getSecondNode(dec), getSecondNode(call))
+            && cmpParamsTypes(getValueNode(dec), getValueNode(call));
+  }
+  else if(dec->tag == PARAMLIST || call->tag == LISTEXP)
+  {
+    return 0;
+  }
+  return cmpType(getType(dec), getType(call));
+}
+
 void printType(Node *node) {
   if(node==NULL)
   {

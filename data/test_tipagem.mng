@@ -1,10 +1,13 @@
-foo():int
+foo(i:[int]):int
 {
   return 1;
 }
 
-main(a:int, b:int):int
+main(a:int, b:[int]):int
 {
-  a = foo();
+  if(foo(b)==1)#esse b não está vendo sua referência ao parametro
+  {
+    a = foo((1+2)as [int]);
+  }
   return a;
 }
