@@ -1,2 +1,3 @@
 build/*
 monga_parser
+monga_compiler
