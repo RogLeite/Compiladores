@@ -20,17 +20,25 @@ Atualmente, o compilador consiste nos seguintes arquivos:
  - Operators é o enum de operadores.
  - Cada tag é apenas um tipo de nó: folha, árvore unária, árvore binária, árvore ternária e árvore quaternária.
  - WRAPPER teve que ser definido para envolver as constantes, senão elas não se encaixavam na árvore de lisp (não poderiam ter um next).
- - As funções `mk*Node` servem para fazer um nó da árvore e, na sua construção, recebem os nós filhos. 
+ - As funções `mk*Node` servem para fazer um nó da árvore e, na sua construção, recebem os nós filhos.
+ - Em retrospecto, acho que deveria ter diferenciado melhor os nós de comandos e expressões, especialmente para o caso de chamada de função;
 
 #####Parte 3: Como a gramática constrói a ast
 -------------------
-
+ - No `start` seta a global_tree e caso seja `%empty` usa o `mkNullNode()`.
+ - Quando se faz uma sub-árvore, passo a *TAG* dela.
+ - Olhar para tipos: Array é a única exceção.
+ - Olhar para a definição de constantes: Ainda tenho que corrigir o que é um `char`.
 
 #####Parte 4: ast.c a Arvore de sintaxe abstrata
 ---------------------
+ - Forward Declaration de diversas funções auxiliares.
+ - Notar que, nas constantes, defino o tipo e aninho num WRAPPER.
+ - Notar que os tipos são um uniNode sem filhos. Não deu para criar um nó para cada tipo apenas, porque não dava para usar o campo `next` do `Pair`.
 
 #####Parte 5: var_table.h Interface da tabela de Identificadores
 -------------------
+ - É a interface sugerida pelo Roberto
 
 #####Parte 6: Costura da Árvore
 -------------------
