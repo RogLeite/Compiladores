@@ -78,8 +78,8 @@ typedef union content_u{
 typedef struct node_s{
     NodeTag tag;
     NodeContent content;
-    Node *reference;
-    Node *type;
+    Node *reference; //Referência caso o nó seja um SIMPLEVAR ou CALL
+    Node *type; //Tipo do nó, definido por typeTree() salvo o nó seja um tipo ou constante.
 }Node;
 
 typedef struct info_s
@@ -116,7 +116,11 @@ void setGlobalTree(Node *);
 Node *getGlobalTree();
 
 void printTree(Node *tree, int identation);
+
+/*Retorna -1 se houve erro de costura*/
 int stitchTree(Node *tree);
+
+/*Retorna o tipo da árvore*/
 Node *typeTree(Node *tree, Info *info);
 
 #endif
