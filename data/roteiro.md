@@ -15,7 +15,12 @@ Atualmente, o compilador consiste nos seguintes arquivos:
 
 #####Parte 2: ast.h Interface da Árvore
 -------------
-
+ - Node é a estrutura da árvore
+ - NodeContent é o que diferencia os nós, se são folhas ou árvores.
+ - Operators é o enum de operadores.
+ - Cada tag é apenas um tipo de nó: folha, árvore unária, árvore binária, árvore ternária e árvore quaternária.
+ - WRAPPER teve que ser definido para envolver as constantes, senão elas não se encaixavam na árvore de lisp (não poderiam ter um next).
+ - As funções `mk*Node` servem para fazer um nó da árvore e, na sua construção, recebem os nós filhos. 
 
 #####Parte 3: Como a gramática constrói a ast
 -------------------
