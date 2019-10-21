@@ -357,6 +357,39 @@ void printTree(Node *n, int identation)
   }
 }
 
+Node *ignoreWrapper(Node *node)
+{
+  if(node->tag!=WRAPPER)return node;
+  return getValueNode(node);
+}
+
+Node *getValueNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return curr->content.pair.value;
+}
+Node *getSecondNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return getNextNode(getValueNode(curr));
+}
+Node *getThirdNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return getNextNode(getSecondNode(curr));
+}
+Node *getFourthNode(Node *curr)
+{
+  if(curr==NULL || curr->tag<WRAPPER)return NULL;
+  return getNextNode(getThirdNode(curr));
+}
+
+Node *getNextNode(Node *curr)
+{
+  if(curr==NULL || (curr->tag<WRAPPER && curr->tag>=INTEGER))return NULL;
+  return curr->content.pair.next;
+}
+
 int stitchTree(Node *tree)
 {
   char *id;
@@ -835,39 +868,6 @@ Node *getFuncdefType(Node *node)
 {
   if(node->tag != FUNCDEF) return NULL;
   return getThirdNode(node);
-}
-
-Node *ignoreWrapper(Node *node)
-{
-  if(node->tag!=WRAPPER)return node;
-  return getValueNode(node);
-}
-
-Node *getValueNode(Node *curr)
-{
-  if(curr==NULL || curr->tag<WRAPPER)return NULL;
-  return curr->content.pair.value;
-}
-Node *getSecondNode(Node *curr)
-{
-  if(curr==NULL || curr->tag<WRAPPER)return NULL;
-  return getNextNode(getValueNode(curr));
-}
-Node *getThirdNode(Node *curr)
-{
-  if(curr==NULL || curr->tag<WRAPPER)return NULL;
-  return getNextNode(getSecondNode(curr));
-}
-Node *getFourthNode(Node *curr)
-{
-  if(curr==NULL || curr->tag<WRAPPER)return NULL;
-  return getNextNode(getThirdNode(curr));
-}
-
-Node *getNextNode(Node *curr)
-{
-  if(curr==NULL || (curr->tag<WRAPPER && curr->tag>=INTEGER))return NULL;
-  return curr->content.pair.next;
 }
 
 void setType(Node *node, Node *type)
