@@ -40,10 +40,13 @@ Atualmente, o compilador consiste nos seguintes arquivos:
 -------------------
  - É a interface sugerida pelo Roberto
 
-#####Parte 6: Costura da Árvore
+#####Parte 6: var_table.c Implementação da tabela
 -------------------
+ - É uma pilha: a estrutura se chama Empilhável.
+ - Empilhável tem a união Conteudo, a tag que diz qual dos campos do conteúdo se usa e ponteiro para o próximo.
+ - Conteudo é um escopo ou o par Id e ponteiro para o nó dele.
 
-#####Parte 7: var_table.c Implementação da tabela
+#####Parte 7: Costura da Árvore
 -------------------
 
 #####Parte 8: Tipagem da árvore
