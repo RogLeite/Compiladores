@@ -30,6 +30,7 @@ int isFloatType(Node *type);
 int isBoolType(Node *type);
 int isArrayType(Node *type);
 Node *promoteIfIsChar(Node **node_ptr);
+Node *promoteToInt(Node **node_ptr);
 Node *promoteToFloat(Node **node_ptr);
 int cmpType(Node *type1, Node *type2);
 int cmpParamsTypes(Node *dec, Node *call);
@@ -980,17 +981,26 @@ int isArrayType(Node *type)
 
 Node *promoteIfIsChar(Node **node_ptr)
 {
+  if(isCharType(getType(*node_ptr)))
+    return promoteToInt(node_ptr);
+  return getType(*node_ptr);
+}
+
+Node *promoteToInt(Node **node_ptr)
+{
   Node *exp_node = *node_ptr;
   //(*node_ptr)é o ponteiro para nó que trabalho normalmente
-  if(node_ptr!=NULL&&(*node_ptr)!=NULL&&isCharType(getType(*node_ptr)))
+  if(node_ptr!=NULL&&(*node_ptr)!=NULL&&!isIntType(getType(*node_ptr)))
   {
-      if(VERBOSE_CASTING==1){printf("Tipagem: char promovido para int\n");}
-      //Promover, tem que inserir um cast na árvore
+      printf("Tipagem:");
+      printType(getType(*node_ptr));
+      printf("promovido para int\n");
       (*node_ptr) = mkBiNode(CAST, exp_node, mkIntTypeNode());
       setType((*node_ptr), mkIntTypeNode());
   }
   return getType(*node_ptr);
 }
+
 Node *promoteToFloat(Node **node_ptr)
 {
   Node *exp_node = *node_ptr;
