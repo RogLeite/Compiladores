@@ -1,4 +1,7 @@
 main(a:float, b:char)
 {
+  arr : [int];
+  b = -b;
   a = a+b;
+  arr = new int[a as int];
 }

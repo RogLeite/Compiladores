@@ -498,39 +498,39 @@ Node *typeTree(Node *tree, Info *info)
       break;
     case SIMPLEVAR :
     {
-      Node *newType;
+      Node *varType;
       //typeTree(getNextNode(tree), info);
-      newType = getType(tree->reference);
-      //printf("Typing: SIMPLEVAR (%s) type:", getVarId(tree));printType(stdout, newType);printf("\n");
-      setType(tree, newType);
+      varType = getType(tree->reference);
+      //printf("Typing: SIMPLEVAR (%s) type:", getVarId(tree));printType(stdout, varType);printf("\n");
+      setType(tree, varType);
       return getType(tree);
       break;
     }
     case ARRAYVAR :
     {
-      Node *type1, *type2;
-      type1 = typeTree(getValueNode(tree), info);
-      type2 = typeTree(getSecondNode(tree), info);
-      // printf("type1:");printType(stdout, type1);
-      // printf("type2:");printType(stdout, type2);
-      if(!isArrayType(type1))
+      Node *expType, *indexType;
+      expType = typeTree(getValueNode(tree), info);
+      indexType = typeTree(getSecondNode(tree), info);
+      // printf("expType:");printType(stdout, expType);
+      // printf("indexType:");printType(stdout, indexType);
+      if(!isArrayType(expType))
       {
         printerr("Tipagem: Indexação ilegal: %s não é um array\n",
                 getVarId(getValueNode(tree)->reference));
         setType(tree, NULL);
         return NULL;
       }
-      type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
-      if(!isIntType(type2))
+      indexType = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
+      if(!isIntType(indexType))
       {
        printerr("Tipagem: Indexação ilegal da variavel %s: Tipo",
                 getVarId(getValueNode(tree)->reference));
-       printType(stderr,  type2);
+       printType(stderr,  indexType);
        printerr("não pode indexar um array\n");
        setType(tree, NULL);
        return NULL;
       }
-      setType(tree, getValueNode(type1));
+      setType(tree, getValueNode(expType));
       return getType(tree);
       break;
     }
