@@ -15,7 +15,7 @@ COMPILER = gcc
 LINKER_FLAGS = -lfl
 WARNING_FLAGS = -Wall #-fsanitize=address
 
-INCLUDES = -I${SCRPATH}
+INCLUDES = -I${SRCPATH}
 #Faltam os defines
 #DEFINES = -D${1}
 
@@ -39,6 +39,7 @@ all: monga_compiler
 
 monga_compiler: TMP_GRAMMATIC TMP_LEXIC
 	@echo "Compilando compilador..."
+	gcc ${WARNING_FLAGS} ${INCLUDES}  ${C_FILES} ${COMPILER_OUTPUT} ${LINKER_FLAGS}
 
 TMP_GRAMMATIC:
 	@echo "Compilando gramática..."
@@ -52,3 +53,4 @@ clean:
 	@echo "Limpando"
 	rm ${TMP_GRAMMATIC}
 	rm ${TMP_LEXIC}
+	rm ${OUT_NAME}
