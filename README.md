@@ -7,7 +7,7 @@ Da pasta raiz você pode:
 ----------------------------------
  - Dar make no compilador, resultando no executável `monga_compiler`, e usá-lo num arquivo a tua escolha. Ao ser executado, a árvore sintática costudara do programa é exibida:
 ```
-$ ./make.sh
+$ make
 $ ./monga_compiler < teu_programa_em_monga
 ```
 
