@@ -1,6 +1,6 @@
 
-.PHONY:= all say_hello generate clean
-
+.PHONY := all say_hello generate clean
+COMANDO := touch
 
 all: say_hello generate
 
@@ -9,7 +9,7 @@ say_hello:
 
 generate:
 	@echo "Criando arquivos de texto..."
-	touch tmp/file-{1..10}.txt
+	${COMANDO} tmp/file-{1..10}.txt
 
 clean:
 	@echo "Limpando..."
