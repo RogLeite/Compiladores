@@ -33,7 +33,9 @@ Node *promoteIfIsChar(Node **node_ptr);
 Node *promoteToFloat(Node **node_ptr);
 int cmpType(Node *type1, Node *type2);
 int cmpParamsTypes(Node *dec, Node *call);
+void printNodeType(FILE *out, Node *node);
 void printType(FILE *out, Node *node);
+
 Node *global_tree = NULL;
 
 char *tag_name[] = {
@@ -290,11 +292,7 @@ void printTree(Node *n, int identation)
         case TRUEVALUE :
         case FALSEVALUE :
         case EMPTY :
-          if(getType(n)!=NULL)
-          {
-            printf("| Tipo:");
-            printType(stdout, n->type);
-          }
+          printNodeType(stdout, n);
           if(n->content.pair.next != NULL)
           {
             printTree(n->content.pair.next, identation);
@@ -302,30 +300,18 @@ void printTree(Node *n, int identation)
           break;
         case FLOATING :
           printf("| Value: %f ", n->content.d);
-          if(getType(n)!=NULL)
-          {
-            printf("| Tipo:");
-            printType(stdout, n->type);
-          }
+          printNodeType(stdout, n);
           break;
         case INTEGER :
           printf("| Value: %d ", n->content.i);
-          if(getType(n)!=NULL)
-          {
-            printf("| Tipo:");
-            printType(stdout, n->type);
-          }
+          printNodeType(stdout, n);
           break;
         case CHARACTER :
         case STRING :
           tmp = expandEscapes(n->content.string);
           printf("| Value: \"%s\" ", tmp);
           free(tmp);
-          if(getType(n)!=NULL)
-          {
-            printf("| Tipo:");
-            printType(stdout, n->type);
-          }
+          printNodeType(stdout, n);
           break;
         case ID :
           tmp = expandEscapes(n->content.string);
@@ -334,21 +320,13 @@ void printTree(Node *n, int identation)
           break;
         case OPERATOR :
           printf("| Operator: %s ", op_name[n->content.op]);
-          if(getType(n)!=NULL)
-          {
-            printf("| Tipo:");
-            printType(stdout, n->type);
-          }
+          printNodeType(stdout, n);
           break;
         //UniNode
         default :
           if(n->reference!=NULL)
             printf("| Referencia: %s ", getVarId(n->reference));
-          if(getType(n)!=NULL)
-          {
-            printf("| Tipo:");
-            printType(stdout, getType(n));
-          }
+          printNodeType(stdout, n);
           printTree(n->content.pair.value, identation+1);
           if(n->content.pair.next != NULL)
             printTree(n->content.pair.next, identation);
@@ -357,7 +335,14 @@ void printTree(Node *n, int identation)
     }
   }
 }
-
+void printNodeType(FILE *out, Node *node)
+{
+  if(getType(node)!=NULL)
+  {
+    printf("| Tipo:");
+    printType(out, getType(node));
+  }
+}
 Node *ignoreWrapper(Node *node)
 {
   if(node->tag!=WRAPPER)return node;
