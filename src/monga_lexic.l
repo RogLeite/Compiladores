@@ -5,6 +5,7 @@
 %{
 #include "ast.h"
 #include "interpreter.h"
+#include "auxiliar.h"
 #include <string.h>
 #include <stdlib.h>
 void storeString(int isString);
@@ -52,7 +53,7 @@ while                           {storeLineno(); return TK_WHILE; }
 
 void storeString(int isString)
 {
-  char* str = (char*)malloc((strlen(yytext)+1)*sizeof(char));
+  char* str = (char*)mymalloc((strlen(yytext)+1)*sizeof(char));
   int i_str = 0;
   int i_yy = isString;
   while(yytext[i_yy] != '\0' && i_yy<strlen(yytext)-isString)

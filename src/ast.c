@@ -111,7 +111,7 @@ char *op_symbol[] = {
 
 Node *mkCteIntegerNode(int val)
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
+  Node *newNode = (Node*)mymalloc(sizeof(Node));
   newNode->tag = INTEGER;
   newNode->content.i = val;
   newNode->reference = NULL;
@@ -121,9 +121,9 @@ Node *mkCteIntegerNode(int val)
 }
 Node *mkCteStringNode(NodeTag tag, char *val)
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
+  Node *newNode = (Node*)mymalloc(sizeof(Node));
   newNode->tag = tag;
-  newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
+  newNode->content.string = (char*)mymalloc(sizeof(char)*(strlen(val)+1));
   strcpy(newNode->content.string, val);
   newNode->reference = NULL;
   newNode->type = (tag==CHARACTER)?mkCharTypeNode():mkArrayTypeNode(mkCharTypeNode());
@@ -132,7 +132,7 @@ Node *mkCteStringNode(NodeTag tag, char *val)
 }
 Node *mkCteFloatingNode(double val)
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
+  Node *newNode = (Node*)mymalloc(sizeof(Node));
   newNode->tag = FLOATING;
   newNode->content.d = val;
   newNode->reference = NULL;
@@ -142,7 +142,7 @@ Node *mkCteFloatingNode(double val)
 }
 Node *mkOperatorNode(Operators val)
 {
-    Node *newNode = (Node*)malloc(sizeof(Node));
+    Node *newNode = (Node*)mymalloc(sizeof(Node));
     newNode->tag = OPERATOR;
     newNode->content.op = val;
     newNode->reference = NULL;
@@ -156,7 +156,7 @@ Node *mkNullNode()
 }
 Node *mkUniNode(NodeTag tag, Node *first)
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
+  Node *newNode = (Node*)mymalloc(sizeof(Node));
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
@@ -166,7 +166,7 @@ Node *mkUniNode(NodeTag tag, Node *first)
 }
 Node *mkBiNode(NodeTag tag, Node *first, Node *second)
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
+  Node *newNode = (Node*)mymalloc(sizeof(Node));
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
@@ -177,7 +177,7 @@ Node *mkBiNode(NodeTag tag, Node *first, Node *second)
 }
 Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third)
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
+  Node *newNode = (Node*)mymalloc(sizeof(Node));
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
@@ -190,7 +190,7 @@ Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third)
 
 Node *mkQuadNode(NodeTag tag, Node *first, Node *second, Node *third, Node *fourth)
 {
-  Node *newNode = (Node*)malloc(sizeof(Node));
+  Node *newNode = (Node*)mymalloc(sizeof(Node));
   newNode->tag = tag;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
@@ -788,7 +788,7 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getSecondNode(tree), info);//Parametros
       type1 = typeTree(getThirdNode(tree), info); //Tipo
 
-      newInfo = (Info*)malloc(sizeof(Info));
+      newInfo = (Info*)mymalloc(sizeof(Info));
       newInfo->funcRetType = type1;
       typeTree(getFourthNode(tree), newInfo); //Bloco
 
@@ -906,7 +906,7 @@ Node *getType(Node *node)
 
 char *expandEscapes(char *src)
 {
-  char* str = (char*)malloc((strlen(src)*2+1)*sizeof(char));
+  char* str = (char*)mymalloc((strlen(src)*2+1)*sizeof(char));
   int i_str = 0;
   int i_src = 0;
   while(src[i_src] != '\0' || i_src<strlen(src))

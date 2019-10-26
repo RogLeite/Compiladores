@@ -45,7 +45,7 @@ Empilhavel *topo = NULL;
 
 int enterScope()
 {
-  Empilhavel *novo = (Empilhavel *)malloc(sizeof(Empilhavel));
+  Empilhavel *novo = (Empilhavel *)mymalloc(sizeof(Empilhavel));
   if (novo == NULL) {
     return -1;
   }
@@ -82,12 +82,12 @@ int newId(char *name, Node *node)
     return -1;
   }
 
-  novo = (Empilhavel*)malloc(sizeof(Empilhavel));
+  novo = (Empilhavel*)mymalloc(sizeof(Empilhavel));
   if (novo == NULL) return -1;
 
   novo->tag = VAR;
 
-  novo->val.pair.id = (char*)malloc(sizeof(char)*(strlen(name)+1));
+  novo->val.pair.id = (char*)mymalloc(sizeof(char)*(strlen(name)+1));
   if (novo->val.pair.id == NULL) return -1;
 
   strcpy(novo->val.pair.id, name);
