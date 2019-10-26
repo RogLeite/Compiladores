@@ -475,8 +475,6 @@ int stitchTree(Node *tree)
 
 Node *typeTree(Node *tree, Info *info)
 {
-  Info *newInfo;
-  Node *newType, *type1, *type2;
   if(tree==NULL) return NULL;
 
   switch (tree->tag) {
@@ -499,13 +497,18 @@ Node *typeTree(Node *tree, Info *info)
       return getType(tree);
       break;
     case SIMPLEVAR :
+    {
+      Node *newType;
       //typeTree(getNextNode(tree), info);
       newType = getType(tree->reference);
       //printf("Typing: SIMPLEVAR (%s) type:", getVarId(tree));printType(stdout, newType);printf("\n");
       setType(tree, newType);
       return getType(tree);
       break;
+    }
     case ARRAYVAR :
+    {
+      Node *type1, *type2;
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
       // printf("type1:");printType(stdout, type1);
@@ -530,7 +533,10 @@ Node *typeTree(Node *tree, Info *info)
       setType(tree, getValueNode(type1));
       return getType(tree);
       break;
+    }
     case OPERATION_UNARIA :
+    {
+      Node *type1;
       type1 = typeTree(getSecondNode(tree), info);
       switch (ignoreWrapper(getValueNode(tree))->content.op) {
         case NOT:
@@ -564,7 +570,10 @@ Node *typeTree(Node *tree, Info *info)
           break;
       }
       break;
+    }
     case OPERATION_BINARIA :
+    {
+      Node *type1, *type2;
       type1 = typeTree(getSecondNode(tree), info);
       type2 = typeTree(getThirdNode(tree), info);
       switch (ignoreWrapper(getValueNode(tree))->content.op)
@@ -709,7 +718,10 @@ Node *typeTree(Node *tree, Info *info)
           break;
       }
       break;
+    }
     case NEW :
+    {
+      Node *type1, *type2;
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
       type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
@@ -725,13 +737,18 @@ Node *typeTree(Node *tree, Info *info)
       setType(tree, mkArrayTypeNode(type1));
       //typeTree(getNextNode(tree), info);
       return getType(tree);
+      break;
+    }
     case CAST :
-      type1 = typeTree(getValueNode(tree), info);
+    {
+      Node *type2;
+      typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
       setType(tree, type2);
       //typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
+    }
     // case PRINT :
     //   type1 = typeTree(getValueNode(tree), info);
     //   setType(tree, NULL);
@@ -741,6 +758,8 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getThirdNode(tree), info);
     case IF :
     case WHILE :
+    {
+      Node *type1;
       typeTree(getSecondNode(tree), info);
       type1 = typeTree(getValueNode(tree), info);
       if(!isBoolType(type1))
@@ -755,7 +774,10 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getNextNode(tree), info);
       return getType(NULL);
       break;
+    }
     case ASSIGN :
+    {
+      Node *type1, *type2;
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
       type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
@@ -769,7 +791,11 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getNextNode(tree), info);
       return getType(NULL);
       break;
+    }
     case FUNCDEF :
+    {
+      Info *newInfo;
+      Node *type1;
       typeTree(getSecondNode(tree), info);//Parametros
       type1 = typeTree(getThirdNode(tree), info); //Tipo
 
@@ -781,7 +807,10 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
+    }
     case RET :
+    {
+      Node *type1;
       type1 = typeTree(getValueNode(tree), info);
       if(!cmpType(type1, info->funcRetType))
       {
@@ -794,10 +823,13 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
+    }
     // case PARAM :
     // case VARDEC :
     //   break;
     case CALL :
+    {
+      Node *newType;
       typeTree(getSecondNode(tree), info);
       newType = getType(tree->reference);
       if(!cmpParamsTypes(getSecondNode(tree->reference), getSecondNode(tree)))
@@ -809,18 +841,24 @@ Node *typeTree(Node *tree, Info *info)
       typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
+    }
     case WRAPPER :
+    {
+      Node *newType;
       newType = typeTree(getValueNode(tree), info);
       setType(tree, newType);
       typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
+    }
     default :
-      newType = typeTree(getValueNode(tree), info);
+    {
+      typeTree(getValueNode(tree), info);
       setType(tree, NULL);
       typeTree(getNextNode(tree), info);
       return getType(tree);
       break;
+    }
   }
 
   return 0;
