@@ -16,7 +16,7 @@ Empilhavel *pop();
 typedef enum stack_tag
 {
   SCOPE = 0,
-  VAR
+  IDENTIFIER
 } StackTag;
 
 typedef struct id_node_pair
@@ -82,7 +82,7 @@ int newId(char *name, Node *node)
 
   novo = (Empilhavel*)mymalloc(sizeof(Empilhavel));
 
-  novo->tag = VAR;
+  novo->tag = IDENTIFIER;
 
   novo->val.pair.id = (char*)mymalloc(sizeof(char)*(strlen(name)+1));
 
@@ -98,7 +98,7 @@ Node *getId(char *id)
   //printf("Para->id = %s ", id);
   for(Empilhavel *curr=topo;curr!=NULL;curr = curr->next)
   {
-    if(curr->tag==VAR && strcmp(id, curr->val.pair.id)==0)
+    if(curr->tag==IDENTIFIER && strcmp(id, curr->val.pair.id)==0)
     {
       //printf("Encontrou o nó %p\n", curr->val.pair.node);
       return curr->val.pair.node;
@@ -113,7 +113,7 @@ void push(Empilhavel *bloco)
   if(scopeCounter == 0)
     enterScope();
   bloco->next = topo;
-  //printf("Pushed %s: %p on top of %p\n", (bloco->tag?"VAR":"SCOPE"), bloco, topo);
+  //printf("Pushed %s: %p on top of %p\n", (bloco->tag?"IDENTIFIER":"SCOPE"), bloco, topo);
   topo = bloco;
 }
 
@@ -123,7 +123,7 @@ Empilhavel *pop()
   if(topo==NULL)
     return NULL;
   topo = no->next;
-  //printf("Popped %s: %p\n",(no->tag?"VAR":"SCOPE"), no);
+  //printf("Popped %s: %p\n",(no->tag?"IDENTIFIER":"SCOPE"), no);
   return no;
 }
 
