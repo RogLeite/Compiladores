@@ -1,8 +1,9 @@
 
 .PHONY := all clean
 
-TEMPFILE=tmp
-SRCPATH=src
+TMPPATH = tmp
+
+SRCPATH = src
 
 COMPILER = gcc
 LINKER_FLAGS = -lfl
@@ -25,6 +26,8 @@ LEXIC = ${SRCPATH}/monga_lexic.y
 TMP_GRAMMATIC = ${TMPPATH}/tmp_grammatic.c
 TMP_LEXIC = ${TMPPATH}/tmp_lexic.c
 
+C_FILES = ${SRC} ${TMP_GRAMMATIC} ${TMP_LEXIC} ${SRCPATH}/ast.c ${SRCPATH}/var_table.c
+
 all: monga_compiler
 
 monga_compiler: TMP_GRAMMATIC TMP_LEXIC
@@ -32,10 +35,12 @@ monga_compiler: TMP_GRAMMATIC TMP_LEXIC
 
 TMP_GRAMMATIC:
 	@echo "Compilando gramática..."
+	yacc --output=${TMP_GRAMMATIC} --defines=${TMP_GRAMMAR_HEADER} ${GRAMMAR}
 
 TMP_LEXIC:
 	@echo "Compilando léxico..."
 
 clean:
-	@echo "Limpando..."
-	rm tmp/file-*.txt
+	@echo "Limpando"
+	rm ${TMP_GRAMMATIC}
+  #rm ${TMP_LEXIC}
