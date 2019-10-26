@@ -83,3 +83,20 @@ Obs.: Recomendo redirecionar o output para um arquivo de tua escolha, para melho
 $ cd scripts/
 $ ./view_tokens.sh >../tmp/tokens.txt
 ```
+
+#Monga
+----------------
+ - Atribuição à variáveis aceita as seguintes combinações de tipos:
+ ```
+ bool = bool;
+ [tipo] = [tipo] #Com tipo==tipo
+ float = float;
+ float = int;
+ float = char;
+ int = int;
+ int = float;
+ int = char;
+ char = char;
+ char = float;
+ char = int;
+ ```

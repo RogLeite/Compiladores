@@ -33,8 +33,10 @@ int isFloatType(Node *type);
 int isBoolType(Node *type);
 int isArrayType(Node *type);
 Node *promoteIfIsChar(Node **node_ptr);
+Node *promoteToChar(Node **node_ptr);
 Node *promoteToInt(Node **node_ptr);
 Node *promoteToFloat(Node **node_ptr);
+int assignmentRule(Node **assignNodePtr, Node **expNodePtr);
 int cmpType(Node *type1, Node *type2);
 int cmpParamsTypes(Node *dec, Node *call);
 void printType(Node *node);
@@ -777,13 +779,7 @@ Node *typeTree(Node *tree, Info *info)
     case ASSIGN :
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
-      type2 = promoteIfIsChar(SECOND_POINTER_ADDRESS);
-      // if( isNumericType(type1) && isNumericType(type2) )
-      // {
-      //   assignementPromotion();
-      // }
-      // else
-      if (!cmpType(type1, type2))
+      if(!assignmentRule(VALUE_POINTER_ADDRESS, SECOND_POINTER_ADDRESS))
       {
          printf("Tipagem: Atribuição ilegal de tipo");printType(type2);
          printf("para variável de tipo");printType(type1);
@@ -994,17 +990,38 @@ Node *promoteIfIsChar(Node **node_ptr)
   return getType(*node_ptr);
 }
 
+Node *promoteToChar(Node **node_ptr)
+{
+  Node *exp_node = *node_ptr;
+  //(*node_ptr)é o ponteiro para nó que trabalho normalmente
+  if(node_ptr!=NULL&&(*node_ptr)!=NULL&&!isCharType(getType(*node_ptr)))
+  {
+    if(VERBOSE_CASTING==1)
+    {
+      printf("Tipagem:");
+      printType(getType(*node_ptr));
+      printf("promovido para char\n");
+    }
+    (*node_ptr) = mkBiNode(CAST, exp_node, mkCharTypeNode());
+    setType((*node_ptr), mkCharTypeNode());
+  }
+  return getType(*node_ptr);
+}
+
 Node *promoteToInt(Node **node_ptr)
 {
   Node *exp_node = *node_ptr;
   //(*node_ptr)é o ponteiro para nó que trabalho normalmente
   if(node_ptr!=NULL&&(*node_ptr)!=NULL&&!isIntType(getType(*node_ptr)))
   {
+    if(VERBOSE_CASTING==1)
+    {
       printf("Tipagem:");
       printType(getType(*node_ptr));
       printf("promovido para int\n");
-      (*node_ptr) = mkBiNode(CAST, exp_node, mkIntTypeNode());
-      setType((*node_ptr), mkIntTypeNode());
+    }
+    (*node_ptr) = mkBiNode(CAST, exp_node, mkIntTypeNode());
+    setType((*node_ptr), mkIntTypeNode());
   }
   return getType(*node_ptr);
 }
@@ -1015,18 +1032,50 @@ Node *promoteToFloat(Node **node_ptr)
   //(*node_ptr)é o ponteiro para nó que trabalho normalmente
   if(node_ptr!=NULL&&(*node_ptr)!=NULL&&!isFloatType(getType(*node_ptr)))
   {
-      if(VERBOSE_CASTING==1)
-      {
-        printf("Tipagem:");
-        printType(getType(*node_ptr));
-        printf("promovido para float\n");
-        (*node_ptr) = mkBiNode(CAST, exp_node, mkFloatTypeNode());
-        setType((*node_ptr), mkFloatTypeNode());
-      }
-      //Promover, tem que inserir um cast na árvore
+    if(VERBOSE_CASTING==1)
+    {
+      printf("Tipagem:");
+      printType(getType(*node_ptr));
+      printf("promovido para float\n");
+    }
+
+    (*node_ptr) = mkBiNode(CAST, exp_node, mkFloatTypeNode());
+    setType((*node_ptr), mkFloatTypeNode());
   }
   return getType(*node_ptr);
 }
+
+int assignmentRule(Node **assignNodePtr, Node **expNodePtr)
+{
+  if( assignNodePtr!=NULL && (*assignNodePtr)!=NULL
+   && expNodePtr!=NULL && (*expNodePtr)!=NULL)
+  {
+    Node *assignType = getType(*assignNodePtr);
+    Node *expType = getType(*expNodePtr);
+    if(cmpType(assignType, expType))
+    {
+      return 1;
+    }
+    else if( isNumericType(assignType) && isNumericType(expType) )
+    {
+      if(isFloatType(assignType))
+      {
+        promoteToFloat(expNodePtr);
+      }
+      else if(isIntType(assignType))
+      {
+        promoteToInt(expNodePtr);
+      }
+      else if(isCharType(assignType))
+      {
+        promoteToChar(expNodePtr);
+      }
+      return 1;
+    }
+  }
+  return 0;
+}
+
 int cmpType(Node *type1, Node *type2)
 {
   if(type1==NULL && type2==NULL)
