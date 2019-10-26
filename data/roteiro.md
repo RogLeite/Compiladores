@@ -48,6 +48,10 @@ Atualmente, o compilador consiste nos seguintes arquivos:
 
 #####Parte 7: Costura da Árvore
 -------------------
+ - Um grande switch
+ - Em BLOCK e FUNCDEF entra em escopo, costura a sub-árvore e sai do escopo.
+ - Em PARAM, VARDEC e FUNCDEF crio um novo Id n tabela.
+ - Em CALL e SIMPLEVAR busco o Id na tabela.
 
 #####Parte 8: Tipagem da árvore
 -------------------
