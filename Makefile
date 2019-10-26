@@ -19,8 +19,8 @@ INCLUDES = -I${SRCPATH}
 #Faltam os defines
 #DEFINES = -D${1}
 
-OUT_NAME = monga_compiler
-COMPILER_OUTPUT = -o ${OUT_NAME}
+BIN_NAME = monga_compiler
+COMPILER_OUTPUT = -o ${BIN_NAME}
 
 
 SRC = ${SRCPATH}/tree_stitcher.c
@@ -38,19 +38,23 @@ C_FILES = ${SRC} ${TMP_GRAMMATIC} ${TMP_LEXIC} ${SRCPATH}/ast.c ${SRCPATH}/var_t
 all: monga_compiler
 
 monga_compiler: TMP_GRAMMATIC TMP_LEXIC
-	@echo "Compilando compilador..."
-	gcc ${WARNING_FLAGS} ${INCLUDES}  ${C_FILES} ${COMPILER_OUTPUT} ${LINKER_FLAGS}
+	@echo "Compilando ${BIN_NAME}..."
+	@gcc ${WARNING_FLAGS} ${INCLUDES}  ${C_FILES} ${COMPILER_OUTPUT} ${LINKER_FLAGS}
+	@echo
 
 TMP_GRAMMATIC:
 	@echo "Compilando gramática..."
-	yacc --output=${TMP_GRAMMATIC} --defines=${TMP_GRAMMAR_HEADER} ${GRAMMAR}
+	@yacc --output=${TMP_GRAMMATIC} --defines=${TMP_GRAMMAR_HEADER} ${GRAMMAR}
+	@echo
 
 TMP_LEXIC:
 	@echo "Compilando léxico..."
-	flex --outfile=${TMP_LEXIC} --header-file=${TMP_LEXIC_HEADER} ${LEXIC} ${TMP_GRAMMAR_HEADER}
+	@flex --outfile=${TMP_LEXIC} --header-file=${TMP_LEXIC_HEADER} ${LEXIC} ${TMP_GRAMMAR_HEADER}
+	@echo
 
 clean:
 	@echo "Limpando"
 	rm ${TMP_GRAMMATIC}
 	rm ${TMP_LEXIC}
-	rm ${OUT_NAME}
+	rm ${BIN_NAME}
+	@echo
