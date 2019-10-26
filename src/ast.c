@@ -23,6 +23,7 @@ Node *getFourthNode(Node *curr);
 Node *getNextNode(Node *curr);
 void setType(Node *node, Node *type);
 Node *getType(Node *node);
+int isNumericType(Node *type);
 int isIntType(Node *type);
 int isCharType(Node *type);
 int isFloatType(Node *type);
@@ -561,7 +562,7 @@ Node *typeTree(Node *tree, Info *info)
           break;
         case NEGATIVE:
           type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
-          if(!isIntType(type1) && !isFloatType(type1))
+          if(!isNumericType(type1))
           {
             printf("Tipagem: Operador - não pode ser usado no tipo");
             printType(type1);
@@ -589,14 +590,14 @@ Node *typeTree(Node *tree, Info *info)
         case DIVIDE :
           type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
           type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
-          if( !isIntType(type1)&&!isFloatType(type1) )
+          if(!isNumericType(type1))
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type1);printf("\n");
             setType(tree, NULL);
             return NULL;
           }
-          if( !isIntType(type2)&&!isFloatType(type2) )
+          if(!isNumericType(type2))
           {
             printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type2);printf("\n");
@@ -629,14 +630,14 @@ Node *typeTree(Node *tree, Info *info)
         case GREATER :
           type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
           type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
-          if( !isIntType(type1)&&!isFloatType(type1) )
+          if(!isNumericType(type1))
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type1);printf("\n");
             setType(tree, NULL);
             return NULL;
           }
-          if( !isIntType(type2)&&!isFloatType(type2) )
+          if(!isNumericType(type2))
           {
             printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type2);printf("\n");
@@ -661,14 +662,14 @@ Node *typeTree(Node *tree, Info *info)
         case NOTEQUAL :
           type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
           type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
-          if( !isIntType(type1)&&!isFloatType(type1)&&!isBoolType(type1) )
+          if( !isNumericType(type1) && !isBoolType(type1) )
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type1);printf("\n");
             setType(tree, NULL);
             return NULL;
           }
-          if( !isIntType(type2)&&!isFloatType(type2)&&!isBoolType(type2) )
+          if( !isNumericType(type2) && !isBoolType(type2) )
           {
             printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
             printType(type2);printf("\n");
@@ -941,31 +942,42 @@ char *expandEscapes(char *src)
   return str;
 }
 
+int isNumericType(Node *type)
+{
+  if(type==NULL)return 0;
+  return (isIntType(type) || isFloatType(type) || isCharType(type))?1:0;
+}
+
 int isIntType(Node *type)
 {
   if(type==NULL)return 0;
   return (type->tag==INTTYPE)?1:0;
 }
+
 int isCharType(Node *type)
 {
   if(type==NULL)return 0;
   return (type->tag==CHARTYPE)?1:0;
 }
+
 int isFloatType(Node *type)
 {
   if(type==NULL)return 0;
   return (type->tag==FLOATTYPE)?1:0;
 }
+
 int isBoolType(Node *type)
 {
   if(type==NULL)return 0;
   return (type->tag==BOOLTYPE)?1:0;
 }
+
 int isArrayType(Node *type)
 {
   if(type==NULL)return 0;
   return (type->tag==ARRAYTYPE)?1:0;
 }
+
 Node *promoteIfIsChar(Node **node_ptr)
 {
   Node *exp_node = *node_ptr;

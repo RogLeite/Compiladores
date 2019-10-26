@@ -1,4 +1,5 @@
 main(a:float, b:char)
 {
+  b = -b;
   a = a+b;
 }
