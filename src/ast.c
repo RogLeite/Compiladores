@@ -8,6 +8,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#define VALUE_POINTER_ADDRESS &(tree->content.pair.value)
+#define SECOND_POINTER_ADDRESS &(tree->content.pair.value->content.pair.next)
+#define THIRD_POINTER_ADDRESS &(tree->content.pair.value->content.pair.next->content.pair.next)
 
 char *expandEscapes(char *src);
 void setNextNode(Node *current, Node *next);
@@ -533,7 +536,7 @@ Node *typeTree(Node *tree, Info *info)
         setType(tree, NULL);
         return NULL;
       }
-      type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
+      type2 = promoteIfIsChar(SECOND_POINTER_ADDRESS);
       if(!isIntType(type2))
       {
        printf("Tipagem: Indexação ilegal da variavel %s: Tipo",
@@ -562,7 +565,7 @@ Node *typeTree(Node *tree, Info *info)
           return getType(tree);
           break;
         case NEGATIVE:
-          type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
+          type1 = promoteIfIsChar(SECOND_POINTER_ADDRESS);
           if(!isNumericType(type1))
           {
             printf("Tipagem: Operador - não pode ser usado no tipo");
@@ -589,8 +592,8 @@ Node *typeTree(Node *tree, Info *info)
         case SUBTRACT :
         case MULTIPLY :
         case DIVIDE :
-          type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
-          type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
+          type1 = promoteIfIsChar(SECOND_POINTER_ADDRESS);
+          type2 = promoteIfIsChar(THIRD_POINTER_ADDRESS);
           if(!isNumericType(type1))
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
@@ -618,9 +621,9 @@ Node *typeTree(Node *tree, Info *info)
           //Ultimo caso é que um deles é float o outro int
           //basta promover o int para float
           if(isIntType(type1))
-            type1 = promoteToFloat(&(tree->content.pair.value->content.pair.next));
+            type1 = promoteToFloat(SECOND_POINTER_ADDRESS);
           if(isIntType(type2))
-            type2 = promoteToFloat(&(tree->content.pair.value->content.pair.next->content.pair.next));
+            type2 = promoteToFloat(THIRD_POINTER_ADDRESS);
           setType(tree, type1);
           return getType(tree);
           break;
@@ -629,8 +632,8 @@ Node *typeTree(Node *tree, Info *info)
         case GREATEROREQUAL :
         case LESS :
         case GREATER :
-          type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
-          type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
+          type1 = promoteIfIsChar(SECOND_POINTER_ADDRESS);
+          type2 = promoteIfIsChar(THIRD_POINTER_ADDRESS);
           if(!isNumericType(type1))
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
@@ -653,16 +656,16 @@ Node *typeTree(Node *tree, Info *info)
           //Ultimo caso é que um deles é float o outro int
           //basta promover o int para float
           if(isIntType(type1))
-            type1 = promoteToFloat(&(tree->content.pair.value->content.pair.next));
+            type1 = promoteToFloat(SECOND_POINTER_ADDRESS);
           if(isIntType(type2))
-            type2 = promoteToFloat(&(tree->content.pair.value->content.pair.next->content.pair.next));
+            type2 = promoteToFloat(THIRD_POINTER_ADDRESS);
           setType(tree, mkBoolTypeNode());
           return getType(tree);
           break;
         case EQUAL :
         case NOTEQUAL :
-          type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
-          type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
+          type1 = promoteIfIsChar(SECOND_POINTER_ADDRESS);
+          type2 = promoteIfIsChar(THIRD_POINTER_ADDRESS);
           if( !isNumericType(type1) && !isBoolType(type1) )
           {
             printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
@@ -684,13 +687,13 @@ Node *typeTree(Node *tree, Info *info)
           }
           if(isFloatType(type1)&&isIntType(type2))
           {
-            type2 = promoteToFloat(&(tree->content.pair.value->content.pair.next->content.pair.next));
+            type2 = promoteToFloat(THIRD_POINTER_ADDRESS);
             setType(tree, mkBoolTypeNode());
             return getType(tree);
           }
           if(isIntType(type1)&&isFloatType(type2))
           {
-            type1 = promoteToFloat(&(tree->content.pair.value->content.pair.next));
+            type1 = promoteToFloat(SECOND_POINTER_ADDRESS);
             setType(tree, mkBoolTypeNode());
             return getType(tree);
           }
@@ -728,7 +731,7 @@ Node *typeTree(Node *tree, Info *info)
     case NEW :
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
-      type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
+      type2 = promoteIfIsChar(SECOND_POINTER_ADDRESS);
       if(!isIntType(type2))
       {
        printf("Tipagem: Construção ilegal de array: Tipo");
@@ -774,8 +777,13 @@ Node *typeTree(Node *tree, Info *info)
     case ASSIGN :
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
-      type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
-      if(!cmpType(type1, type2))
+      type2 = promoteIfIsChar(SECOND_POINTER_ADDRESS);
+      // if( isNumericType(type1) && isNumericType(type2) )
+      // {
+      //   assignementPromotion();
+      // }
+      // else
+      if (!cmpType(type1, type2))
       {
          printf("Tipagem: Atribuição ilegal de tipo");printType(type2);
          printf("para variável de tipo");printType(type1);
