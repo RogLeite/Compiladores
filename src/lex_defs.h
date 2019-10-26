@@ -466,7 +466,7 @@ extern int yylex (void);
 #undef yyTABLES_NAME
 #endif
 
-#line 51 "src/monga_lexic.l"
+#line 52 "src/monga_lexic.l"
 
 
 #line 473 "src/lex_defs.h"

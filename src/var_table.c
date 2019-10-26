@@ -4,6 +4,7 @@
 **/
 #include "var_table.h"
 #include "ast.h"
+#include "auxiliar.h"
 #include <stdlib.h>
 //#include <stdio.h>
 #include <string.h>

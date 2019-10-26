@@ -33,7 +33,7 @@ Node *promoteIfIsChar(Node **node_ptr);
 Node *promoteToFloat(Node **node_ptr);
 int cmpType(Node *type1, Node *type2);
 int cmpParamsTypes(Node *dec, Node *call);
-void printType(Node *node);
+void printType(FILE *out, Node *node);
 Node *global_tree = NULL;
 
 char *tag_name[] = {
@@ -293,7 +293,7 @@ void printTree(Node *n, int identation)
           if(getType(n)!=NULL)
           {
             printf("| Tipo:");
-            printType(n->type);
+            printType(stdout, n->type);
           }
           if(n->content.pair.next != NULL)
           {
@@ -305,7 +305,7 @@ void printTree(Node *n, int identation)
           if(getType(n)!=NULL)
           {
             printf("| Tipo:");
-            printType(n->type);
+            printType(stdout, n->type);
           }
           break;
         case INTEGER :
@@ -313,7 +313,7 @@ void printTree(Node *n, int identation)
           if(getType(n)!=NULL)
           {
             printf("| Tipo:");
-            printType(n->type);
+            printType(stdout, n->type);
           }
           break;
         case CHARACTER :
@@ -324,7 +324,7 @@ void printTree(Node *n, int identation)
           if(getType(n)!=NULL)
           {
             printf("| Tipo:");
-            printType(n->type);
+            printType(stdout, n->type);
           }
           break;
         case ID :
@@ -337,7 +337,7 @@ void printTree(Node *n, int identation)
           if(getType(n)!=NULL)
           {
             printf("| Tipo:");
-            printType(n->type);
+            printType(stdout, n->type);
           }
           break;
         //UniNode
@@ -347,7 +347,7 @@ void printTree(Node *n, int identation)
           if(getType(n)!=NULL)
           {
             printf("| Tipo:");
-            printType(getType(n));
+            printType(stdout, getType(n));
           }
           printTree(n->content.pair.value, identation+1);
           if(n->content.pair.next != NULL)
@@ -417,7 +417,7 @@ int stitchTree(Node *tree)
 
       if(leaveScope()==-1)
       {
-        printf("Erro, não há escopo para sair\n");
+        printerr("Erro, não há escopo para sair\n");
         return -1;
       }
 
@@ -429,7 +429,7 @@ int stitchTree(Node *tree)
       idNode = getId(getVarId(tree));
       if(idNode == NULL)
       {
-        printf("Não foi encontrado um id\n");
+        printerr("Não foi encontrado um id\n");
         return -1;
       }
       tree->reference = idNode;
@@ -443,11 +443,11 @@ int stitchTree(Node *tree)
       idNode = getId(getVarId(tree));
       if(idNode == NULL)
       {
-        printf("Não foi encontrado um id\n");
+        printerr("Não foi encontrado um id\n");
         return -1;
       }
       tree->reference = idNode;
-      //printf("Stitching: SIMPLEVAR (%s) type:", getVarId(tree));printType(getType(idNode));printf("\n");
+      //printf("Stitching: SIMPLEVAR (%s) type:", getVarId(tree));printType(stdout, getType(idNode));printf("\n");
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
@@ -460,7 +460,7 @@ int stitchTree(Node *tree)
         if(stitchTree(getValueNode(tree))==-1) return -1;
       if(leaveScope()==-1)
       {
-        printf("Erro, não há escopo para sair\n");
+        printerr("Erro, não há escopo para sair\n");
         return -1;
       }
 
@@ -471,7 +471,7 @@ int stitchTree(Node *tree)
     case PARAM :
     case VARDEC :
       if(newId(getVarId(tree), tree)==-1)return -1;
-      //printf("Stitching: %s (%s) type:", tag_name[tree->tag], getVarId(tree));printType(getVardecType(tree));printf("\n");
+      //printf("Stitching: %s (%s) type:", tag_name[tree->tag], getVarId(tree));printType(stdout, getVardecType(tree));printf("\n");
       setType(tree, getVardecType(tree));
       if(getValueNode(tree) != NULL)
         if(stitchTree(getValueNode(tree))==-1) return -1;
@@ -516,18 +516,18 @@ Node *typeTree(Node *tree, Info *info)
     case SIMPLEVAR :
       //typeTree(getNextNode(tree), info);
       newType = getType(tree->reference);
-      //printf("Typing: SIMPLEVAR (%s) type:", getVarId(tree));printType(newType);printf("\n");
+      //printf("Typing: SIMPLEVAR (%s) type:", getVarId(tree));printType(stdout, newType);printf("\n");
       setType(tree, newType);
       return getType(tree);
       break;
     case ARRAYVAR :
       type1 = typeTree(getValueNode(tree), info);
       type2 = typeTree(getSecondNode(tree), info);
-      // printf("type1:");printType(type1);
-      // printf("type2:");printType(type2);
+      // printf("type1:");printType(stdout, type1);
+      // printf("type2:");printType(stdout, type2);
       if(!isArrayType(type1))
       {
-        printf("Tipagem: Indexação ilegal: %s não é um array\n",
+        printerr("Tipagem: Indexação ilegal: %s não é um array\n",
                 getVarId(getValueNode(tree)->reference));
         setType(tree, NULL);
         return NULL;
@@ -535,10 +535,10 @@ Node *typeTree(Node *tree, Info *info)
       type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
       if(!isIntType(type2))
       {
-       printf("Tipagem: Indexação ilegal da variavel %s: Tipo",
+       printerr("Tipagem: Indexação ilegal da variavel %s: Tipo",
                 getVarId(getValueNode(tree)->reference));
-       printType(type2);
-       printf("não pode indexar um array\n");
+       printType(stderr,  type2);
+       printerr("não pode indexar um array\n");
        setType(tree, NULL);
        return NULL;
       }
@@ -551,9 +551,9 @@ Node *typeTree(Node *tree, Info *info)
         case NOT:
           if(!isBoolType(type1))
           {
-            printf("Tipagem: Operador ! não pode ser usado no tipo");
-            printType(type1);
-            printf("\n");
+            printerr("Tipagem: Operador ! não pode ser usado no tipo");
+            printType(stderr,  type1);
+            printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
@@ -564,9 +564,9 @@ Node *typeTree(Node *tree, Info *info)
           type1 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
           if(!isIntType(type1) && !isFloatType(type1))
           {
-            printf("Tipagem: Operador - não pode ser usado no tipo");
-            printType(type1);
-            printf("\n");
+            printerr("Tipagem: Operador - não pode ser usado no tipo");
+            printType(stderr,  type1);
+            printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
@@ -592,15 +592,15 @@ Node *typeTree(Node *tree, Info *info)
           type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
           if( !isIntType(type1)&&!isFloatType(type1) )
           {
-            printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-            printType(type1);printf("\n");
+            printerr("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(stderr,  type1);printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
           if( !isIntType(type2)&&!isFloatType(type2) )
           {
-            printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-            printType(type2);printf("\n");
+            printerr("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(stderr,  type2);printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
@@ -632,15 +632,15 @@ Node *typeTree(Node *tree, Info *info)
           type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
           if( !isIntType(type1)&&!isFloatType(type1) )
           {
-            printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-            printType(type1);printf("\n");
+            printerr("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(stderr,  type1);printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
           if( !isIntType(type2)&&!isFloatType(type2) )
           {
-            printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-            printType(type2);printf("\n");
+            printerr("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(stderr,  type2);printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
@@ -664,15 +664,15 @@ Node *typeTree(Node *tree, Info *info)
           type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next->content.pair.next));
           if( !isIntType(type1)&&!isFloatType(type1)&&!isBoolType(type1) )
           {
-            printf("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-            printType(type1);printf("\n");
+            printerr("Tipagem: operador %s não pode ser usado com membro esquerdo do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(stderr,  type1);printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
           if( !isIntType(type2)&&!isFloatType(type2)&&!isBoolType(type2) )
           {
-            printf("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-            printType(type2);printf("\n");
+            printerr("Tipagem: operador %s não pode ser usado com membro direito do tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(stderr,  type2);printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
@@ -693,8 +693,8 @@ Node *typeTree(Node *tree, Info *info)
             setType(tree, mkBoolTypeNode());
             return getType(tree);
           }
-          printf("Tipagem: operador %s não pode ser usado com a combinação de tipos:", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-          printType(type1);printf("e");printType(type2);printf("\n");
+          printerr("Tipagem: operador %s não pode ser usado com a combinação de tipos:", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+          printType(stderr,  type1);printerr("e");printType(stderr,  type2);printerr("\n");
           setType(tree, NULL);
           return getType(tree);
           break;
@@ -702,15 +702,15 @@ Node *typeTree(Node *tree, Info *info)
         case AND :
           if( !isBoolType(type1) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-            printType(type1);printf("\n");
+            printerr("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(stderr,  type1);printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
           if( !isBoolType(type2) )
           {
-            printf("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
-            printType(type2);printf("\n");
+            printerr("Tipagem: operador %s não pode ser usado com o tipo", op_symbol[ignoreWrapper(getValueNode(tree))->content.op]);
+            printType(stderr,  type2);printerr("\n");
             setType(tree, NULL);
             return NULL;
           }
@@ -730,9 +730,9 @@ Node *typeTree(Node *tree, Info *info)
       type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
       if(!isIntType(type2))
       {
-       printf("Tipagem: Construção ilegal de array: Tipo");
-       printType(type2);
-       printf("não descreve um inteiro\n");
+       printerr("Tipagem: Construção ilegal de array: Tipo");
+       printType(stderr,  type2);
+       printerr("não descreve um inteiro\n");
        setType(tree, NULL);
        //typeTree(getNextNode(tree), info);
        return getType(NULL);
@@ -760,8 +760,8 @@ Node *typeTree(Node *tree, Info *info)
       type1 = typeTree(getValueNode(tree), info);
       if(!isBoolType(type1))
       {
-         printf("Tipagem: Condição de um %s espera bool, é:", tag_name[tree->tag]);
-         printType(type1);printf("\n");
+         printerr("Tipagem: Condição de um %s espera bool, é:", tag_name[tree->tag]);
+         printType(stderr,  type1);printerr("\n");
          setType(tree, NULL);
          typeTree(getNextNode(tree), info);
          return getType(NULL);
@@ -776,9 +776,9 @@ Node *typeTree(Node *tree, Info *info)
       type2 = promoteIfIsChar(&(tree->content.pair.value->content.pair.next));
       if(!cmpType(type1, type2))
       {
-         printf("Tipagem: Atribuição ilegal de tipo");printType(type2);
-         printf("para variável de tipo");printType(type1);
-         printf("\n");
+         printerr("Tipagem: Atribuição ilegal de tipo");printType(stderr,  type2);
+         printerr("para variável de tipo");printType(stderr,  type1);
+         printerr("\n");
       }
       setType(tree, NULL);
       typeTree(getNextNode(tree), info);
@@ -800,9 +800,9 @@ Node *typeTree(Node *tree, Info *info)
       type1 = typeTree(getValueNode(tree), info);
       if(!cmpType(type1, info->funcRetType))
       {
-        printf("Tipagem: Tipo do retorno (");printType(type1);
-        printf(") incompatível com tipo da função (");printType(info->funcRetType);
-        printf(")\n");
+        printerr("Tipagem: Tipo do retorno (");printType(stderr,  type1);
+        printerr(") incompatível com tipo da função (");printType(stderr,  info->funcRetType);
+        printerr(")\n");
       }
 
       setType(tree, NULL);
@@ -817,7 +817,7 @@ Node *typeTree(Node *tree, Info *info)
       newType = getType(tree->reference);
       if(!cmpParamsTypes(getSecondNode(tree->reference), getSecondNode(tree)))
       {
-        printf("Tipagem: Tipo dos parâmetros da chamada à função %s não casam com os de sua declaração\n",
+        printerr("Tipagem: Tipo dos parâmetros da chamada à função %s não casam com os de sua declaração\n",
                 getFuncdefId(tree->reference));
       }
       setType(tree, newType);
@@ -989,7 +989,7 @@ Node *promoteToFloat(Node **node_ptr)
       if(VERBOSE_CASTING==1)
       {
         printf("Tipagem:");
-        printType(getType(*node_ptr));
+        printType(stdout,  getType(*node_ptr));
         printf("promovido para float\n");
         (*node_ptr) = mkBiNode(CAST, exp_node, mkFloatTypeNode());
         setType((*node_ptr), mkFloatTypeNode());
@@ -1025,35 +1025,35 @@ int cmpParamsTypes(Node *dec, Node *call)
   {
     return 0;
   }
-  // printf("getType(dec):");printType(getType(dec));printf("\n");
+  // printf("getType(dec):");printType(stdout,  getType(dec));printf("\n");
   // printf("tag = %s | ", tag_name[call->tag]);
-  // printf("getType(call):");printType(getType(call));printf("\n");
+  // printf("getType(call):");printType(stdout,  getType(call));printf("\n");
   return cmpType(getType(dec), getType(call));
 }
 
-void printType(Node *node) {
+void printType(FILE *out, Node *node) {
   if(node==NULL)
   {
-    printf(" NULL ");
+    fprintf(out," NULL ");
     return;
   }
   switch (node->tag) {
     case INTTYPE:
-      printf(" int ");
+      fprintf(out," int ");
       break;
     case CHARTYPE:
-      printf(" char ");
+      fprintf(out," char ");
       break;
     case FLOATTYPE:
-      printf(" float ");
+      fprintf(out," float ");
       break;
     case BOOLTYPE:
-      printf(" bool ");
+      fprintf(out," bool ");
       break;
     case ARRAYTYPE:
-      printf(" [");
-      printType(getValueNode(node));
-      printf("] ");
+      fprintf(out," [");
+      printType(out, getValueNode(node));
+      fprintf(out,"] ");
     default :
       return;
   }
