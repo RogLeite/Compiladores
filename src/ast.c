@@ -345,7 +345,8 @@ void printNodeType(FILE *out, Node *node)
 }
 Node *ignoreWrapper(Node *node)
 {
-  if(node->tag!=WRAPPER)return node;
+  if(node == NULL) return NULL;
+  if(node->tag!=WRAPPER) return node;
   return getValueNode(node);
 }
 
