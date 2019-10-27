@@ -11,6 +11,11 @@ $ make
 $ ./monga_compiler < teu_programa_em_monga
 ```
 
+Se quiser usar uma `main()` de um arquivo específico `file.c` use:
+```
+$ make SRC=file.c
+```
+
  - Executar os testes léxicos(DEPRECADO COM A INSERÇÃO DO TK_CHARACTER):
 ```
 $ ./lexic_tests.sh
