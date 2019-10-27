@@ -33,7 +33,7 @@ TMP_LEXIC_HEADER = ${SRCPATH}/lex_defs.h
 TMP_GRAMMATIC = ${TMPPATH}/tmp_grammatic.c
 TMP_LEXIC = ${TMPPATH}/tmp_lexic.c
 
-C_FILES = ${SRC} ${TMP_GRAMMATIC} ${TMP_LEXIC} ${SRCPATH}/ast.c ${SRCPATH}/var_table.c
+C_FILES = ${SRC} ${TMP_GRAMMATIC} ${TMP_LEXIC} ${SRCPATH}/ast.c ${SRCPATH}/var_table.c ${SRCPATH}/code_generator.c
 
 all: monga_compiler
 
