@@ -19,8 +19,8 @@ Node *getVardecType(Node *node);
 char *getFuncdefId(Node *current);
 Node *getFuncdefType(Node *node);
 Node *ignoreWrapper(Node *node);
-Node *getValueNode(Node *curr);
-Node *getSecondNode(Node *curr);
+
+
 Node *getThirdNode(Node *curr);
 Node *getFourthNode(Node *curr);
 Node *getNextNode(Node *curr);

@@ -116,6 +116,10 @@ Node *mkFalseValueNode();
 void setGlobalTree(Node *);
 Node *getGlobalTree();
 
+Node *getValueNode(Node *curr);
+Node *getSecondNode(Node *curr);
+
+
 void printTree(Node *tree, int identation);
 
 /*Retorna -1 se houve erro de costura*/
