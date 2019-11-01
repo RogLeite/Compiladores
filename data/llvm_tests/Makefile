@@ -6,7 +6,7 @@ all: ${FILENAME}
 
 ${FILENAME}: ${FILENAME}.s
 	@echo "Compiling .s..."
-	@gcc ${FILENAME}.s -o ${FILENAME}
+	@gcc -fsanitize=address ${FILENAME}.s -o ${FILENAME}
 
 ${FILENAME}.s: ${FILENAME}.ll
 	@echo "Compiling .ll..."

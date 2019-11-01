@@ -1,5 +1,5 @@
 #include <stdio.h>
 int main()
 {
-	printf("oi\n");
+	printf("1");
 }
