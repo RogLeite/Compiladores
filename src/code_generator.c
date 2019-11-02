@@ -8,6 +8,7 @@
 
 
 void codeGlobal(FILE *outfile);
+void codeGlobalId(FILE *outfile, char *id);
 void codeDefinitions(FILE *outfile, Node *tree);
 void codeFuncdef(FILE *outfile, Node *tree);
 
@@ -47,12 +48,19 @@ void codeGlobal(FILE *outfile)
   }
   fprintf(outfile, "\n");
 }
+
+void codeGlobalId(FILE *outfile, char *id)
+{
+  fprintf(outfile, "@%s", id);
+}
+
 void codeDefinitions(FILE *outfile, Node *tree)
 {
   fprintf(outfile, "codeDefinitions() não implementado\n");
 }
+
 void codeFuncdef(FILE *outfile, Node *tree)
 {
-
+  codeGlobalId(outfile, getNodeId(tree));
   fprintf(outfile, "codeFuncdef() não implementado\n");
 }
