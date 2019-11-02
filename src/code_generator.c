@@ -11,6 +11,7 @@ void codeGlobal(FILE *outfile);
 void codeGlobalId(FILE *outfile, char *id);
 void codeType(FILE *outfile, Node *typeTree);
 void codeDefinitions(FILE *outfile, Node *tree);
+void codeParamDefs(FILE *outfile, Node *tree);
 void codeFuncdef(FILE *outfile, Node *tree);
 
 int temporario = 0;
@@ -63,6 +64,19 @@ void codeType(FILE *outfile, Node *typeTree)
 void codeDefinitions(FILE *outfile, Node *tree)
 {
   fprintf(outfile, ";codeDefinitions() não implementado\n");
+}
+
+void codeParamDefs(FILE *outfile, Node *tree)
+{
+  switch(tree->tag)
+  {
+    case EMPTY:
+      fprintf(outfile, "() ");
+      break;
+    default:
+      fprintf(outfile, ";case %s não implementado em codeParamDefs()\n", tag_name[tree->tag]);
+      break;
+  }
 }
 
 void codeFuncdef(FILE *outfile, Node *tree)
