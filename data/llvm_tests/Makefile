@@ -1,4 +1,4 @@
-.PHONY := all clean
+.PHONY := all clean remake
 SRC = basic
 
 all: ${SRC}
@@ -16,11 +16,17 @@ ${SRC}.ll:
 	@echo "Emiting llvm..."
 	@clang -O0 ${SRC}.c -S -emit-llvm
 
+remake:
+	-@rm -f ${SRC}.s
+	-@rm -f ${SRC}
+	@echo "Compiling from ${SRC}.ll"
+	@llc ${SRC}.ll
+	@clang ${SRC}.s -o ${SRC}
 
 clean:
 	@echo "Removing ${SRC}..."
-	@rm ${SRC}
+	-@rm -f ${SRC}
 	@echo "Removing ${SRC}.s..."
-	@rm ${SRC}.s
+	-@rm -f ${SRC}.s
 	@echo "Removing ${SRC}.ll..."
-	@rm ${SRC}.ll
+	-@rm -f ${SRC}.ll

@@ -60,10 +60,10 @@ program:
 
 clean:
 	@echo "Limpando"
-	rm ${TMP_GRAMMATIC}
-	rm ${TMP_LEXIC}
-	rm ${BIN_NAME}
-	rm ${PROG_NAME}.ll
-	rm ${PROG_NAME}.s
-	rm ${PROG_NAME}
+	-rm -f ${TMP_GRAMMATIC}
+	-rm -f ${TMP_LEXIC}
+	-rm -f ${BIN_NAME}
+	-rm -f ${PROG_NAME}.ll
+	-rm -f ${PROG_NAME}.s
+	-rm -f ${PROG_NAME}
 	@echo
