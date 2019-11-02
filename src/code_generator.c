@@ -15,6 +15,7 @@ void codeParamDefs(FILE *outfile, Node *tree);
 void codeFuncDef(FILE *outfile, Node *tree);
 void codeFuncBody(FILE *outfile, Node *tree);
 void codeInBlock(FILE *outfile, Node *tree);
+void codeCommand(FILE *outfile, Node *tree);
 
 int temporario = 0;
 int newTemporario()
@@ -151,5 +152,20 @@ void codeFuncBody(FILE *outfile, Node *tree)
 
 void codeInBlock(FILE *outfile, Node *tree)
 {
-  fprintf(outfile, ";codeInBlock() não implementado\n");
+  switch (tree->tag) {
+    case EMPTY:
+      fprintf(outfile, "\n");
+      break;
+    case COMMANDS:
+      codeInBlock(outfile, getValueNode(tree));
+      codeCommand(outfile, getSecondNode(tree));
+      break;
+    default:
+      fprintf(outfile, ";case %s não implementado em codeInBlock()\n", tag_name[tree->tag]);
+  }
+}
+
+void codeCommand(FILE *outfile, Node *tree)
+{
+    fprintf(outfile, ";codeCommand() não implementado\n");
 }
