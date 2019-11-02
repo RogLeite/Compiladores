@@ -14,6 +14,7 @@ void codeDefinitions(FILE *outfile, Node *tree);
 void codeParamDefs(FILE *outfile, Node *tree);
 void codeFuncDef(FILE *outfile, Node *tree);
 void codeFuncBody(FILE *outfile, Node *tree);
+void codeInBlock(FILE *outfile, Node *tree);
 
 int temporario = 0;
 int newTemporario()
@@ -139,7 +140,16 @@ void codeFuncDef(FILE *outfile, Node *tree)
 
 void codeFuncBody(FILE *outfile, Node *tree)
 {
-  //Node *block = getFourthNode(tree);
-  fprintf(outfile, "{\n\tret void\n}\n");
-  fprintf(outfile, ";codeFuncBody() não implementado\n");
+  Node *in_block = getValueNode(getFourthNode(tree));
+  fprintf(outfile, "{\n");
+  codeInBlock(outfile, in_block);
+  fprintf(outfile, "\tret ");
+  codeType(outfile, getType(tree));
+  fprintf(outfile, "\n}\n");
+
+}
+
+void codeInBlock(FILE *outfile, Node *tree)
+{
+  fprintf(outfile, ";codeInBlock() não implementado\n");
 }
