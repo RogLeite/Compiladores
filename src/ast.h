@@ -116,6 +116,7 @@ Node *mkFalseValueNode();
 void setGlobalTree(Node *);
 Node *getGlobalTree();
 
+Node *ignoreWrapper(Node *node);
 Node *getValueNode(Node *curr);
 Node *getSecondNode(Node *curr);
 

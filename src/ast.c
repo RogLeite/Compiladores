@@ -18,7 +18,7 @@ char *getVarId(Node *current);
 Node *getVardecType(Node *node);
 char *getFuncdefId(Node *current);
 Node *getFuncdefType(Node *node);
-Node *ignoreWrapper(Node *node);
+
 
 
 Node *getThirdNode(Node *curr);
