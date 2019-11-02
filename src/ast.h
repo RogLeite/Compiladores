@@ -121,6 +121,8 @@ char *getNodeId(Node *current);
 Node *ignoreWrapper(Node *node);
 Node *getValueNode(Node *curr);
 Node *getSecondNode(Node *curr);
+Node *getThirdNode(Node *curr);
+Node *getFourthNode(Node *curr);
 
 Node *getType(Node *node);
 

@@ -21,8 +21,8 @@ Node *getFuncdefType(Node *node);
 
 
 
-Node *getThirdNode(Node *curr);
-Node *getFourthNode(Node *curr);
+
+
 Node *getNextNode(Node *curr);
 void setType(Node *node, Node *type);
 
