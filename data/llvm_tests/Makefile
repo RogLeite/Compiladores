@@ -1,26 +1,26 @@
 .PHONY := all clean
-FILENAME = basic
+SRC = basic
 
-all: ${FILENAME}
+all: ${SRC}
 
 
-${FILENAME}: ${FILENAME}.s
+${SRC}: ${SRC}.s
 	@echo "Compiling .s..."
-	@gcc -fsanitize=address ${FILENAME}.s -o ${FILENAME}
+	@clang ${SRC}.s -o ${SRC}
 
-${FILENAME}.s: ${FILENAME}.ll
+${SRC}.s: ${SRC}.ll
 	@echo "Compiling .ll..."
-	@llc ${FILENAME}.ll
+	@llc ${SRC}.ll
 
-${FILENAME}.ll:
+${SRC}.ll:
 	@echo "Emiting llvm..."
-	@clang ${FILENAME}.c -S -emit-llvm
+	@clang -O0 ${SRC}.c -S -emit-llvm
 
 
 clean:
-	@echo "Removing ${FILENAME}..."
-	@rm ${FILENAME}
-	@echo "Removing ${FILENAME}.s..."
-	@rm ${FILENAME}.s
-	@echo "Removing ${FILENAME}.l..."
-	@rm ${FILENAME}.ll
+	@echo "Removing ${SRC}..."
+	@rm ${SRC}
+	@echo "Removing ${SRC}.s..."
+	@rm ${SRC}.s
+	@echo "Removing ${SRC}.l..."
+	@rm ${SRC}.ll
