@@ -142,6 +142,9 @@ void codeFuncDef(FILE *outfile, Node *tree)
 void codeFuncBody(FILE *outfile, Node *tree)
 {
   Node *in_block = getValueNode(getFourthNode(tree));
+
+  resetTemporario();
+
   fprintf(outfile, "{\n");
   codeInBlock(outfile, in_block);
   fprintf(outfile, "\tret ");
