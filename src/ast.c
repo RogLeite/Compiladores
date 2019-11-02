@@ -14,7 +14,7 @@
 
 char *expandEscapes(char *src);
 void setNextNode(Node *current, Node *next);
-char *getVarId(Node *current);
+
 Node *getVardecType(Node *node);
 char *getFuncdefId(Node *current);
 Node *getFuncdefType(Node *node);
@@ -349,7 +349,7 @@ void printTree(Node *n, int identation)
         //UniNode
         default :
           if(n->reference!=NULL)
-            printf("| Referencia: %s ", getVarId(n->reference));
+            printf("| Referencia: %s ", getNodeId(n->reference));
           if(getType(n)!=NULL)
           {
             printf("| Tipo:");
@@ -432,28 +432,28 @@ int stitchTree(Node *tree)
 
       break;
     case CALL :
-      idNode = getId(getVarId(tree));
+      idNode = getId(getNodeId(tree));
       if(idNode == NULL)
       {
         printf("Não foi encontrado um id\n");
         return -1;
       }
       tree->reference = idNode;
-      //printf("Stitching: CALL (%s) \n", getVarId(tree));
+      //printf("Stitching: CALL (%s) \n", getNodeId(tree));
       if(getValueNode(tree) != NULL)
         if(stitchTree(getValueNode(tree))==-1) return -1;
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
     case SIMPLEVAR :
-      idNode = getId(getVarId(tree));
+      idNode = getId(getNodeId(tree));
       if(idNode == NULL)
       {
         printf("Não foi encontrado um id\n");
         return -1;
       }
       tree->reference = idNode;
-      //printf("Stitching: SIMPLEVAR (%s) type:", getVarId(tree));printType(getType(idNode));printf("\n");
+      //printf("Stitching: SIMPLEVAR (%s) type:", getNodeId(tree));printType(getType(idNode));printf("\n");
       if(getNextNode(tree) != NULL)
         if(stitchTree(getNextNode(tree))==-1) return -1;
       break;
@@ -476,8 +476,8 @@ int stitchTree(Node *tree)
       break;
     case PARAM :
     case VARDEC :
-      if(newId(getVarId(tree), tree)==-1)return -1;
-      //printf("Stitching: %s (%s) type:", tag_name[tree->tag], getVarId(tree));printType(getVardecType(tree));printf("\n");
+      if(newId(getNodeId(tree), tree)==-1)return -1;
+      //printf("Stitching: %s (%s) type:", tag_name[tree->tag], getNodeId(tree));printType(getVardecType(tree));printf("\n");
       setType(tree, getVardecType(tree));
       if(getValueNode(tree) != NULL)
         if(stitchTree(getValueNode(tree))==-1) return -1;
@@ -522,7 +522,7 @@ Node *typeTree(Node *tree, Info *info)
     case SIMPLEVAR :
       //typeTree(getNextNode(tree), info);
       newType = getType(tree->reference);
-      //printf("Typing: SIMPLEVAR (%s) type:", getVarId(tree));printType(newType);printf("\n");
+      //printf("Typing: SIMPLEVAR (%s) type:", getNodeId(tree));printType(newType);printf("\n");
       setType(tree, newType);
       return getType(tree);
       break;
@@ -534,7 +534,7 @@ Node *typeTree(Node *tree, Info *info)
       if(!isArrayType(type1))
       {
         printf("Tipagem: Indexação ilegal: %s não é um array\n",
-                getVarId(getValueNode(tree)->reference));
+                getNodeId(getValueNode(tree)->reference));
         setType(tree, NULL);
         return NULL;
       }
@@ -542,7 +542,7 @@ Node *typeTree(Node *tree, Info *info)
       if(!isIntType(type2))
       {
        printf("Tipagem: Indexação ilegal da variavel %s: Tipo",
-                getVarId(getValueNode(tree)->reference));
+                getNodeId(getValueNode(tree)->reference));
        printType(type2);
        printf("não pode indexar um array\n");
        setType(tree, NULL);
@@ -846,7 +846,7 @@ Node *typeTree(Node *tree, Info *info)
   return 0;
 }
 
-char *getVarId(Node *node)
+char *getNodeId(Node *node)
 {
   Node *idNode;
   if(node->tag != VARDEC
