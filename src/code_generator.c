@@ -20,14 +20,16 @@ int newTemporario()
 {
   return temporario++;
 }
-void printTemporario(int tmp)
+
+void printTemporario(FILE *outfile, int tmp)
 {
-    printf("a%d", tmp);
+    fprintf(outfile, "a%d", tmp);
 }
-int printNewTemporario()
+
+int printNewTemporario(FILE *outfile)
 {
   int novo = newTemporario();
-  printf("a%d", novo);
+  fprintf(outfile, "a%d", novo);
   return novo;
 }
 
