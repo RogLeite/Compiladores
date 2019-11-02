@@ -25,7 +25,7 @@ Node *getThirdNode(Node *curr);
 Node *getFourthNode(Node *curr);
 Node *getNextNode(Node *curr);
 void setType(Node *node, Node *type);
-Node *getType(Node *node);
+
 int isNumericType(Node *type);
 int isIntType(Node *type);
 int isCharType(Node *type);

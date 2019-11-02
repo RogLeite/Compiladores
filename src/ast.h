@@ -122,6 +122,8 @@ Node *ignoreWrapper(Node *node);
 Node *getValueNode(Node *curr);
 Node *getSecondNode(Node *curr);
 
+Node *getType(Node *node);
+
 
 void printTree(Node *tree, int identation);
 
