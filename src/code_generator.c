@@ -44,7 +44,7 @@ void codeGlobal(FILE *outfile)
       }
       break;
     default:
-      fprintf(outfile, "case %s não implementado em codeGlobal()\n", tag_name[tree->tag]);
+      fprintf(outfile, ";case %s não implementado em codeGlobal()\n", tag_name[tree->tag]);
   }
   fprintf(outfile, "\n");
 }
@@ -56,11 +56,11 @@ void codeGlobalId(FILE *outfile, char *id)
 
 void codeDefinitions(FILE *outfile, Node *tree)
 {
-  fprintf(outfile, "codeDefinitions() não implementado\n");
+  fprintf(outfile, ";codeDefinitions() não implementado\n");
 }
 
 void codeFuncdef(FILE *outfile, Node *tree)
 {
   codeGlobalId(outfile, getNodeId(tree));
-  fprintf(outfile, "codeFuncdef() não implementado\n");
+  fprintf(outfile, ";codeFuncdef() não implementado\n");
 }
