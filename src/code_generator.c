@@ -59,7 +59,17 @@ void codeGlobalId(FILE *outfile, char *id)
 
 void codeType(FILE *outfile, Node *typeTree)
 {
-  fprintf(outfile, ";codeType() não implementado\n");
+  if(typeTree==NULL)
+  {
+    fprintf(outfile, "void ");
+  }
+  else
+  {
+    switch (typeTree->tag) {
+      default:
+        fprintf(outfile, ";case %s não implementado em codeType()\n", tag_name[typeTree->tag]);
+    }
+  }
 }
 
 void codeDefinitions(FILE *outfile, Node *tree)
