@@ -22,5 +22,5 @@ clean:
 	@rm ${SRC}
 	@echo "Removing ${SRC}.s..."
 	@rm ${SRC}.s
-	@echo "Removing ${SRC}.l..."
+	@echo "Removing ${SRC}.ll..."
 	@rm ${SRC}.ll
