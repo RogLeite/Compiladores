@@ -9,6 +9,7 @@
 
 void codeGlobal(FILE *outfile);
 void codeGlobalId(FILE *outfile, char *id);
+void codeType(FILE *outfile, Node *typeTree);
 void codeDefinitions(FILE *outfile, Node *tree);
 void codeFuncdef(FILE *outfile, Node *tree);
 
@@ -52,6 +53,11 @@ void codeGlobal(FILE *outfile)
 void codeGlobalId(FILE *outfile, char *id)
 {
   fprintf(outfile, "@%s", id);
+}
+
+void codeType(FILE *outfile, Node *typeTree)
+{
+  fprintf(outfile, ";codeType() não implementado\n");
 }
 
 void codeDefinitions(FILE *outfile, Node *tree)
