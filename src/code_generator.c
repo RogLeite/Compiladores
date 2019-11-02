@@ -81,6 +81,10 @@ void codeParamDefs(FILE *outfile, Node *tree)
 
 void codeFuncdef(FILE *outfile, Node *tree)
 {
+  fprintf(outfile, "define ");
+  codeType(outfile, getType(tree));
   codeGlobalId(outfile, getNodeId(tree));
-  fprintf(outfile, ";codeFuncdef() não implementado\n");
+  codeParamDefs(outfile, getSecondNode(tree));
+  fprintf(outfile, "#0 ");
+  fprintf(outfile, ";codeFuncdef() não completamente implementado\n");
 }
