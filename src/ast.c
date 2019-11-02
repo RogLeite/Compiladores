@@ -947,6 +947,12 @@ char *expandEscapes(char *src)
   return str;
 }
 
+int isNullType(Node *type)
+{
+  if(type==NULL)return 1;
+  return (type->tag==EMPTY)?1:0;
+}
+
 int isNumericType(Node *type)
 {
   if(type==NULL)return 0;

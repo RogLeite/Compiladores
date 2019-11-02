@@ -126,6 +126,7 @@ Node *getFourthNode(Node *curr);
 
 Node *getType(Node *node);
 
+int isNullType(Node *type);
 
 void printTree(Node *tree, int identation);
 
