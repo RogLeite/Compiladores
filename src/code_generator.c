@@ -37,17 +37,14 @@ void codeGlobal(FILE *outfile)
   assert(tree != NULL);
   switch (tree->tag) {
     case FUNCDEF:
-      codeFuncdef(outfile, getValueNode(tree));
+      codeFuncDef(outfile, tree);
       break;
     case DEFS:
-      codeDefinitions(outfile, getValueNode(tree));
-      if(getSecondNode(tree)->tag == FUNCDEF)
-      {
-        codeFuncdef(outfile, getSecondNode(tree));
-      }
+      codeDefinitions(outfile, tree);
       break;
     default:
       fprintf(outfile, ";case %s não implementado em codeGlobal()\n", tag_name[tree->tag]);
+      break;
   }
   fprintf(outfile, "\n");
 }
