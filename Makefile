@@ -5,7 +5,7 @@
 # Usage:
 # make        # cria o executável monga_compiler
 # make clean  # remove os temporários
-.PHONY := all clean
+.PHONY := all clean program
 
 TMPPATH = tmp
 
@@ -19,6 +19,7 @@ INCLUDES = -I${SRCPATH}
 #Faltam os defines
 #DEFINES = -D${1}
 
+PROG_NAME = Program
 BIN_NAME = monga_compiler
 COMPILER_OUTPUT = -o ${BIN_NAME}
 
@@ -52,9 +53,17 @@ TMP_LEXIC:
 	@flex --outfile=${TMP_LEXIC} --header-file=${TMP_LEXIC_HEADER} ${LEXIC} ${TMP_GRAMMAR_HEADER}
 	@echo
 
+program:
+	@echo "Compilando Program.ll para executável Program..."
+	@llc ${PROG_NAME}.ll
+	@gcc ${WARNING_FLAGS} ${PROG_NAME}.s -o ${PROG_NAME}
+
 clean:
 	@echo "Limpando"
 	rm ${TMP_GRAMMATIC}
 	rm ${TMP_LEXIC}
 	rm ${BIN_NAME}
+	rm ${PROG_NAME}.ll
+	rm ${PROG_NAME}.s
+	rm ${PROG_NAME}
 	@echo

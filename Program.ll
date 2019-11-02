@@ -1,2 +1,0 @@
-generateFuncdefCode() não implementado
-
