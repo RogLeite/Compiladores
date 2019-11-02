@@ -23,7 +23,7 @@ int main(void)
       FILE *outfile;
       typeTree(getGlobalTree(), NULL);
       outfile = fopen("Program.ll","w");
-      generateGlobalCode(outfile);
+      codeGlobal(outfile);
       fclose(outfile);
       printf("\n");
     }

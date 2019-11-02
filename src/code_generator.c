@@ -7,9 +7,9 @@
 #include <assert.h>
 
 
-void generateGlobalCode(FILE *outfile);
-void generateDefinitionsCode(FILE *outfile, Node *tree);
-void generateFuncdefCode(FILE *outfile, Node *tree);
+void codeGlobal(FILE *outfile);
+void codeDefinitions(FILE *outfile, Node *tree);
+void codeFuncdef(FILE *outfile, Node *tree);
 
 int temporario = 0;
 int newTemporario()
@@ -27,31 +27,32 @@ int printNewTemporario()
   return novo;
 }
 
-void generateGlobalCode(FILE *outfile)
+void codeGlobal(FILE *outfile)
 {
   Node *tree = getGlobalTree();
   assert(tree != NULL);
   switch (tree->tag) {
     case FUNCDEF:
-      generateFuncdefCode(outfile, getValueNode(tree));
+      codeFuncdef(outfile, getValueNode(tree));
       break;
     case DEFS:
-      generateDefinitionsCode(outfile, getValueNode(tree));
+      codeDefinitions(outfile, getValueNode(tree));
       if(getSecondNode(tree)->tag == FUNCDEF)
       {
-        generateFuncdefCode(outfile, getSecondNode(tree));
+        codeFuncdef(outfile, getSecondNode(tree));
       }
       break;
     default:
-      fprintf(outfile, "case %s não implementado em generateGlobalCode()\n", tag_name[tree->tag]);
+      fprintf(outfile, "case %s não implementado em codeGlobal()\n", tag_name[tree->tag]);
   }
   fprintf(outfile, "\n");
 }
-void generateDefinitionsCode(FILE *outfile, Node *tree)
+void codeDefinitions(FILE *outfile, Node *tree)
 {
-  fprintf(outfile, "generateDefinitionsCode() não implementado\n");
+  fprintf(outfile, "codeDefinitions() não implementado\n");
 }
-void generateFuncdefCode(FILE *outfile, Node *tree)
+void codeFuncdef(FILE *outfile, Node *tree)
 {
-  fprintf(outfile, "generateFuncdefCode() não implementado\n");
+
+  fprintf(outfile, "codeFuncdef() não implementado\n");
 }
