@@ -21,6 +21,11 @@ int newTemporario()
   return temporario++;
 }
 
+void resetTemporario()
+{
+  temporario = 0;
+}
+
 void printTemporario(FILE *outfile, int tmp)
 {
     fprintf(outfile, "a%d", tmp);
