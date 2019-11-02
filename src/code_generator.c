@@ -12,7 +12,7 @@ void codeGlobalId(FILE *outfile, char *id);
 void codeType(FILE *outfile, Node *typeTree);
 void codeDefinitions(FILE *outfile, Node *tree);
 void codeParamDefs(FILE *outfile, Node *tree);
-void codeFuncdef(FILE *outfile, Node *tree);
+void codeFuncDef(FILE *outfile, Node *tree);
 void codeFuncBody(FILE *outfile, Node *tree);
 
 int temporario = 0;
@@ -71,7 +71,33 @@ void codeType(FILE *outfile, Node *typeTree)
 
 void codeDefinitions(FILE *outfile, Node *tree)
 {
-  fprintf(outfile, ";codeDefinitions() não implementado\n");
+  Node *first = getValueNode(tree);
+  Node *second = getSecondNode(tree);
+
+  //Primeiro nó filho
+  switch (first->tag) {
+    case FUNCDEF:
+      codeFuncDef(outfile, first);
+      break;
+    case DEFS:
+      codeDefinitions(outfile, first);
+      break;
+    default:
+      fprintf(outfile, ";case %s não implementado em codeDefinitions() para primeiro filho\n", tag_name[first->tag]);
+      break;
+  }
+
+  //Segundo nó filho
+  switch (second->tag) {
+    case FUNCDEF:
+      codeFuncDef(outfile, second);
+      break;
+    default:
+      fprintf(outfile, ";case %s não implementado em codeDefinitions() para segundo filho\n", tag_name[second->tag]);
+      break;
+
+  }
+
 }
 
 void codeParamDefs(FILE *outfile, Node *tree)
@@ -87,7 +113,7 @@ void codeParamDefs(FILE *outfile, Node *tree)
   }
 }
 
-void codeFuncdef(FILE *outfile, Node *tree)
+void codeFuncDef(FILE *outfile, Node *tree)
 {
   fprintf(outfile, "define ");
   codeType(outfile, getType(tree));
