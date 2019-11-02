@@ -37,6 +37,14 @@ void codeGlobal(FILE *outfile)
 {
   Node *tree = getGlobalTree();
   assert(tree != NULL);
+
+  //Início para permitir printar coisas
+  //string "%d"
+  fprintf(outfile, "@percent_d = constant [3 x i8] c\"%%d\\00\"\n");
+  //string "\n"
+  fprintf(outfile, "@endl = constant [2 x i8] c\"\\0A\\00\"\n");
+  fprintf(outfile,"declare i32 @printf(i8*, ...)\n");
+
   switch (tree->tag) {
     case FUNCDEF:
       codeFuncDef(outfile, tree);
@@ -121,7 +129,6 @@ void codeFuncDef(FILE *outfile, Node *tree)
   codeType(outfile, getType(tree));
   codeGlobalId(outfile, getNodeId(tree));
   codeParamDefs(outfile, getSecondNode(tree));
-  fprintf(outfile, "#0 ");
   codeFuncBody(outfile, tree);
 }
 
