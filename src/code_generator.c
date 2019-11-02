@@ -16,6 +16,8 @@ void codeFuncDef(FILE *outfile, Node *tree);
 void codeFuncBody(FILE *outfile, Node *tree);
 void codeInBlock(FILE *outfile, Node *tree);
 void codeCommand(FILE *outfile, Node *tree);
+void codePrint(FILE *outfile, Node *tree);
+int codeExpression(FILE *outfile, Node *tree);
 
 int temporario = 0;
 int newTemporario()
@@ -159,6 +161,10 @@ void codeInBlock(FILE *outfile, Node *tree)
     case EMPTY:
       fprintf(outfile, "\n");
       break;
+    //Casos a serem repassados para codeCommand()
+    case PRINT:
+      codeCommand(outfile, tree);
+      break;
     case COMMANDS:
       codeInBlock(outfile, getValueNode(tree));
       codeCommand(outfile, getSecondNode(tree));
@@ -170,5 +176,30 @@ void codeInBlock(FILE *outfile, Node *tree)
 
 void codeCommand(FILE *outfile, Node *tree)
 {
-    fprintf(outfile, ";codeCommand() não implementado\n");
+  switch (tree->tag) {
+    case PRINT:
+      codePrint(outfile, tree);
+      break;
+    default:
+      fprintf(outfile, ";case %s não implementado em codeCommand()\n", tag_name[tree->tag]);
+  }
+}
+
+void codePrint(FILE *outfile, Node *tree)
+{
+  int temp = codeExpression(outfile, getValueNode(tree));
+  fprintf(outfile, "\tcall i32 (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, i32 0, i32 0), i32 ");
+  printTemporario(outfile, temp);
+  fprintf(outfile, ")\n");
+  fprintf(outfile, "\tcall i32 (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @endl, i32 0, i32 0))\n");
+
+}
+
+int codeExpression(FILE *outfile, Node *tree)
+{
+  switch (tree->tag) {
+    default:
+      fprintf(outfile, ";case %s não implementado em codeExpression()\n", tag_name[tree->tag]);
+  }
+  return 0;
 }
