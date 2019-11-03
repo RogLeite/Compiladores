@@ -2,13 +2,9 @@ var1 : int;
 var2 : int;
 main()
 {
-  var1 :int;
-  var3:int;
   var1 = 1;
   var2 = 2;
-  var3 = 3;
   @var1; #não tenho certeza que essas linhas são pré requisito pro t6
   @var2; #não tenho certeza que essas linhas são pré requisito pro t6
-  @var3; #não tenho certeza que essas linhas são pré requisito pro t6
-  @4;
+  @3;
 }
