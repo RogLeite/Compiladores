@@ -33,12 +33,12 @@ void resetTemporario()
   temporario = 0;
 }
 
-void printTemporario(FILE *outfile, int tmp)
+void codeTemporario(FILE *outfile, int tmp)
 {
     fprintf(outfile, "%%a%d ", tmp);
 }
 
-int printNewTemporario(FILE *outfile)
+int codeNewTemporario(FILE *outfile)
 {
   int novo = newTemporario();
   fprintf(outfile, "%%a%d ", novo);
@@ -207,7 +207,7 @@ void codePrint(FILE *outfile, Node *tree)
 {
   int temp = codeExpression(outfile, getValueNode(tree));
   fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, %s 0, %s 0), %s ", ll_intType, ll_intType, ll_intType, ll_intType);
-  printTemporario(outfile, temp);
+  codeTemporario(outfile, temp);
   fprintf(outfile, ")\n");
   fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @endl, %s 0, %s 0))\n", ll_intType, ll_intType, ll_intType);
 
@@ -233,19 +233,19 @@ int codeExpression(FILE *outfile, Node *tree)
 
       //%a1 = alloca i32
       fprintf(outfile, "\t");
-      printTemporario(outfile, temp1);
+      codeTemporario(outfile, temp1);
       fprintf(outfile, " = alloca %s\n", ll_intType);
 
       //store i32 tree->content.i, i32* %a1
       fprintf(outfile, "\tstore %s %d, %s* ", ll_intType, tree->content.i, ll_intType);
-      printTemporario(outfile, temp1);
+      codeTemporario(outfile, temp1);
       fprintf(outfile, "\n");
 
       //%a2 = load i32, i32* %a1
       fprintf(outfile, "\t");
-      printTemporario(outfile, temp2);
+      codeTemporario(outfile, temp2);
       fprintf(outfile, "= load %s, %s* ", ll_intType, ll_intType);
-      printTemporario(outfile, temp1);
+      codeTemporario(outfile, temp1);
       fprintf(outfile, "\n");
       return temp2;
       break;
