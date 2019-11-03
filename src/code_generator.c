@@ -15,7 +15,7 @@ void codeParamDefs(FILE *outfile, Node *tree);
 void codeFuncDef(FILE *outfile, Node *tree);
 void codeFuncBody(FILE *outfile, Node *tree);
 void codeInBlock(FILE *outfile, Node *tree);
-void codeCommand(FILE *outfile, Node *tree);
+void codeCommands(FILE *outfile, Node *tree);
 void codePrint(FILE *outfile, Node *tree);
 void codeVardecGlobal(FILE *outfile, Node *tree);
 int codeExpression(FILE *outfile, Node *tree);
@@ -176,27 +176,29 @@ void codeInBlock(FILE *outfile, Node *tree)
     case EMPTY:
       fprintf(outfile, "\n");
       break;
-    //Casos a serem repassados para codeCommand()
+    //Casos a serem repassados para codeCommands()
     case PRINT:
-      codeCommand(outfile, tree);
+      codeCommands(outfile, tree);
       break;
     case COMMANDS:
-      codeInBlock(outfile, getValueNode(tree));
-      codeCommand(outfile, getSecondNode(tree));
+      codeCommands(outfile, tree);
       break;
     default:
       fprintf(outfile, ";case %s não implementado em codeInBlock()\n", tag_name[tree->tag]);
   }
 }
 
-void codeCommand(FILE *outfile, Node *tree)
+void codeCommands(FILE *outfile, Node *tree)
 {
   switch (tree->tag) {
     case PRINT:
       codePrint(outfile, tree);
       break;
+    case COMMANDS:
+      codeCommands(outfile, getValueNode(tree));
+      codeCommands(outfile, getSecondNode(tree));
     default:
-      fprintf(outfile, ";case %s não implementado em codeCommand()\n", tag_name[tree->tag]);
+      fprintf(outfile, ";case %s não implementado em codeCommands()\n", tag_name[tree->tag]);
   }
 }
 
