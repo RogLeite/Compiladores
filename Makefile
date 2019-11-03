@@ -40,7 +40,7 @@ all: monga_compiler
 
 monga_compiler: TMP_GRAMMATIC TMP_LEXIC
 	@echo "Compilando ${BIN_NAME}..."
-	@gcc ${WARNING_FLAGS} ${INCLUDES}  ${C_FILES} ${COMPILER_OUTPUT} ${LINKER_FLAGS}
+	@${COMPILER} ${WARNING_FLAGS} ${INCLUDES}  ${C_FILES} ${COMPILER_OUTPUT} ${LINKER_FLAGS}
 	@echo
 
 TMP_GRAMMATIC:
@@ -56,7 +56,7 @@ TMP_LEXIC:
 program:
 	@echo "Compilando Program.ll para executável Program..."
 	@llc ${PROG_NAME}.ll
-	@gcc ${WARNING_FLAGS} ${PROG_NAME}.s -o ${PROG_NAME}
+	@${COMPILER} ${WARNING_FLAGS} ${PROG_NAME}.s -o ${PROG_NAME}
 
 clean:
 	@echo "Limpando"
