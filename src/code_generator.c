@@ -178,8 +178,7 @@ void codeInBlock(FILE *outfile, Node *tree)
       break;
     //Casos a serem repassados para codeCommands()
     case PRINT:
-      codeCommands(outfile, tree);
-      break;
+    case ASSIGN:
     case COMMANDS:
       codeCommands(outfile, tree);
       break;
@@ -194,9 +193,11 @@ void codeCommands(FILE *outfile, Node *tree)
     case PRINT:
       codePrint(outfile, tree);
       break;
+    //case ASSIGN:
     case COMMANDS:
       codeCommands(outfile, getValueNode(tree));
       codeCommands(outfile, getSecondNode(tree));
+      break;
     default:
       fprintf(outfile, ";case %s não implementado em codeCommands()\n", tag_name[tree->tag]);
   }
