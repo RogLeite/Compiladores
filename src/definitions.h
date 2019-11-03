@@ -70,30 +70,6 @@ extern int yydebug;
     TK_TRUE = 280
   };
 #endif
-/* Tokens.  */
-#define TK_AS 258
-#define TK_CHAR 259
-#define TK_ELSE 260
-#define TK_FLOAT 261
-#define TK_IF 262
-#define TK_INT 263
-#define TK_NEW 264
-#define TK_RETURN 265
-#define TK_BOOL 266
-#define TK_WHILE 267
-#define TK_ID 268
-#define TK_STRING 269
-#define TK_CHARACTER 270
-#define TK_INTEGER 271
-#define TK_FLOATING 272
-#define TK_EQ 273
-#define TK_NE 274
-#define TK_LE 275
-#define TK_GE 276
-#define TK_AND 277
-#define TK_OR 278
-#define TK_FALSE 279
-#define TK_TRUE 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -107,7 +83,7 @@ union YYSTYPE
   char *s;
   Node *n;
 
-#line 111 "src/definitions.h" /* yacc.c:1909  */
+#line 87 "src/definitions.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
