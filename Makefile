@@ -45,7 +45,7 @@ monga_compiler: TMP_GRAMMATIC TMP_LEXIC
 
 TMP_GRAMMATIC:
 	@echo "Compilando gramática..."
-	@yacc --output=${TMP_GRAMMATIC} --defines=${TMP_GRAMMAR_HEADER} ${GRAMMAR}
+	@bison --output=${TMP_GRAMMATIC} --defines=${TMP_GRAMMAR_HEADER} ${GRAMMAR}
 	@echo
 
 TMP_LEXIC:
