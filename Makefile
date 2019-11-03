@@ -24,7 +24,7 @@ BIN_NAME = monga_compiler
 COMPILER_OUTPUT = -o ${BIN_NAME}
 
 
-SRC = ${SRCPATH}/tree_stitcher.c
+SRC = ${SRCPATH}/main.c
 GRAMMAR = ${SRCPATH}/monga_grammar.y
 TMP_GRAMMAR_HEADER = ${SRCPATH}/definitions.h
 
