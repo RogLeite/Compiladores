@@ -88,6 +88,9 @@ void codeType(FILE *outfile, Node *typeTree)
   else
   {
     switch (typeTree->tag) {
+      case INTTYPE:
+        fprintf(outfile, "%s", ll_intType);
+        break;
       default:
         fprintf(outfile, ";case %s não implementado em codeType()\n", tag_name[typeTree->tag]);
     }
