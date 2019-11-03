@@ -13,7 +13,7 @@ $ make
 $ ./monga_compiler < teu_programa_em_monga
 ```
 
- - Compilar `Program.ll` feito e executá-lo 
+ - Compilar `Program.ll` feito e executá-lo
 ```
 $ make program
 $ ./Program
@@ -46,3 +46,5 @@ O arquivo em yacc, com as definições gramaticais de Monga é ``` src/monga_gra
  char = float;
  char = int;
  ```
+
+ - De código executável aceita: Declaração de variáveis globais e funções globais, essas funções não aceitam parâmetros nem tem tipo; o único tipo é `int`; atribuição a variáveis; o comando `@`.
