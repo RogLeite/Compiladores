@@ -197,7 +197,32 @@ void codePrint(FILE *outfile, Node *tree)
 
 int codeExpression(FILE *outfile, Node *tree)
 {
+  tree = ignoreWrapper(tree);
   switch (tree->tag) {
+    case INTEGER:
+    {
+      int temp1 = newTemporario();
+      int temp2 = newTemporario();
+
+      //%a1 = alloca i32
+      fprintf(outfile, "\t");
+      printTemporario(outfile, temp1);
+      fprintf(outfile, " = alloca i32\n");
+
+      //store i32 tree->content.i, i32* %a1
+      fprintf(outfile, "\tstore i32 %d, i32* ", tree->content.i);
+      printTemporario(outfile, temp1);
+      fprintf(outfile, "\n");
+
+      //%a2 = load i32, i32* %a1
+      fprintf(outfile, "\t");
+      printTemporario(outfile, temp2);
+      fprintf(outfile, "= load i32, i32* ");
+      printTemporario(outfile, temp1);
+      fprintf(outfile, "\n");
+      return temp2;
+      break;
+    }
     default:
       fprintf(outfile, ";case %s não implementado em codeExpression()\n", tag_name[tree->tag]);
   }
