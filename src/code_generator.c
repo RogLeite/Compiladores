@@ -18,6 +18,7 @@ void codeInBlock(FILE *outfile, Node *tree);
 void codeCommands(FILE *outfile, Node *tree);
 void codePrint(FILE *outfile, Node *tree);
 void codeVardecGlobal(FILE *outfile, Node *tree);
+void codeAssignment(FILE *outfile, Node *tree);
 int codeExpression(FILE *outfile, Node *tree);
 
 const char *ll_intType = "i32";
@@ -193,7 +194,9 @@ void codeCommands(FILE *outfile, Node *tree)
     case PRINT:
       codePrint(outfile, tree);
       break;
-    //case ASSIGN:
+    case ASSIGN:
+      codeAssignment(outfile, tree);
+      break;
     case COMMANDS:
       codeCommands(outfile, getValueNode(tree));
       codeCommands(outfile, getSecondNode(tree));
@@ -220,6 +223,21 @@ void codeVardecGlobal(FILE *outfile, Node *tree)
   fprintf(outfile, " = common global ");
   codeType(outfile, getType(tree));
   fprintf(outfile, " 0\n");
+}
+
+void codeAssignment(FILE *outfile, Node *tree)
+{
+  int exp_result = codeExpression(outfile, getSecondNode(tree));
+  //store i32 [exp], i32* @getNodeId(getValueNode(tree))
+  fprintf(outfile, "\tstore ");
+  codeType(outfile, getType(getValueNode(tree)));
+  fprintf(outfile, " ");
+  codeTemporario(outfile, exp_result);
+  fprintf(outfile, ", ");
+  codeType(outfile, getType(getValueNode(tree)));
+  fprintf(outfile, "* ");
+  codeGlobalId(outfile, getNodeId(getValueNode(tree)));
+  fprintf(outfile, "\n");
 }
 
 int codeExpression(FILE *outfile, Node *tree)
