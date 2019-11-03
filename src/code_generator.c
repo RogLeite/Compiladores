@@ -228,7 +228,7 @@ void codeVardecGlobal(FILE *outfile, Node *tree)
 void codeAssignment(FILE *outfile, Node *tree)
 {
   int exp_result = codeExpression(outfile, getSecondNode(tree));
-  //store i32 [exp], i32* @getNodeId(getValueNode(tree))
+  //store getType(getValueNode(tree)) [exp], getType(getValueNode(tree))* @getNodeId(getValueNode(tree))
   fprintf(outfile, "\tstore ");
   codeType(outfile, getType(getValueNode(tree)));
   fprintf(outfile, " ");
