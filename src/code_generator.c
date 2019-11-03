@@ -19,6 +19,8 @@ void codeCommand(FILE *outfile, Node *tree);
 void codePrint(FILE *outfile, Node *tree);
 int codeExpression(FILE *outfile, Node *tree);
 
+const char *ll_intType = "i32";
+
 int temporario = 0;
 int newTemporario()
 {
@@ -52,7 +54,7 @@ void codeGlobal(FILE *outfile)
   fprintf(outfile, "@percent_d = constant [3 x i8] c\"%%d\\00\"\n");
   //string "\n"
   fprintf(outfile, "@endl = constant [2 x i8] c\"\\0A\\00\"\n");
-  fprintf(outfile,"declare i32 @printf(i8*, ...)\n");
+  fprintf(outfile,"declare %s @printf(i8*, ...)\n", ll_intType);
 
   switch (tree->tag) {
     case FUNCDEF:
@@ -188,10 +190,10 @@ void codeCommand(FILE *outfile, Node *tree)
 void codePrint(FILE *outfile, Node *tree)
 {
   int temp = codeExpression(outfile, getValueNode(tree));
-  fprintf(outfile, "\tcall i32 (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, i32 0, i32 0), i32 ");
+  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, %s 0, %s 0), %s ", ll_intType, ll_intType, ll_intType, ll_intType);
   printTemporario(outfile, temp);
   fprintf(outfile, ")\n");
-  fprintf(outfile, "\tcall i32 (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @endl, i32 0, i32 0))\n");
+  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @endl, %s 0, %s 0))\n", ll_intType, ll_intType, ll_intType);
 
 }
 
@@ -207,17 +209,17 @@ int codeExpression(FILE *outfile, Node *tree)
       //%a1 = alloca i32
       fprintf(outfile, "\t");
       printTemporario(outfile, temp1);
-      fprintf(outfile, " = alloca i32\n");
+      fprintf(outfile, " = alloca %s\n", ll_intType);
 
       //store i32 tree->content.i, i32* %a1
-      fprintf(outfile, "\tstore i32 %d, i32* ", tree->content.i);
+      fprintf(outfile, "\tstore %s %d, %s* ", ll_intType, tree->content.i, ll_intType);
       printTemporario(outfile, temp1);
       fprintf(outfile, "\n");
 
       //%a2 = load i32, i32* %a1
       fprintf(outfile, "\t");
       printTemporario(outfile, temp2);
-      fprintf(outfile, "= load i32, i32* ");
+      fprintf(outfile, "= load %s, %s* ", ll_intType, ll_intType);
       printTemporario(outfile, temp1);
       fprintf(outfile, "\n");
       return temp2;
