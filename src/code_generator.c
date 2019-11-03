@@ -268,6 +268,21 @@ int codeExpression(FILE *outfile, Node *tree)
       return temp2;
       break;
     }
+    case SIMPLEVAR:
+    {
+      //%2 = load getType(tree), getType(tree)* @getNodeId(tree)
+      fprintf(outfile, "\t");
+      int temp1 = codeNewTemporario(outfile);
+      fprintf(outfile, "= load ");
+      codeType(outfile, getType(tree));
+      fprintf(outfile, ", ");
+      codeType(outfile, getType(tree));
+      fprintf(outfile, "* ");
+      codeGlobalId(outfile, getNodeId(tree));
+      fprintf(outfile, "\n");
+      return temp1;
+      break;
+    }
     default:
       fprintf(outfile, ";case %s não implementado em codeExpression()\n", tag_name[tree->tag]);
   }
