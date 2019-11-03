@@ -212,7 +212,11 @@ void codePrint(FILE *outfile, Node *tree)
 
 void codeVardecGlobal(FILE *outfile, Node *tree)
 {
-  fprintf(outfile, ";codeVardecGlobal() não implementado\n");
+  //@getNodeId(tree) = common global i32 0,
+  codeGlobalId(outfile, getNodeId(tree));
+  fprintf(outfile, " = common global ");
+  codeType(outfile, getType(tree));
+  fprintf(outfile, " 0\n");
 }
 
 int codeExpression(FILE *outfile, Node *tree)
