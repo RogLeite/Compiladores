@@ -11,7 +11,7 @@ TMPPATH = tmp
 
 SRCPATH = src
 
-COMPILER = gcc
+COMPILER = clang
 LINKER_FLAGS = -lfl
 WARNING_FLAGS = -Wall #-fsanitize=address
 
