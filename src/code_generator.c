@@ -32,13 +32,13 @@ void resetTemporario()
 
 void printTemporario(FILE *outfile, int tmp)
 {
-    fprintf(outfile, "%%a%d", tmp);
+    fprintf(outfile, "%%a%d ", tmp);
 }
 
 int printNewTemporario(FILE *outfile)
 {
   int novo = newTemporario();
-  fprintf(outfile, "%%a%d", novo);
+  fprintf(outfile, "%%a%d ", novo);
   return novo;
 }
 
