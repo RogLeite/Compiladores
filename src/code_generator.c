@@ -17,6 +17,7 @@ void codeFuncBody(FILE *outfile, Node *tree);
 void codeInBlock(FILE *outfile, Node *tree);
 void codeCommand(FILE *outfile, Node *tree);
 void codePrint(FILE *outfile, Node *tree);
+void codeVardecGlobal(FILE *outfile, Node *tree);
 int codeExpression(FILE *outfile, Node *tree);
 
 const char *ll_intType = "i32";
@@ -60,6 +61,9 @@ void codeGlobal(FILE *outfile)
     case FUNCDEF:
       codeFuncDef(outfile, tree);
       break;
+    case VARDEC:
+      codeVardecGlobal(outfile, tree);
+      break;
     case DEFS:
       codeDefinitions(outfile, tree);
       break;
@@ -100,6 +104,9 @@ void codeDefinitions(FILE *outfile, Node *tree)
     case FUNCDEF:
       codeFuncDef(outfile, first);
       break;
+    case VARDEC:
+      codeVardecGlobal(outfile, first);
+      break;
     case DEFS:
       codeDefinitions(outfile, first);
       break;
@@ -112,6 +119,9 @@ void codeDefinitions(FILE *outfile, Node *tree)
   switch (second->tag) {
     case FUNCDEF:
       codeFuncDef(outfile, second);
+      break;
+    case VARDEC:
+      codeVardecGlobal(outfile, second);
       break;
     default:
       fprintf(outfile, ";case %s não implementado em codeDefinitions() para segundo filho\n", tag_name[second->tag]);
@@ -195,6 +205,11 @@ void codePrint(FILE *outfile, Node *tree)
   fprintf(outfile, ")\n");
   fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @endl, %s 0, %s 0))\n", ll_intType, ll_intType, ll_intType);
 
+}
+
+void codeVardecGlobal(FILE *outfile, Node *tree)
+{
+  fprintf(outfile, ";codeVardecGlobal() não implementado\n");
 }
 
 int codeExpression(FILE *outfile, Node *tree)
