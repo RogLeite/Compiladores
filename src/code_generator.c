@@ -252,5 +252,5 @@ int codeExpression(FILE *outfile, Node *tree)
     default:
       fprintf(outfile, ";case %s não implementado em codeExpression()\n", tag_name[tree->tag]);
   }
-  return 0;
+  return -1;
 }
