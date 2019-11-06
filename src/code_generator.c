@@ -18,6 +18,7 @@ void codeInBlock(FILE *outfile, Node *tree);
 void codeCommands(FILE *outfile, Node *tree);
 void codePrint(FILE *outfile, Node *tree);
 void codeVardecGlobal(FILE *outfile, Node *tree);
+void codeVardecLocal(FILE *outfile, Node *tree);
 void codeAssignment(FILE *outfile, Node *tree);
 int codeExpression(FILE *outfile, Node *tree);
 
@@ -69,7 +70,7 @@ void codeGlobal(FILE *outfile)
       codeDefinitions(outfile, tree);
       break;
     default:
-      fprintf(outfile, ";case %s não implementado em codeGlobal()\n", tag_name[tree->tag]);
+      fprintf(outfile, "\t;case %s não implementado em codeGlobal()\n", tag_name[tree->tag]);
       break;
   }
   fprintf(outfile, "\n");
@@ -122,7 +123,7 @@ void codeDefinitions(FILE *outfile, Node *tree)
       codeDefinitions(outfile, first);
       break;
     default:
-      fprintf(outfile, ";case %s não implementado em codeDefinitions() para primeiro filho\n", tag_name[first->tag]);
+      fprintf(outfile, "\t;case %s não implementado em codeDefinitions() para primeiro filho\n", tag_name[first->tag]);
       break;
   }
 
@@ -135,7 +136,7 @@ void codeDefinitions(FILE *outfile, Node *tree)
       codeVardecGlobal(outfile, second);
       break;
     default:
-      fprintf(outfile, ";case %s não implementado em codeDefinitions() para segundo filho\n", tag_name[second->tag]);
+      fprintf(outfile, "\t;case %s não implementado em codeDefinitions() para segundo filho\n", tag_name[second->tag]);
       break;
 
   }
@@ -150,7 +151,7 @@ void codeParamDefs(FILE *outfile, Node *tree)
       fprintf(outfile, "() ");
       break;
     default:
-      fprintf(outfile, ";case %s não implementado em codeParamDefs()\n", tag_name[tree->tag]);
+      fprintf(outfile, "\t;case %s não implementado em codeParamDefs()\n", tag_name[tree->tag]);
       break;
   }
 }
@@ -182,13 +183,15 @@ void codeInBlock(FILE *outfile, Node *tree)
       fprintf(outfile, "\n");
       break;
     //Casos a serem repassados para codeCommands()
+    case VARDEC:
+    case VARDECS:
     case PRINT:
     case ASSIGN:
     case COMMANDS:
       codeCommands(outfile, tree);
       break;
     default:
-      fprintf(outfile, ";case %s não implementado em codeInBlock()\n", tag_name[tree->tag]);
+      fprintf(outfile, "\t;case %s não implementado em codeInBlock()\n", tag_name[tree->tag]);
   }
 }
 
@@ -205,8 +208,15 @@ void codeCommands(FILE *outfile, Node *tree)
       codeCommands(outfile, getValueNode(tree));
       codeCommands(outfile, getSecondNode(tree));
       break;
+    case VARDECS:
+      codeCommands(outfile, getValueNode(tree));
+      codeCommands(outfile, getSecondNode(tree));
+      break;
+    case VARDEC:
+      codeVardecLocal(outfile, tree);
+      break;
     default:
-      fprintf(outfile, ";case %s não implementado em codeCommands()\n", tag_name[tree->tag]);
+      fprintf(outfile, "\t;case %s não implementado em codeCommands()\n", tag_name[tree->tag]);
   }
 }
 
@@ -226,6 +236,11 @@ void codeVardecGlobal(FILE *outfile, Node *tree)
   //@getNodeId(tree) = common global i32 0,
   codeGlobalId(outfile, getNodeId(tree));
   fprintf(outfile, " = common global %s 0\n", typeString(getType(tree)));
+}
+
+void codeVardecLocal(FILE *outfile, Node *tree)
+{
+  fprintf(outfile, "\t;codeVardecLocal() não implementado\n");
 }
 
 void codeAssignment(FILE *outfile, Node *tree)
@@ -289,7 +304,7 @@ int codeExpression(FILE *outfile, Node *tree)
       break;
     }
     default:
-      fprintf(outfile, ";case %s não implementado em codeExpression()\n", tag_name[tree->tag]);
+      fprintf(outfile, "\t;case %s não implementado em codeExpression()\n", tag_name[tree->tag]);
   }
   return -1;
 }
