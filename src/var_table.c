@@ -94,6 +94,8 @@ int newId(char *name, Node *node)
   novo->val.pair.node = node;
   novo->next = NULL;
   push(novo);
+  if(scopeCounter==1)
+    node->isGlobal = 1;
   return 0;
 }
 

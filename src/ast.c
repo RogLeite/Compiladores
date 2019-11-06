@@ -119,6 +119,7 @@ Node *mkCteIntegerNode(int val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = INTEGER;
+  newNode->isGlobal = 0;
   newNode->content.i = val;
   newNode->reference = NULL;
   newNode->type = mkIntTypeNode();
@@ -129,6 +130,7 @@ Node *mkCteStringNode(NodeTag tag, char *val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
+  newNode->isGlobal = 0;
   newNode->content.string = (char*)malloc(sizeof(char)*(strlen(val)+1));
   strcpy(newNode->content.string, val);
   newNode->reference = NULL;
@@ -140,6 +142,7 @@ Node *mkCteFloatingNode(double val)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = FLOATING;
+  newNode->isGlobal = 0;
   newNode->content.d = val;
   newNode->reference = NULL;
   newNode->type = mkFloatTypeNode();
@@ -150,6 +153,7 @@ Node *mkOperatorNode(Operators val)
 {
     Node *newNode = (Node*)malloc(sizeof(Node));
     newNode->tag = OPERATOR;
+    newNode->isGlobal = 0;
     newNode->content.op = val;
     newNode->reference = NULL;
     newNode->type = NULL;
@@ -164,6 +168,7 @@ Node *mkUniNode(NodeTag tag, Node *first)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
+  newNode->isGlobal = 0;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
   newNode->type = NULL;
@@ -174,6 +179,7 @@ Node *mkBiNode(NodeTag tag, Node *first, Node *second)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
+  newNode->isGlobal = 0;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
   newNode->type = NULL;
@@ -185,6 +191,7 @@ Node *mkTriNode(NodeTag tag, Node *first, Node *second, Node *third)
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
+  newNode->isGlobal = 0;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
   newNode->type = NULL;
@@ -198,6 +205,7 @@ Node *mkQuadNode(NodeTag tag, Node *first, Node *second, Node *third, Node *four
 {
   Node *newNode = (Node*)malloc(sizeof(Node));
   newNode->tag = tag;
+  newNode->isGlobal = 0;
   newNode->content.pair.value = first;
   newNode->reference = NULL;
   newNode->type = NULL;
