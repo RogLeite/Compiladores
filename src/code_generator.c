@@ -247,25 +247,32 @@ int codeExpression(FILE *outfile, Node *tree)
     case INTEGER:
     {
       int temp1 = newTemporario();
-      int temp2 = newTemporario();
-
-      //%a1 = alloca i32
+      //%temp1 = add i32 0, tree->content.i
       fprintf(outfile, "\t");
       codeTemporario(outfile, temp1);
-      fprintf(outfile, " = alloca %s\n", ll_intType);
+      fprintf(outfile, " = add %s 0, %d\n", ll_intType, tree->content.i);
 
-      //store i32 tree->content.i, i32* %a1
-      fprintf(outfile, "\tstore %s %d, %s* ", ll_intType, tree->content.i, ll_intType);
-      codeTemporario(outfile, temp1);
-      fprintf(outfile, "\n");
-
-      //%a2 = load i32, i32* %a1
-      fprintf(outfile, "\t");
-      codeTemporario(outfile, temp2);
-      fprintf(outfile, "= load %s, %s* ", ll_intType, ll_intType);
-      codeTemporario(outfile, temp1);
-      fprintf(outfile, "\n");
-      return temp2;
+      //Isso fica aqui em baixo para, talvez, ser reaproveitado
+      // int temp2 = newTemporario();
+      //
+      // //%a1 = alloca i32
+      // fprintf(outfile, "\t");
+      // codeTemporario(outfile, temp1);
+      // fprintf(outfile, " = alloca %s\n", ll_intType);
+      //
+      // //store i32 tree->content.i, i32* %a1
+      // fprintf(outfile, "\tstore %s %d, %s* ", ll_intType, tree->content.i, ll_intType);
+      // codeTemporario(outfile, temp1);
+      // fprintf(outfile, "\n");
+      //
+      // //%a2 = load i32, i32* %a1
+      // fprintf(outfile, "\t");
+      // codeTemporario(outfile, temp2);
+      // fprintf(outfile, "= load %s, %s* ", ll_intType, ll_intType);
+      // codeTemporario(outfile, temp1);
+      // fprintf(outfile, "\n");
+      
+      return temp1;
       break;
     }
     case SIMPLEVAR:
