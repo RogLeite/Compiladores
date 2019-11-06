@@ -21,7 +21,7 @@ void codeVardecGlobal(FILE *outfile, Node *tree);
 void codeAssignment(FILE *outfile, Node *tree);
 int codeExpression(FILE *outfile, Node *tree);
 
-const char *ll_intType = "i32";
+char *ll_intType = "i32";
 
 int temporario = 0;
 int newTemporario()
@@ -80,22 +80,29 @@ void codeGlobalId(FILE *outfile, char *id)
   fprintf(outfile, "@%s", id);
 }
 
-void codeType(FILE *outfile, Node *typeTree)
+char *typeString(Node *typeTree)
 {
   if(typeTree==NULL)
   {
-    fprintf(outfile, "void ");
+    return "void";
   }
   else
   {
     switch (typeTree->tag) {
       case INTTYPE:
-        fprintf(outfile, "%s", ll_intType);
+        return ll_intType;
         break;
       default:
-        fprintf(outfile, ";case %s não implementado em codeType()\n", tag_name[typeTree->tag]);
+      {
+        return ";tipo não implementado em typeTree()\n";
+      }
     }
   }
+}
+
+void codeType(FILE *outfile, Node *typeTree)
+{
+  fprintf(outfile, "%s ", typeString(typeTree));
 }
 
 void codeDefinitions(FILE *outfile, Node *tree)
@@ -150,8 +157,7 @@ void codeParamDefs(FILE *outfile, Node *tree)
 
 void codeFuncDef(FILE *outfile, Node *tree)
 {
-  fprintf(outfile, "define ");
-  codeType(outfile, getType(tree));
+  fprintf(outfile, "define %s ", typeString(getType(tree)));
   codeGlobalId(outfile, getNodeId(tree));
   codeParamDefs(outfile, getSecondNode(tree));
   codeFuncBody(outfile, tree);
@@ -165,9 +171,7 @@ void codeFuncBody(FILE *outfile, Node *tree)
 
   fprintf(outfile, "{\n");
   codeInBlock(outfile, in_block);
-  fprintf(outfile, "\tret ");
-  codeType(outfile, getType(tree));
-  fprintf(outfile, "\n}\n");
+  fprintf(outfile, "\tret %s \n}\n", typeString(getType(tree)));
 
 }
 
@@ -209,10 +213,11 @@ void codeCommands(FILE *outfile, Node *tree)
 void codePrint(FILE *outfile, Node *tree)
 {
   int temp = codeExpression(outfile, getValueNode(tree));
-  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, %s 0, %s 0), %s ", ll_intType, ll_intType, ll_intType, ll_intType);
+  char *s =  typeString(getType(getValueNode(tree)));
+  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, %s 0, %s 0), %s ", s, s, s, s);
   codeTemporario(outfile, temp);
   fprintf(outfile, ")\n");
-  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @endl, %s 0, %s 0))\n", ll_intType, ll_intType, ll_intType);
+  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @endl, %s 0, %s 0))\n", s, s, s);
 
 }
 
@@ -220,22 +225,17 @@ void codeVardecGlobal(FILE *outfile, Node *tree)
 {
   //@getNodeId(tree) = common global i32 0,
   codeGlobalId(outfile, getNodeId(tree));
-  fprintf(outfile, " = common global ");
-  codeType(outfile, getType(tree));
-  fprintf(outfile, " 0\n");
+  fprintf(outfile, " = common global %s 0\n", typeString(getType(tree)));
 }
 
 void codeAssignment(FILE *outfile, Node *tree)
 {
   int exp_result = codeExpression(outfile, getSecondNode(tree));
+  char *s = typeString(getValueNode(tree));
   //store getType(getValueNode(tree)) [exp], getType(getValueNode(tree))* @getNodeId(getValueNode(tree))
-  fprintf(outfile, "\tstore ");
-  codeType(outfile, getType(getValueNode(tree)));
-  fprintf(outfile, " ");
+  fprintf(outfile, "\tstore %s ", s);
   codeTemporario(outfile, exp_result);
-  fprintf(outfile, ", ");
-  codeType(outfile, getType(getValueNode(tree)));
-  fprintf(outfile, "* ");
+  fprintf(outfile, ", %s* ", typeString(getType(getValueNode(tree))));
   codeGlobalId(outfile, getNodeId(getValueNode(tree)));
   fprintf(outfile, "\n");
 }
@@ -247,10 +247,11 @@ int codeExpression(FILE *outfile, Node *tree)
     case INTEGER:
     {
       int temp1 = newTemporario();
+      char *intString = typeString(getType(tree));
       //%temp1 = add i32 0, tree->content.i
       fprintf(outfile, "\t");
       codeTemporario(outfile, temp1);
-      fprintf(outfile, " = add %s 0, %d\n", ll_intType, tree->content.i);
+      fprintf(outfile, " = add %s 0, %d\n", intString, tree->content.i);
 
       //Isso fica aqui em baixo para, talvez, ser reaproveitado
       // int temp2 = newTemporario();
@@ -258,33 +259,30 @@ int codeExpression(FILE *outfile, Node *tree)
       // //%a1 = alloca i32
       // fprintf(outfile, "\t");
       // codeTemporario(outfile, temp1);
-      // fprintf(outfile, " = alloca %s\n", ll_intType);
+      // fprintf(outfile, " = alloca %s\n", intString);
       //
       // //store i32 tree->content.i, i32* %a1
-      // fprintf(outfile, "\tstore %s %d, %s* ", ll_intType, tree->content.i, ll_intType);
+      // fprintf(outfile, "\tstore %s %d, %s* ", intString, tree->content.i, intString);
       // codeTemporario(outfile, temp1);
       // fprintf(outfile, "\n");
       //
       // //%a2 = load i32, i32* %a1
       // fprintf(outfile, "\t");
       // codeTemporario(outfile, temp2);
-      // fprintf(outfile, "= load %s, %s* ", ll_intType, ll_intType);
+      // fprintf(outfile, "= load %s, %s* ", intString, intString);
       // codeTemporario(outfile, temp1);
       // fprintf(outfile, "\n");
-      
+
       return temp1;
       break;
     }
     case SIMPLEVAR:
     {
+      char *s = typeString(getType(tree));
       //%2 = load getType(tree), getType(tree)* @getNodeId(tree)
       fprintf(outfile, "\t");
       int temp1 = codeNewTemporario(outfile);
-      fprintf(outfile, "= load ");
-      codeType(outfile, getType(tree));
-      fprintf(outfile, ", ");
-      codeType(outfile, getType(tree));
-      fprintf(outfile, "* ");
+      fprintf(outfile, "= load %s, %s* ", s, s);
       codeGlobalId(outfile, getNodeId(tree));
       fprintf(outfile, "\n");
       return temp1;
