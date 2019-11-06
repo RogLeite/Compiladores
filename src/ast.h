@@ -81,6 +81,7 @@ typedef struct node_s{
     Node *reference; //Referência caso o nó seja um SIMPLEVAR ou CALL
     Node *type; //Tipo do nó, definido por typeTree() salvo o nó seja um tipo ou constante.
     int isGlobal;
+    int temp;
 }Node;
 
 typedef struct info_s
