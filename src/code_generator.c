@@ -306,7 +306,11 @@ int codeExpression(FILE *outfile, Node *tree)
       fprintf(outfile, "\t");
       int temp1 = codeNewTemporario(outfile);
       fprintf(outfile, "= load %s, %s* ", s, s);
+      //pegar a referência à declaração
+      //verificar se é global
+      //se não for global, imprimir o temporário
       codeGlobalId(outfile, getNodeId(tree));
+
       fprintf(outfile, "\n");
       return temp1;
       break;
