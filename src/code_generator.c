@@ -240,7 +240,15 @@ void codeVardecGlobal(FILE *outfile, Node *tree)
 
 void codeVardecLocal(FILE *outfile, Node *tree)
 {
-  fprintf(outfile, "\t;codeVardecLocal() não implementado\n");
+  int temp = newTemporario();
+
+  //%temp = alloca getType(tree)
+  fprintf(outfile, "\t");
+  codeTemporario(outfile, temp);
+  fprintf(outfile, "= alloca %s\n", typeString(getType(tree)));
+
+  //salvar o temporário no tree->temp
+  setTemporario(tree, temp);
 }
 
 void codeAssignment(FILE *outfile, Node *tree)
