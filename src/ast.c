@@ -984,6 +984,12 @@ int getTemporario(Node *node)
   return node->temp;
 }
 
+Node *getReference(Node *node)
+{
+  assert(node!=NULL);
+  return node->reference;
+}
+
 int isNumericType(Node *type)
 {
   if(type==NULL)return 0;

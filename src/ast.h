@@ -131,6 +131,7 @@ Node *getType(Node *node);
 int isNullType(Node *type);
 void setTemporario(Node *node, int temp);
 int getTemporario(Node *node);
+Node *getReference(Node *node);
 
 void printTree(Node *tree, int identation);
 
