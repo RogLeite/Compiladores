@@ -8,6 +8,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <assert.h>
+
 #define VALUE_POINTER_ADDRESS &(tree->content.pair.value)
 #define SECOND_POINTER_ADDRESS &(tree->content.pair.value->content.pair.next)
 #define THIRD_POINTER_ADDRESS &(tree->content.pair.value->content.pair.next->content.pair.next)
@@ -276,6 +278,7 @@ void setNextNode(Node *current, Node *next)
 {
     current->content.pair.next = next;
 }
+
 void printTree(Node *n, int identation)
 {
   if(n!=NULL && n->tag == WRAPPER)
@@ -967,6 +970,18 @@ int isNullType(Node *type)
 {
   if(type==NULL)return 1;
   return (type->tag==EMPTY)?1:0;
+}
+
+void setTemporario(Node *node, int temp)
+{
+  assert(node!=NULL);
+  node->temp = temp;
+}
+
+int getTemporario(Node *node)
+{
+  assert(node!=NULL);
+  return node->temp;
 }
 
 int isNumericType(Node *type)

@@ -129,6 +129,8 @@ Node *getFourthNode(Node *curr);
 Node *getType(Node *node);
 
 int isNullType(Node *type);
+void setTemporario(Node *node, int temp);
+int getTemporario(Node *node);
 
 void printTree(Node *tree, int identation);
 
