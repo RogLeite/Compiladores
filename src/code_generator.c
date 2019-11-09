@@ -280,26 +280,6 @@ int codeExpression(FILE *outfile, Node *tree)
       codeTemporario(outfile, temp1);
       fprintf(outfile, " = add %s 0, %d\n", intString, tree->content.i);
 
-      //Isso fica aqui em baixo para, talvez, ser reaproveitado
-      // int temp2 = newTemporario();
-      //
-      // //%a1 = alloca i32
-      // fprintf(outfile, "\t");
-      // codeTemporario(outfile, temp1);
-      // fprintf(outfile, " = alloca %s\n", intString);
-      //
-      // //store i32 tree->content.i, i32* %a1
-      // fprintf(outfile, "\tstore %s %d, %s* ", intString, tree->content.i, intString);
-      // codeTemporario(outfile, temp1);
-      // fprintf(outfile, "\n");
-      //
-      // //%a2 = load i32, i32* %a1
-      // fprintf(outfile, "\t");
-      // codeTemporario(outfile, temp2);
-      // fprintf(outfile, "= load %s, %s* ", intString, intString);
-      // codeTemporario(outfile, temp1);
-      // fprintf(outfile, "\n");
-
       return temp1;
       break;
     }
@@ -318,6 +298,36 @@ int codeExpression(FILE *outfile, Node *tree)
 
       fprintf(outfile, "\n");
       return temp1;
+      break;
+    }
+    case OPERATION_BINARIA:
+    {
+      char *s = typeString(getType(tree));
+      Node *operatorNode = ignoreWrapper(getValueNode(tree));
+      int tempLeftExp = codeExpression(outfile, getSecondNode(tree));
+      int tempRightExp = codeExpression(outfile, getThirdNode(tree));
+
+      //%tempNovo = add getTypeTree %tempLeftExp, %temRightExp
+      fprintf(outfile, "\t");
+      int tempNovo = codeNewTemporario(outfile);
+
+      switch (operatorNode->content.op) {
+        case ADD:
+        {
+          fprintf(outfile, "= add %s ", s);
+          codeTemporario(outfile, tempLeftExp);
+          fprintf(outfile, ", ");
+          codeTemporario(outfile, tempRightExp);
+          fprintf(outfile, "\n");
+
+          break;
+        }
+        default:
+          fprintf(outfile, "\t;case %s não implementado em OPERATION_BINARIA em codeExpression()\n", op_name[operatorNode->content.op]);
+      }
+
+      return tempNovo;
+
       break;
     }
     default:
