@@ -317,6 +317,11 @@ int codeExpression(FILE *outfile, Node *tree)
           fprintf(outfile, "= add %s ", s);
           break;
         }
+        case SUBTRACT:
+        {
+          fprintf(outfile, "= sub %s ", s);
+          break;
+        }
         case MULTIPLY:
         {
           fprintf(outfile, "= mul %s ", s);
