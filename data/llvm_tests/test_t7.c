@@ -1,7 +1,12 @@
+int glob;
 int main(void)
 {
-  int var1;
-  var1 = 2;
-  printf("%d\n", var1+1);
+  int locl;
+  locl = 1;
+  glob = -2;
+  printf("%d\n", locl+glob);
+  printf("%d\n", locl-glob);
+  printf("%d\n", locl*glob);
+  printf("%d\n", locl/glob);
   return 0;
 }
