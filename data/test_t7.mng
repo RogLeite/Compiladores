@@ -7,4 +7,5 @@ main()
   glob = 2;
   @(locl+glob);
   @(locl*glob);
+  @(locl/glob);
 }
