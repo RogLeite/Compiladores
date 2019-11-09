@@ -254,12 +254,16 @@ void codeVardecLocal(FILE *outfile, Node *tree)
 void codeAssignment(FILE *outfile, Node *tree)
 {
   int exp_result = codeExpression(outfile, getSecondNode(tree));
-  char *s = typeString(getType(getValueNode(tree)));
-  //store getType(getValueNode(tree)) [exp], getType(getValueNode(tree))* @getNodeId(getValueNode(tree))
+  Node *varNode = getValueNode(tree);
+  char *s = typeString(getType(varNode));
+  //store getType(varNode) [exp], getType(varNode)* @getNodeId(varNode)/
   fprintf(outfile, "\tstore %s ", s);
   codeTemporario(outfile, exp_result);
   fprintf(outfile, ", %s* ", s);
-  codeGlobalId(outfile, getNodeId(getValueNode(tree)));
+  if(getReference(varNode)->isGlobal==1)
+    codeGlobalId(outfile, getNodeId(varNode));
+  else
+    codeTemporario(outfile, getTemporario(getReference(varNode)));
   fprintf(outfile, "\n");
 }
 
