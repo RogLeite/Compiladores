@@ -91,6 +91,7 @@ typedef struct info_s
 
 extern Node *global_tree;
 extern char *tag_name[];
+extern char *op_name[];
 
 Node *mkCteIntegerNode(int val);
 Node *mkCteStringNode(NodeTag tag, char *val);
