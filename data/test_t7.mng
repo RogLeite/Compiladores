@@ -1,6 +1,9 @@
+glob:int;
+
 main()
 {
-  var1:int;
-  var1 = 1;
-  @var1+2;
+  locl:int;
+  locl = 1;
+  glob = 2;
+  @(locl+glob);
 }
