@@ -315,16 +315,21 @@ int codeExpression(FILE *outfile, Node *tree)
         case ADD:
         {
           fprintf(outfile, "= add %s ", s);
-          codeTemporario(outfile, tempLeftExp);
-          fprintf(outfile, ", ");
-          codeTemporario(outfile, tempRightExp);
-          fprintf(outfile, "\n");
-
+          break;
+        }
+        case MULTIPLY:
+        {
+          fprintf(outfile, "= mul %s ", s);
           break;
         }
         default:
           fprintf(outfile, "\t;case %s não implementado em OPERATION_BINARIA em codeExpression()\n", op_name[operatorNode->content.op]);
       }
+
+      codeTemporario(outfile, tempLeftExp);
+      fprintf(outfile, ", ");
+      codeTemporario(outfile, tempRightExp);
+      fprintf(outfile, "\n");
 
       return tempNovo;
 
