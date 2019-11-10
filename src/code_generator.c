@@ -325,6 +325,7 @@ int codeExpression(FILE *outfile, Node *tree)
         case DIVIDE:
         {
           fprintf(outfile, "= sdiv %s ", s);//TODO para float
+          break;
         }
         default:
           fprintf(outfile, "\t;case %s não implementado em OPERATION_BINARIA em codeExpression()\n", op_name[operatorNode->content.op]);
