@@ -345,6 +345,33 @@ int codeExpression(FILE *outfile, Node *tree)
 
       break;
     }
+    case OPERATION_UNARIA:
+    {
+      char *s = typeString(getType(tree));
+      Node *operatorNode = ignoreWrapper(getValueNode(tree));
+      int tempExp = codeExpression(outfile, getSecondNode(tree));
+
+      fprintf(outfile, "\t");
+      int tempNovo = codeNewTemporario(outfile);
+
+      switch (operatorNode->content.op) {
+        case NEGATIVE:
+        {
+          //%tempNovo = mul getTypeTree -1, %tempExp
+          fprintf(outfile, " = mul %s -1, ", s);
+          codeTemporario(outfile, tempExp);
+          break;
+        }
+        default:
+          fprintf(outfile, "\t;case %s não implementado em OPERATION_UNARIA em codeExpression()\n", op_name[operatorNode->content.op]);
+      }
+
+      fprintf(outfile, "\n");
+
+      return tempNovo;
+
+      break;
+    }
     default:
       fprintf(outfile, "\t;case %s não implementado em codeExpression()\n", tag_name[tree->tag]);
   }

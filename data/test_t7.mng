@@ -4,7 +4,7 @@ main()
 {
   locl:int;
   locl = 1;
-  glob = 2;
+  glob = -2;
   @(locl+glob);
   @(locl-glob);
   @(locl*glob);
