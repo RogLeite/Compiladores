@@ -240,6 +240,10 @@ void codePrint(FILE *outfile, Node *tree)
   int temp = codeExpression(outfile, getValueNode(tree));
   //char *s =  typeString(getType(getValueNode(tree)));
   char *s =  ll_intType;
+
+  if(isBoolType(getType(getValueNode(tree))))
+    temp = codeZext(outfile, temp);
+
   fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, %s 0, %s 0), %s ", s, s, s, s);
   codeTemporario(outfile, temp);
   fprintf(outfile, ")\n");
@@ -373,50 +377,38 @@ int codeExpression(FILE *outfile, Node *tree)
         }
         case LESS:
         {
-          int oldTemp = tempNovo;
           fprintf(outfile, "= icmp slt %s ", s);
           codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
-          tempNovo = codeZext(outfile, oldTemp);
           break;
         }
         case LESSOREQUAL:
         {
-          int oldTemp = tempNovo;
           fprintf(outfile, "= icmp sle %s ", s);
           codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
-          tempNovo = codeZext(outfile, oldTemp);
           break;
         }
         case GREATER:
         {
-          int oldTemp = tempNovo;
           fprintf(outfile, "= icmp sgt %s ", s);
           codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
-          tempNovo = codeZext(outfile, oldTemp);
           break;
         }
         case GREATEROREQUAL:
         {
-          int oldTemp = tempNovo;
           fprintf(outfile, "= icmp sge %s ", s);
           codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
-          tempNovo = codeZext(outfile, oldTemp);
           break;
         }
         case EQUAL:
         {
-          int oldTemp = tempNovo;
           fprintf(outfile, "= icmp eq %s ", s);
           codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
-          tempNovo = codeZext(outfile, oldTemp);
           break;
         }
         case NOTEQUAL:
         {
-          int oldTemp = tempNovo;
           fprintf(outfile, "= icmp ne %s ", s);
           codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
-          tempNovo = codeZext(outfile, oldTemp);
           break;
         }
         default:
@@ -442,13 +434,22 @@ int codeExpression(FILE *outfile, Node *tree)
           //%tempNovo = mul getTypeTree -1, %tempExp
           fprintf(outfile, " = mul %s -1, ", s);
           codeTemporario(outfile, tempExp);
+          fprintf(outfile, "\n");
+
+          break;
+        }
+        case NOT:
+        {
+          //%tempNovo = xor i1 true, %tempExp
+          fprintf(outfile, "= xor %s true, ", s);
+          codeTemporario(outfile, tempExp);
+          fprintf(outfile, "\n");
+
           break;
         }
         default:
           fprintf(outfile, "\t;case %s não implementado em OPERATION_UNARIA em codeExpression()\n", op_name[operatorNode->content.op]);
       }
-
-      fprintf(outfile, "\n");
 
       return tempNovo;
 
