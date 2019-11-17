@@ -20,9 +20,11 @@ void codePrint(FILE *outfile, Node *tree);
 void codeVardecGlobal(FILE *outfile, Node *tree);
 void codeVardecLocal(FILE *outfile, Node *tree);
 void codeAssignment(FILE *outfile, Node *tree);
+void codeLeftRightTemps(FILE *oufile, int left, int right);
 int codeExpression(FILE *outfile, Node *tree);
 
 char *ll_intType = "i32";
+char *ll_boolType = "i1";
 
 int temporario = 0;
 int newTemporario()
@@ -93,9 +95,21 @@ char *typeString(Node *typeTree)
       case INTTYPE:
         return ll_intType;
         break;
+      case FLOATTYPE:
+        return ";FLOATTYPE não implementado em typeString()\n";
+        break;
+      case CHARTYPE:
+        return ";CHARTYPE não implementado em typeString()\n";
+        break;
+      case BOOLTYPE:
+        return ll_boolType;
+        break;
+      case ARRAYTYPE:
+        return ";ARRAYTYPE não implementado em typeString()\n";
+        break;
       default:
       {
-        return ";tipo não implementado em typeTree()\n";
+        return ";Tipo desconhecido em typeString()\n";
       }
     }
   }
@@ -223,7 +237,8 @@ void codeCommands(FILE *outfile, Node *tree)
 void codePrint(FILE *outfile, Node *tree)
 {
   int temp = codeExpression(outfile, getValueNode(tree));
-  char *s =  typeString(getType(getValueNode(tree)));
+  //char *s =  typeString(getType(getValueNode(tree)));
+  char *s =  ll_intType;
   fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, %s 0, %s 0), %s ", s, s, s, s);
   codeTemporario(outfile, temp);
   fprintf(outfile, ")\n");
@@ -267,6 +282,14 @@ void codeAssignment(FILE *outfile, Node *tree)
   fprintf(outfile, "\n");
 }
 
+void codeLeftRightTemps(FILE *outfile, int left, int right)
+{
+  codeTemporario(outfile, left);
+  fprintf(outfile, ", ");
+  codeTemporario(outfile, right);
+  fprintf(outfile, "\n");
+}
+
 int codeExpression(FILE *outfile, Node *tree)
 {
   tree = ignoreWrapper(tree);
@@ -302,7 +325,7 @@ int codeExpression(FILE *outfile, Node *tree)
     }
     case OPERATION_BINARIA:
     {
-      char *s = typeString(getType(tree));
+      char *s = typeString(getType(getSecondNode(tree)));
       Node *operatorNode = ignoreWrapper(getValueNode(tree));
       int tempLeftExp = codeExpression(outfile, getSecondNode(tree));
       int tempRightExp = codeExpression(outfile, getThirdNode(tree));
@@ -315,31 +338,42 @@ int codeExpression(FILE *outfile, Node *tree)
         case ADD:
         {
           fprintf(outfile, "= add %s ", s);
+          codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
           break;
         }
         case SUBTRACT:
         {
           fprintf(outfile, "= sub %s ", s);
+          codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
           break;
         }
         case MULTIPLY:
         {
           fprintf(outfile, "= mul %s ", s);
+          codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
           break;
         }
         case DIVIDE:
         {
-          fprintf(outfile, "= sdiv %s ", s);//TODO para float
+          fprintf(outfile, "= sdiv %s ", s);
+          codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
+          break;
+        }
+        case LESS:
+        {
+          int oldTemp = tempNovo;
+          fprintf(outfile, "= icmp slt %s ", s);
+          codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
+          fprintf(outfile, "\t");
+          tempNovo = codeNewTemporario(outfile);
+          fprintf(outfile, "= zext %s ", ll_boolType);
+          codeTemporario(outfile, oldTemp);
+          fprintf(outfile, " to %s\n", ll_intType);
           break;
         }
         default:
           fprintf(outfile, "\t;case %s não implementado em OPERATION_BINARIA em codeExpression()\n", op_name[operatorNode->content.op]);
       }
-
-      codeTemporario(outfile, tempLeftExp);
-      fprintf(outfile, ", ");
-      codeTemporario(outfile, tempRightExp);
-      fprintf(outfile, "\n");
 
       return tempNovo;
 
