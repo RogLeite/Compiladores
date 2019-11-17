@@ -10,7 +10,7 @@ main()
   @(locl*glob);
   @(locl/glob);
   @(locl<glob);
-  #@(locl<=glob);
+  @(locl<=glob);
   #@(locl>glob);
   #@(locl>=glob);
   #@(locl==glob);
