@@ -47,4 +47,10 @@ O arquivo em yacc, com as definições gramaticais de Monga é ``` src/monga_gra
  char = int;
  ```
 
- - De código executável aceita: Declaração de variáveis globais e funções globais, essas funções não aceitam parâmetros nem tem tipo; o único tipo é `int`; atribuição a variáveis; o comando `@`.
+
+##O código aceito:
+ - Declaração de variáveis globais e funções globais. Essas funções não aceitam parâmetros nem tem tipo.
+ - O único tipo é `int`. Mas `bool` existe por baixo dos panos para as comparações.
+ - Atribuição a variáveis
+ - O comando `@`.
+ - Expressões Aritméticas e Comparativas.
