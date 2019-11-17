@@ -395,6 +395,14 @@ int codeExpression(FILE *outfile, Node *tree)
           tempNovo = codeZext(outfile, oldTemp);
           break;
         }
+        case GREATEROREQUAL:
+        {
+          int oldTemp = tempNovo;
+          fprintf(outfile, "= icmp sge %s ", s);
+          codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
+          tempNovo = codeZext(outfile, oldTemp);
+          break;
+        }
         default:
           fprintf(outfile, "\t;case %s não implementado em OPERATION_BINARIA em codeExpression()\n", op_name[operatorNode->content.op]);
       }
