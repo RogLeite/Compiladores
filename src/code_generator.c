@@ -21,6 +21,7 @@ void codeVardecGlobal(FILE *outfile, Node *tree);
 void codeVardecLocal(FILE *outfile, Node *tree);
 void codeAssignment(FILE *outfile, Node *tree);
 void codeLeftRightTemps(FILE *oufile, int left, int right);
+int codeZext(FILE *outfile, int oldTemp);
 int codeExpression(FILE *outfile, Node *tree);
 
 char *ll_intType = "i32";
@@ -290,6 +291,17 @@ void codeLeftRightTemps(FILE *outfile, int left, int right)
   fprintf(outfile, "\n");
 }
 
+int codeZext(FILE *outfile, int oldTemp)
+{
+  int tempNovo;
+  fprintf(outfile, "\t");
+  tempNovo = codeNewTemporario(outfile);
+  fprintf(outfile, "= zext %s ", ll_boolType);
+  codeTemporario(outfile, oldTemp);
+  fprintf(outfile, " to %s\n", ll_intType);
+  return tempNovo;
+}
+
 int codeExpression(FILE *outfile, Node *tree)
 {
   tree = ignoreWrapper(tree);
@@ -364,11 +376,7 @@ int codeExpression(FILE *outfile, Node *tree)
           int oldTemp = tempNovo;
           fprintf(outfile, "= icmp slt %s ", s);
           codeLeftRightTemps(outfile, tempLeftExp, tempRightExp);
-          fprintf(outfile, "\t");
-          tempNovo = codeNewTemporario(outfile);
-          fprintf(outfile, "= zext %s ", ll_boolType);
-          codeTemporario(outfile, oldTemp);
-          fprintf(outfile, " to %s\n", ll_intType);
+          tempNovo = codeZext(outfile, oldTemp);
           break;
         }
         default:
