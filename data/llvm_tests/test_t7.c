@@ -8,5 +8,11 @@ int main(void)
   printf("%d\n", locl-glob);
   printf("%d\n", locl*glob);
   printf("%d\n", locl/glob);
+  printf("%d\n", locl<glob);
+  printf("%d\n", locl<=glob);
+  printf("%d\n", locl>glob);
+  printf("%d\n", locl>=glob);
+  printf("%d\n", locl==glob);
+  printf("%d\n", locl!=glob);
   return 0;
 }
