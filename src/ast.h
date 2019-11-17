@@ -130,6 +130,7 @@ Node *getFourthNode(Node *curr);
 Node *getType(Node *node);
 
 int isNullType(Node *type);
+int isBoolType(Node *type);
 void setTemporario(Node *node, int temp);
 int getTemporario(Node *node);
 Node *getReference(Node *node);

@@ -32,7 +32,7 @@ int isNumericType(Node *type);
 int isIntType(Node *type);
 int isCharType(Node *type);
 int isFloatType(Node *type);
-int isBoolType(Node *type);
+//int isBoolType(Node *type);
 int isArrayType(Node *type);
 Node *promoteIfIsChar(Node **node_ptr);
 Node *promoteToChar(Node **node_ptr);
