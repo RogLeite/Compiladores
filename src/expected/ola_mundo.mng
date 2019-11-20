@@ -1,1 +1,0 @@
-TK_ID ( ) : TK_INT { TK_ID : [ TK_CHAR ] ; TK_ID = TK_STRING ; @ TK_ID ; @ TK_STRING ; TK_RETURN TK_INTEGER ; } 

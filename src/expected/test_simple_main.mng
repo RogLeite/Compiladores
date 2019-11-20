@@ -1,1 +1,0 @@
-TK_ID ( ) : TK_INT { TK_ID : TK_INT ; TK_ID = TK_INTEGER ; TK_RETURN TK_ID ; } 
