@@ -27,6 +27,7 @@ typedef enum node_tag_t{
   PRINT,//Uni
   SIMPLEVAR,//Uni
   ARRAYTYPE,//Uni
+  VAREXP,//Uni
   ARRAYVAR,//Bi
   CAST,//Bi
   NEW,//Bi
