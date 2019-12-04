@@ -163,7 +163,7 @@ exp_unaria : '!' fator     {$$ = mkBiNode(OPERATION_UNARIA, mkOperatorNode(NOT),
 fator : constante   {$$ = $1;}
       | '(' exp ')' {$$ = $2;}
       | chamada     {$$ = $1;}
-      | var         {$$ = mkUniNode(VAREXP, $1);}
+      | var         {$$ = $1;}
       ;
 
 constante : TK_STRING  {$$ = mkCteStringNode(STRING, $1);free($1);}

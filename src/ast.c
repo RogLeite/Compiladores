@@ -64,7 +64,6 @@ char *tag_name[] = {
 "PRINT",
 "SIMPLEVAR",
 "ARRAYTYPE",
-"VAREXP",
 "ARRAYVAR",
 "CAST",
 "NEW",
@@ -537,11 +536,6 @@ Node *typeTree(Node *tree, Info *info)
       break;
     case EMPTY :
       setType(tree, NULL);
-      return getType(tree);
-      break;
-    case VAREXP:
-      newType = typeTree(getValueNode(tree), info);
-      setType(tree, newType);
       return getType(tree);
       break;
     case SIMPLEVAR :

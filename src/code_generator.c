@@ -276,7 +276,6 @@ void codeAssignment(FILE *outfile, Node *tree)
   int exp_result = codeExpression(outfile, getSecondNode(tree));
   Node *varNode = getValueNode(tree);
   char *s = typeString(getType(varNode));
-
   //store getType(varNode) [exp], getType(varNode)* @getNodeId(varNode)/
   fprintf(outfile, "\tstore %s ", s);
   codeTemporario(outfile, exp_result);
@@ -284,11 +283,7 @@ void codeAssignment(FILE *outfile, Node *tree)
   if(getReference(varNode)->isGlobal==1)
     codeGlobalId(outfile, getNodeId(varNode));
   else
-  {
-    //Vai ter que mudar isso pq, em caso de assignement de array, tenho que
-    //gerar código para a indexação
     codeTemporario(outfile, getTemporario(getReference(varNode)));
-  }
   fprintf(outfile, "\n");
 }
 
