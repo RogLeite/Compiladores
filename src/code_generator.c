@@ -311,22 +311,6 @@ int codeZext(FILE *outfile, int oldTemp)
   return tempNovo;
 }
 
-int codeSimpleVar(FILE *outfile, Node *tree)
-{
-  tree = ignoreWrapper(tree);
-  if(tree->tag == SIMPLEVAR)
-  {
-    if(getReference(tree)->isGlobal==1)
-      codeGlobalId(outfile, getNodeId(tree));
-    else
-      codeTemporario(outfile, getTemporario(getReference(tree)));
-
-    fprintf(outfile, "\n");
-    return temp1;
-  }
-
-}
-
 int codeExpression(FILE *outfile, Node *tree)
 {
   tree = ignoreWrapper(tree);
@@ -345,25 +329,20 @@ int codeExpression(FILE *outfile, Node *tree)
     }
     case SIMPLEVAR:
     {
-      /*
-        SUBSTITUIR POR VAREXP
-      */
+      char *s = typeString(getType(tree));
+      //%2 = load getType(tree), getType(tree)* @getNodeId(tree)
+      fprintf(outfile, "\t");
+      int temp1 = codeNewTemporario(outfile);
+      fprintf(outfile, "= load %s, %s* ", s, s);
 
+      if(getReference(tree)->isGlobal==1)
+        codeGlobalId(outfile, getNodeId(tree));
+      else
+        codeTemporario(outfile, getTemporario(getReference(tree)));
 
-      //char *s = typeString(getType(tree));
-      ////%2 = load getType(tree), getType(tree)* @getNodeId(tree)
-      //fprintf(outfile, "\t");
-      //int temp1 = codeNewTemporario(outfile);
-      //fprintf(outfile, "= load %s, %s* ", s, s);
-
-      //if(getReference(tree)->isGlobal==1)
-      //  codeGlobalId(outfile, getNodeId(tree));
-      //else
-      //  codeTemporario(outfile, getTemporario(getReference(tree)));
-
-      //fprintf(outfile, "\n");
-      //return temp1;
-      //break;
+      fprintf(outfile, "\n");
+      return temp1;
+      break;
     }
     case OPERATION_BINARIA:
     {
