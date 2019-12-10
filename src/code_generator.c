@@ -48,7 +48,7 @@ void codeAssignment(FILE *outfile, Node *tree);
 //Gera código para auxiliar no code de dois temporários
 void codeLeftRightTemps(FILE *oufile, int left, int right);
 
-//Gera código para extender i1 para i32
+//Gera código para extender i1 para i32 quando está no print, pois o tipo ainda não foi implementado
 int codeZext(FILE *outfile, int oldTemp);
 
 //Gera código para expressão
