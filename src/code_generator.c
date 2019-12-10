@@ -87,9 +87,9 @@ void codeGlobal(FILE *outfile)
 
   //Início para permitir printar coisas
   //string "%d"
-  fprintf(outfile, "@percent_d = constant [3 x i8] c\"%%d\\00\"\n");
+  fprintf(outfile, "@.percent_d = constant [3 x i8] c\"%%d\\00\"\n");
   //string "\n"
-  fprintf(outfile, "@endl = constant [2 x i8] c\"\\0A\\00\"\n");
+  fprintf(outfile, "@.endl = constant [2 x i8] c\"\\0A\\00\"\n");
   fprintf(outfile,"declare %s @printf(i8*, ...)\n", ll_intType);
 
   switch (tree->tag) {
@@ -274,10 +274,10 @@ void codePrint(FILE *outfile, Node *tree)
   if(isBoolType(getType(getValueNode(tree))))
     temp = codeZext(outfile, temp);
 
-  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @percent_d, %s 0, %s 0), %s ", s, s, s, s);
+  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([3 x i8], [3 x i8]* @.percent_d, %s 0, %s 0), %s ", s, s, s, s);
   codeTemporario(outfile, temp);
   fprintf(outfile, ")\n");
-  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @endl, %s 0, %s 0))\n", s, s, s);
+  fprintf(outfile, "\tcall %s (i8*, ...) @printf(i8* getelementptr ([2 x i8], [2 x i8]* @.endl, %s 0, %s 0))\n", s, s, s);
 
 }
 
