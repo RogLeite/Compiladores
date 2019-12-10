@@ -6,22 +6,52 @@
 #include <stdio.h>
 #include <assert.h>
 
-
+//Gera código para Tudo
 void codeGlobal(FILE *outfile);
+
+//Gera código para um identificador global de llvm (com @)
 void codeGlobalId(FILE *outfile, char *id);
+
+//Gera código para tipo
 void codeType(FILE *outfile, Node *typeTree);
+
+//Gera código para nó Definitions da AST: ou é vardec ou é funcdef
 void codeDefinitions(FILE *outfile, Node *tree);
+
+//Gera código para os parâmetros das funções
 void codeParamDefs(FILE *outfile, Node *tree);
+
+//Gera código para definição das funções
 void codeFuncDef(FILE *outfile, Node *tree);
+
+//Gera código para corpo da função: bota o ret no final
 void codeFuncBody(FILE *outfile, Node *tree);
+
+//Gera código para um bloco
 void codeInBlock(FILE *outfile, Node *tree);
+
+//Gera código para comandos
 void codeCommands(FILE *outfile, Node *tree);
+
+//Gera código para o comando @
 void codePrint(FILE *outfile, Node *tree);
+
+//Gera código para declaração de variáveis globais
 void codeVardecGlobal(FILE *outfile, Node *tree);
+
+//Gera código para declaração de variáveis locais
 void codeVardecLocal(FILE *outfile, Node *tree);
+
+//Gera código para atribuição a variáveis
 void codeAssignment(FILE *outfile, Node *tree);
+
+//Gera código para auxiliar no code de dois temporários
 void codeLeftRightTemps(FILE *oufile, int left, int right);
+
+//Gera código para extender i1 para i32
 int codeZext(FILE *outfile, int oldTemp);
+
+//Gera código para expressão
 int codeExpression(FILE *outfile, Node *tree);
 
 char *ll_intType = "i32";
