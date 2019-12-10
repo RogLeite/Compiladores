@@ -54,7 +54,7 @@ int codeZext(FILE *outfile, int oldTemp);
 //Gera código para expressão
 int codeExpression(FILE *outfile, Node *tree);
 
-//Gera código para variável
+//WIP: Gera código para variável getelementptr retorna o endereço das vars
 int codeVariable(FILE *outfile, Node *tree);
 
 char *ll_intType = "i32";
@@ -309,14 +309,16 @@ void codeAssignment(FILE *outfile, Node *tree)
   int exp_result = codeExpression(outfile, getSecondNode(tree));
   Node *varNode = getValueNode(tree);
   char *s = typeString(getType(varNode));
+  int tempVar = codeVariable(outfile, varNode);
   //store getType(varNode) [exp], getType(varNode)* @getNodeId(varNode)/
   fprintf(outfile, "\tstore %s ", s);
   codeTemporario(outfile, exp_result);
   fprintf(outfile, ", %s* ", s);
-  if(getReference(varNode)->isGlobal==1)
-    codeGlobalId(outfile, getNodeId(varNode));
-  else
-    codeTemporario(outfile, getTemporario(getReference(varNode)));
+  codeTemporario(outfile, tempVar);
+  //if(getReference(varNode)->isGlobal==1)
+  //  codeGlobalId(outfile, getNodeId(varNode));
+  //else
+  //  codeTemporario(outfile, getTemporario(getReference(varNode)));
   fprintf(outfile, "\n");
 }
 
@@ -358,18 +360,19 @@ int codeExpression(FILE *outfile, Node *tree)
     case SIMPLEVAR:
     {
       char *s = typeString(getType(tree));
+      int tempVar = codeVariable(outfile, tree);
       //%2 = load getType(tree), getType(tree)* @getNodeId(tree)
       fprintf(outfile, "\t");
-      int temp1 = codeNewTemporario(outfile);
+      int tempNovo = codeNewTemporario(outfile);
       fprintf(outfile, "= load %s, %s* ", s, s);
-
-      if(getReference(tree)->isGlobal==1)
-        codeGlobalId(outfile, getNodeId(tree));
-      else
-        codeTemporario(outfile, getTemporario(getReference(tree)));
+      codeTemporario(outfile, tempVar);
+      //if(getReference(tree)->isGlobal==1)
+      //  codeGlobalId(outfile, getNodeId(tree));
+      //else
+      //  codeTemporario(outfile, getTemporario(getReference(tree)));
 
       fprintf(outfile, "\n");
-      return temp1;
+      return tempNovo;
       break;
     }
     case OPERATION_BINARIA:
@@ -500,7 +503,7 @@ int codeVariable(FILE *outfile, Node *tree)
   assert(tree->tag == SIMPLEVAR);
   fprintf(outfile, "\t");
   int tempNovo = codeNewTemporario(outfile);
-  fprintf(outfile, " = ");
+  fprintf(outfile, " = getelementptr i32, ");
   if(getReference(tree)->isGlobal==1)
     codeGlobalId(outfile, getNodeId(tree));
   else
