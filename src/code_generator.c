@@ -54,6 +54,9 @@ int codeZext(FILE *outfile, int oldTemp);
 //Gera código para expressão
 int codeExpression(FILE *outfile, Node *tree);
 
+//Gera código para variável
+int codeVariable(FILE *outfile, Node *tree);
+
 char *ll_intType = "i32";
 char *ll_boolType = "i1";
 
@@ -489,4 +492,19 @@ int codeExpression(FILE *outfile, Node *tree)
       fprintf(outfile, "\t;case %s não implementado em codeExpression()\n", tag_name[tree->tag]);
   }
   return -1;
+}
+
+int codeVariable(FILE *outfile, Node *tree)
+{
+  assert(tree!=NULL);
+  assert(tree->tag == SIMPLEVAR);
+  fprintf(outfile, "\t");
+  int tempNovo = codeNewTemporario(outfile);
+  fprintf(outfile, " = ");
+  if(getReference(tree)->isGlobal==1)
+    codeGlobalId(outfile, getNodeId(tree));
+  else
+    codeTemporario(outfile, getTemporario(getReference(tree)));
+  fprintf(outfile, "\n");
+  return tempNovo;
 }
