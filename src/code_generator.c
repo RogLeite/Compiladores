@@ -501,9 +501,10 @@ int codeVariable(FILE *outfile, Node *tree)
 {
   assert(tree!=NULL);
   assert(tree->tag == SIMPLEVAR);
+  char *s = typeString(getType(tree));
   fprintf(outfile, "\t");
   int tempNovo = codeNewTemporario(outfile);
-  fprintf(outfile, " = getelementptr i32, ");
+  fprintf(outfile, " = getelementptr %s, %s* ",s,s);
   if(getReference(tree)->isGlobal==1)
     codeGlobalId(outfile, getNodeId(tree));
   else
